@@ -1,0 +1,16 @@
+# AuthIntrospectionApiHeader
+
+## Example Usage
+
+```typescript
+import { AuthIntrospectionApiHeader } from "authelete-bundled/models/operations";
+
+let value: AuthIntrospectionApiHeader = {};
+```
+
+## Fields
+
+| Field              | Type               | Required           | Description        |
+| ------------------ | ------------------ | ------------------ | ------------------ |
+| `key`              | *string*           | :heavy_minus_sign: | The key part.      |
+| `value`            | *string*           | :heavy_minus_sign: | The value part.    |

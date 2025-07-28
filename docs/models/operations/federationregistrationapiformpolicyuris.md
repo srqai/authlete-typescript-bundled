@@ -1,0 +1,16 @@
+# FederationRegistrationApiFormPolicyUris
+
+## Example Usage
+
+```typescript
+import { FederationRegistrationApiFormPolicyUris } from "authelete-bundled/models/operations";
+
+let value: FederationRegistrationApiFormPolicyUris = {};
+```
+
+## Fields
+
+| Field                  | Type                   | Required               | Description            |
+| ---------------------- | ---------------------- | ---------------------- | ---------------------- |
+| `tag`                  | *string*               | :heavy_minus_sign:     | The language tag part. |
+| `value`                | *string*               | :heavy_minus_sign:     | The value part.        |

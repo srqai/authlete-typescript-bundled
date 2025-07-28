@@ -1,0 +1,18 @@
+# AuthTokenRevokeApiRequestBody
+
+## Example Usage
+
+```typescript
+import { AuthTokenRevokeApiRequestBody } from "authelete-bundled/models/operations";
+
+let value: AuthTokenRevokeApiRequestBody = {};
+```
+
+## Fields
+
+| Field                                                                                                                                          | Type                                                                                                                                           | Required                                                                                                                                       | Description                                                                                                                                    |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `accessTokenIdentifier`                                                                                                                        | *string*                                                                                                                                       | :heavy_minus_sign:                                                                                                                             | The identifier of an access token to revoke<br/><br/>The hash of an access token is recognized as an identifier as well as the access token itself.<br/> |
+| `refreshTokenIdentifier`                                                                                                                       | *string*                                                                                                                                       | :heavy_minus_sign:                                                                                                                             | The identifier of a refresh token to revoke.<br/><br/>The hash of a refresh token is recognized as an identifier as well as the refresh token itself.<br/> |
+| `clientIdentifier`                                                                                                                             | *string*                                                                                                                                       | :heavy_minus_sign:                                                                                                                             | The client ID of the access token to be revoked.<br/><br/>Both the numeric client ID and the alias are recognized as an identifier<br/>of a client.<br/> |
+| `subject`                                                                                                                                      | *string*                                                                                                                                       | :heavy_minus_sign:                                                                                                                             | The subject of a resource owner.<br/>                                                                                                          |

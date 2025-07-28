@@ -1,0 +1,19 @@
+# ServiceConfigurationApiRequest
+
+## Example Usage
+
+```typescript
+import { ServiceConfigurationApiRequest } from "authelete-bundled/models/operations";
+
+let value: ServiceConfigurationApiRequest = {
+  serviceId: "<id>",
+};
+```
+
+## Fields
+
+| Field                                                                                                                                                                            | Type                                                                                                                                                                             | Required                                                                                                                                                                         | Description                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pretty`                                                                                                                                                                         | *boolean*                                                                                                                                                                        | :heavy_minus_sign:                                                                                                                                                               | This boolean value indicates whether the JSON in the response should be formatted or not. If `true`, the JSON in the response is pretty-formatted. The default value is `false`. |
+| `patch`                                                                                                                                                                          | *string*                                                                                                                                                                         | :heavy_minus_sign:                                                                                                                                                               | Get the JSON Patch [RFC 6902 JavaScript Object Notation (JSON) Patch](https://www.rfc-editor.org/rfc/rfc6902) to be applied.                                                     |
+| `serviceId`                                                                                                                                                                      | *string*                                                                                                                                                                         | :heavy_check_mark:                                                                                                                                                               | A service ID.                                                                                                                                                                    |

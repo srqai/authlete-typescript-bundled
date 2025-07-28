@@ -1,0 +1,19 @@
+# FederationRegistrationApiResponse
+
+## Example Usage
+
+```typescript
+import { FederationRegistrationApiResponse } from "authelete-bundled/models/operations";
+
+let value: FederationRegistrationApiResponse = {};
+```
+
+## Fields
+
+| Field                                                                                                                  | Type                                                                                                                   | Required                                                                                                               | Description                                                                                                            |
+| ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `resultCode`                                                                                                           | *string*                                                                                                               | :heavy_minus_sign:                                                                                                     | The code which represents the result of the API call.                                                                  |
+| `resultMessage`                                                                                                        | *string*                                                                                                               | :heavy_minus_sign:                                                                                                     | A short message which explains the result of the API call.                                                             |
+| `action`                                                                                                               | [operations.FederationRegistrationApiAction](../../models/operations/federationregistrationapiaction.md)               | :heavy_minus_sign:                                                                                                     | The next action that the authorization server implementation should take.                                              |
+| `responseContent`                                                                                                      | *string*                                                                                                               | :heavy_minus_sign:                                                                                                     | The content that the authorization server implementation can use as the value of `WWW-Authenticate`<br/>header on errors.<br/> |
+| `client`                                                                                                               | [operations.FederationRegistrationApiClient](../../models/operations/federationregistrationapiclient.md)               | :heavy_minus_sign:                                                                                                     | N/A                                                                                                                    |
