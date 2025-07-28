@@ -13,6 +13,9 @@ targets:
     authelete-bundled:
         target: typescript
         source: Authlete API Explorer
+        publish:
+            npm:
+                token: $npm_token
         codeSamples:
             registry:
                 location: registry.speakeasyapi.dev/vartana/qwerty/authlete-api-explorer-typescript-code-samples
