@@ -5,8 +5,10 @@ management:
   docVersion: 3.0.0
   speakeasyVersion: 1.592.1
   generationVersion: 2.667.0
-  releaseVersion: 0.0.1
-  configChecksum: 9ce16dc4e79429bac7711b089f89c705
+  releaseVersion: 0.0.2
+  configChecksum: 08ace6e94066f4fb5023eefd755fc70d
+  repoURL: https://github.com/srqai/authlete-typescript-bundled.git
+  installationURL: https://github.com/srqai/authlete-typescript-bundled
 features:
   typescript:
     additionalDependencies: 0.1.0
