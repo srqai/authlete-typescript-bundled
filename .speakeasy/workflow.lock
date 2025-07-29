@@ -2,8 +2,8 @@ speakeasyVersion: 1.592.1
 sources:
     Authlete API Explorer:
         sourceNamespace: authlete-api-explorer
-        sourceRevisionDigest: sha256:e30759cb1d03876b29332053e971632bde7b7bdc1e20fca0c5a4a27a901dc918
-        sourceBlobDigest: sha256:aaa828f0f95273331112978e8bfeb7888ce7b9e84c8f6943f80e67a03fc94931
+        sourceRevisionDigest: sha256:d68874b68b3f271ecbc5b067ef8c1dc7fee5758a5519759d4a61ba0fe45b2434
+        sourceBlobDigest: sha256:0558e660fc712b5f0e960c2b830b48751e20fe02747ab8ac3f6e959f221f22cf
         tags:
             - latest
             - 3.0.0
@@ -11,17 +11,19 @@ targets:
     authelete-bundled:
         source: Authlete API Explorer
         sourceNamespace: authlete-api-explorer
-        sourceRevisionDigest: sha256:e30759cb1d03876b29332053e971632bde7b7bdc1e20fca0c5a4a27a901dc918
-        sourceBlobDigest: sha256:aaa828f0f95273331112978e8bfeb7888ce7b9e84c8f6943f80e67a03fc94931
+        sourceRevisionDigest: sha256:d68874b68b3f271ecbc5b067ef8c1dc7fee5758a5519759d4a61ba0fe45b2434
+        sourceBlobDigest: sha256:0558e660fc712b5f0e960c2b830b48751e20fe02747ab8ac3f6e959f221f22cf
         codeSamplesNamespace: authlete-api-explorer-typescript-code-samples
-        codeSamplesRevisionDigest: sha256:f34c9370de9ba47c6e54d982205a14580cbc440d75e4850311654f16dcd2bf38
+        codeSamplesRevisionDigest: sha256:67536d6febec84e39c18199b8c2db5d5c94d23778b9021bdf1a95ed070e7a652
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
     sources:
         Authlete API Explorer:
             inputs:
-                - location: ../Downloads/spec1.json
+                - location: ./specs/spec1.json
+            overlays:
+                - location: .speakeasy/speakeasy-modifications-overlay.yaml
             transformations:
                 - removeUnused: true
             output: .speakeasy/out.openapi.yaml
@@ -31,6 +33,9 @@ workflow:
         authelete-bundled:
             target: typescript
             source: Authlete API Explorer
+            publish:
+                npm:
+                    token: $npm_token
             codeSamples:
                 registry:
                     location: registry.speakeasyapi.dev/vartana/qwerty/authlete-api-explorer-typescript-code-samples

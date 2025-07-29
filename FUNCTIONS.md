@@ -20,7 +20,7 @@ specific category of applications.
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { serviceManagementServiceGetApi } from "authelete-bundled/funcs/serviceManagementServiceGetApi.js";
+import { serviceManagementGet } from "authelete-bundled/funcs/serviceManagementGet.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -31,14 +31,14 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await serviceManagementServiceGetApi(autheleteBundled, {
+  const res = await serviceManagementGet(autheleteBundled, {
     serviceId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("serviceManagementServiceGetApi failed:", res.error);
+    console.log("serviceManagementGet failed:", res.error);
   }
 }
 

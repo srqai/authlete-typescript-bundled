@@ -3,207 +3,20 @@
 
 ## Overview
 
-API endpoints for implementing and running a Verifiable Credential Issuer (VCI).
-
 ### Available Operations
 
-* [vciMetadataApi](#vcimetadataapi) - /api/{serviceId}/vci/metadata API
-* [vciMetadataApiForm](#vcimetadataapiform) - /api/{serviceId}/vci/metadata API
-* [vciJwtissuerApi](#vcijwtissuerapi) - /api/{serviceId}/vci/jwtissuer API
-* [vciJwtissuerApiForm](#vcijwtissuerapiform) - /api/{serviceId}/vci/jwtissuer API
-* [vciJwksApi](#vcijwksapi) - /api/{serviceId}/vci/jwks API
-* [vciJwksApiForm](#vcijwksapiform) - /api/{serviceId}/vci/jwks API
-* [vciOfferCreateApi](#vcioffercreateapi) - /api/{serviceId}/vci/offer/create API
-* [vciOfferCreateApiForm](#vcioffercreateapiform) - /api/{serviceId}/vci/offer/create API
-* [vciOfferInfoApi](#vciofferinfoapi) - /api/{serviceId}/vci/offer/info API
-* [vciOfferInfoApiForm](#vciofferinfoapiform) - /api/{serviceId}/vci/offer/info API
-* [vciSingleParseApi](#vcisingleparseapi) - /api/{serviceId}/vci/single/parse API
-* [vciSingleParseApiForm](#vcisingleparseapiform) - /api/{serviceId}/vci/single/parse API
-* [vciSingleIssueApi](#vcisingleissueapi) - /api/{serviceId}/vci/single/issue API
-* [vciBatchParseApi](#vcibatchparseapi) - /api/{serviceId}/vci/batch/parse API
-* [vciBatchParseApiForm](#vcibatchparseapiform) - /api/{serviceId}/vci/batch/parse API
-* [vciBatchIssueApi](#vcibatchissueapi) - /api/{serviceId}/vci/batch/issue API
-* [vciDeferredParseApi](#vcideferredparseapi) - /api/{serviceId}/vci/deferred/parse API
-* [vciDeferredParseApiForm](#vcideferredparseapiform) - /api/{serviceId}/vci/deferred/parse API
-* [vciDeferredIssueApi](#vcideferredissueapi) - /api/{serviceId}/vci/deferred/issue API
+* [issueJwt](#issuejwt) - /api/{serviceId}/vci/jwtissuer API
+* [issueJwtForm](#issuejwtform) - /api/{serviceId}/vci/jwtissuer API
+* [jwks](#jwks) - /api/{serviceId}/vci/jwks API
+* [jwksForm](#jwksform) - /api/{serviceId}/vci/jwks API
+* [createOffer](#createoffer) - /api/{serviceId}/vci/offer/create API
+* [createOfferForm](#createofferform) - /api/{serviceId}/vci/offer/create API
+* [batchIssue](#batchissue) - /api/{serviceId}/vci/batch/issue API
+* [deferredParse](#deferredparse) - /api/{serviceId}/vci/deferred/parse API
+* [deferredParseForm](#deferredparseform) - /api/{serviceId}/vci/deferred/parse API
+* [issueDeferred](#issuedeferred) - /api/{serviceId}/vci/deferred/issue API
 
-## vciMetadataApi
-
-/api/{serviceId}/vci/metadata API
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="vci_metadata_api" method="post" path="/api/{serviceId}/vci/metadata" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciMetadataApi({
-    serviceId: "<id>",
-    requestBody: {
-      pretty: true,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciMetadataApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciMetadataApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await verifiableCredentialIssuerVciMetadataApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      pretty: true,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("verifiableCredentialIssuerVciMetadataApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.VciMetadataApiRequest](../../models/operations/vcimetadataapirequest.md)                                                                                           | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.VciMetadataApiResponse](../../models/operations/vcimetadataapiresponse.md)\>**
-
-### Errors
-
-| Error Type                               | Status Code                              | Content Type                             |
-| ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| errors.VciMetadataApiBadRequestError     | 400                                      | application/json                         |
-| errors.VciMetadataApiUnauthorizedError   | 401                                      | application/json                         |
-| errors.VciMetadataApiForbiddenError      | 403                                      | application/json                         |
-| errors.VciMetadataApiInternalServerError | 500                                      | application/json                         |
-| errors.AutheleteBundledDefaultError      | 4XX, 5XX                                 | \*/\*                                    |
-
-## vciMetadataApiForm
-
-/api/{serviceId}/vci/metadata API
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="vci_metadata_api_form" method="post" path="/api/{serviceId}/vci/metadata" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciMetadataApiForm({
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: true,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciMetadataApiForm } from "authelete-bundled/funcs/verifiableCredentialIssuerVciMetadataApiForm.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await verifiableCredentialIssuerVciMetadataApiForm(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: false,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("verifiableCredentialIssuerVciMetadataApiForm failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.VciMetadataApiFormRequest](../../models/operations/vcimetadataapiformrequest.md)                                                                                   | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.VciMetadataApiFormResponse](../../models/operations/vcimetadataapiformresponse.md)\>**
-
-### Errors
-
-| Error Type                                   | Status Code                                  | Content Type                                 |
-| -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| errors.VciMetadataApiFormBadRequestError     | 400                                          | application/json                             |
-| errors.VciMetadataApiFormUnauthorizedError   | 401                                          | application/json                             |
-| errors.VciMetadataApiFormForbiddenError      | 403                                          | application/json                             |
-| errors.VciMetadataApiFormInternalServerError | 500                                          | application/json                             |
-| errors.AutheleteBundledDefaultError          | 4XX, 5XX                                     | \*/\*                                        |
-
-## vciJwtissuerApi
+## issueJwt
 
 /api/{serviceId}/vci/jwtissuer API
 
@@ -220,7 +33,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciJwtissuerApi({
+  const result = await autheleteBundled.verifiableCredentialIssuer.issueJwt({
     serviceId: "<id>",
     requestBody: {
       pretty: true,
@@ -239,7 +52,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciJwtissuerApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciJwtissuerApi.js";
+import { verifiableCredentialIssuerIssueJwt } from "authelete-bundled/funcs/verifiableCredentialIssuerIssueJwt.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -250,7 +63,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciJwtissuerApi(autheleteBundled, {
+  const res = await verifiableCredentialIssuerIssueJwt(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       pretty: true,
@@ -260,7 +73,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciJwtissuerApi failed:", res.error);
+    console.log("verifiableCredentialIssuerIssueJwt failed:", res.error);
   }
 }
 
@@ -283,15 +96,15 @@ run();
 
 ### Errors
 
-| Error Type                                | Status Code                               | Content Type                              |
-| ----------------------------------------- | ----------------------------------------- | ----------------------------------------- |
-| errors.VciJwtissuerApiBadRequestError     | 400                                       | application/json                          |
-| errors.VciJwtissuerApiUnauthorizedError   | 401                                       | application/json                          |
-| errors.VciJwtissuerApiForbiddenError      | 403                                       | application/json                          |
-| errors.VciJwtissuerApiInternalServerError | 500                                       | application/json                          |
-| errors.AutheleteBundledDefaultError       | 4XX, 5XX                                  | \*/\*                                     |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## vciJwtissuerApiForm
+## issueJwtForm
 
 /api/{serviceId}/vci/jwtissuer API
 
@@ -308,7 +121,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciJwtissuerApiForm({
+  const result = await autheleteBundled.verifiableCredentialIssuer.issueJwtForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -327,7 +140,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciJwtissuerApiForm } from "authelete-bundled/funcs/verifiableCredentialIssuerVciJwtissuerApiForm.js";
+import { verifiableCredentialIssuerIssueJwtForm } from "authelete-bundled/funcs/verifiableCredentialIssuerIssueJwtForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -338,7 +151,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciJwtissuerApiForm(autheleteBundled, {
+  const res = await verifiableCredentialIssuerIssueJwtForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -348,7 +161,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciJwtissuerApiForm failed:", res.error);
+    console.log("verifiableCredentialIssuerIssueJwtForm failed:", res.error);
   }
 }
 
@@ -371,15 +184,15 @@ run();
 
 ### Errors
 
-| Error Type                                    | Status Code                                   | Content Type                                  |
-| --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
-| errors.VciJwtissuerApiFormBadRequestError     | 400                                           | application/json                              |
-| errors.VciJwtissuerApiFormUnauthorizedError   | 401                                           | application/json                              |
-| errors.VciJwtissuerApiFormForbiddenError      | 403                                           | application/json                              |
-| errors.VciJwtissuerApiFormInternalServerError | 500                                           | application/json                              |
-| errors.AutheleteBundledDefaultError           | 4XX, 5XX                                      | \*/\*                                         |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## vciJwksApi
+## jwks
 
 /api/{serviceId}/vci/jwks API
 
@@ -396,7 +209,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciJwksApi({
+  const result = await autheleteBundled.verifiableCredentialIssuer.jwks({
     serviceId: "<id>",
     requestBody: {
       pretty: false,
@@ -415,7 +228,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciJwksApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciJwksApi.js";
+import { verifiableCredentialIssuerJwks } from "authelete-bundled/funcs/verifiableCredentialIssuerJwks.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -426,7 +239,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciJwksApi(autheleteBundled, {
+  const res = await verifiableCredentialIssuerJwks(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       pretty: false,
@@ -436,7 +249,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciJwksApi failed:", res.error);
+    console.log("verifiableCredentialIssuerJwks failed:", res.error);
   }
 }
 
@@ -459,15 +272,15 @@ run();
 
 ### Errors
 
-| Error Type                           | Status Code                          | Content Type                         |
-| ------------------------------------ | ------------------------------------ | ------------------------------------ |
-| errors.VciJwksApiBadRequestError     | 400                                  | application/json                     |
-| errors.VciJwksApiUnauthorizedError   | 401                                  | application/json                     |
-| errors.VciJwksApiForbiddenError      | 403                                  | application/json                     |
-| errors.VciJwksApiInternalServerError | 500                                  | application/json                     |
-| errors.AutheleteBundledDefaultError  | 4XX, 5XX                             | \*/\*                                |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## vciJwksApiForm
+## jwksForm
 
 /api/{serviceId}/vci/jwks API
 
@@ -484,7 +297,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciJwksApiForm({
+  const result = await autheleteBundled.verifiableCredentialIssuer.jwksForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -503,7 +316,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciJwksApiForm } from "authelete-bundled/funcs/verifiableCredentialIssuerVciJwksApiForm.js";
+import { verifiableCredentialIssuerJwksForm } from "authelete-bundled/funcs/verifiableCredentialIssuerJwksForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -514,7 +327,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciJwksApiForm(autheleteBundled, {
+  const res = await verifiableCredentialIssuerJwksForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -524,7 +337,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciJwksApiForm failed:", res.error);
+    console.log("verifiableCredentialIssuerJwksForm failed:", res.error);
   }
 }
 
@@ -547,15 +360,15 @@ run();
 
 ### Errors
 
-| Error Type                               | Status Code                              | Content Type                             |
-| ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
-| errors.VciJwksApiFormBadRequestError     | 400                                      | application/json                         |
-| errors.VciJwksApiFormUnauthorizedError   | 401                                      | application/json                         |
-| errors.VciJwksApiFormForbiddenError      | 403                                      | application/json                         |
-| errors.VciJwksApiFormInternalServerError | 500                                      | application/json                         |
-| errors.AutheleteBundledDefaultError      | 4XX, 5XX                                 | \*/\*                                    |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## vciOfferCreateApi
+## createOffer
 
 /api/{serviceId}/vci/offer/create API
 
@@ -572,7 +385,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciOfferCreateApi({
+  const result = await autheleteBundled.verifiableCredentialIssuer.createOffer({
     serviceId: "<id>",
     requestBody: {},
   });
@@ -589,7 +402,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciOfferCreateApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciOfferCreateApi.js";
+import { verifiableCredentialIssuerCreateOffer } from "authelete-bundled/funcs/verifiableCredentialIssuerCreateOffer.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -600,7 +413,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciOfferCreateApi(autheleteBundled, {
+  const res = await verifiableCredentialIssuerCreateOffer(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {},
   });
@@ -608,7 +421,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciOfferCreateApi failed:", res.error);
+    console.log("verifiableCredentialIssuerCreateOffer failed:", res.error);
   }
 }
 
@@ -631,15 +444,15 @@ run();
 
 ### Errors
 
-| Error Type                                  | Status Code                                 | Content Type                                |
-| ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
-| errors.VciOfferCreateApiBadRequestError     | 400                                         | application/json                            |
-| errors.VciOfferCreateApiUnauthorizedError   | 401                                         | application/json                            |
-| errors.VciOfferCreateApiForbiddenError      | 403                                         | application/json                            |
-| errors.VciOfferCreateApiInternalServerError | 500                                         | application/json                            |
-| errors.AutheleteBundledDefaultError         | 4XX, 5XX                                    | \*/\*                                       |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## vciOfferCreateApiForm
+## createOfferForm
 
 /api/{serviceId}/vci/offer/create API
 
@@ -656,7 +469,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciOfferCreateApiForm({
+  const result = await autheleteBundled.verifiableCredentialIssuer.createOfferForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -675,7 +488,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciOfferCreateApiForm } from "authelete-bundled/funcs/verifiableCredentialIssuerVciOfferCreateApiForm.js";
+import { verifiableCredentialIssuerCreateOfferForm } from "authelete-bundled/funcs/verifiableCredentialIssuerCreateOfferForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -686,7 +499,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciOfferCreateApiForm(autheleteBundled, {
+  const res = await verifiableCredentialIssuerCreateOfferForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -696,7 +509,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciOfferCreateApiForm failed:", res.error);
+    console.log("verifiableCredentialIssuerCreateOfferForm failed:", res.error);
   }
 }
 
@@ -719,615 +532,15 @@ run();
 
 ### Errors
 
-| Error Type                                      | Status Code                                     | Content Type                                    |
-| ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
-| errors.VciOfferCreateApiFormBadRequestError     | 400                                             | application/json                                |
-| errors.VciOfferCreateApiFormUnauthorizedError   | 401                                             | application/json                                |
-| errors.VciOfferCreateApiFormForbiddenError      | 403                                             | application/json                                |
-| errors.VciOfferCreateApiFormInternalServerError | 500                                             | application/json                                |
-| errors.AutheleteBundledDefaultError             | 4XX, 5XX                                        | \*/\*                                           |
-
-## vciOfferInfoApi
-
-/api/{serviceId}/vci/offer/info API
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="vci_offer_info_api" method="post" path="/api/{serviceId}/vci/offer/info" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciOfferInfoApi({
-    serviceId: "<id>",
-    requestBody: {},
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciOfferInfoApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciOfferInfoApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await verifiableCredentialIssuerVciOfferInfoApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {},
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("verifiableCredentialIssuerVciOfferInfoApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.VciOfferInfoApiRequest](../../models/operations/vciofferinfoapirequest.md)                                                                                         | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.VciOfferInfoApiResponse](../../models/operations/vciofferinfoapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                | Status Code                               | Content Type                              |
-| ----------------------------------------- | ----------------------------------------- | ----------------------------------------- |
-| errors.VciOfferInfoApiBadRequestError     | 400                                       | application/json                          |
-| errors.VciOfferInfoApiUnauthorizedError   | 401                                       | application/json                          |
-| errors.VciOfferInfoApiForbiddenError      | 403                                       | application/json                          |
-| errors.VciOfferInfoApiInternalServerError | 500                                       | application/json                          |
-| errors.AutheleteBundledDefaultError       | 4XX, 5XX                                  | \*/\*                                     |
-
-## vciOfferInfoApiForm
-
-/api/{serviceId}/vci/offer/info API
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="vci_offer_info_api_form" method="post" path="/api/{serviceId}/vci/offer/info" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciOfferInfoApiForm({
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: true,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciOfferInfoApiForm } from "authelete-bundled/funcs/verifiableCredentialIssuerVciOfferInfoApiForm.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await verifiableCredentialIssuerVciOfferInfoApiForm(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: false,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("verifiableCredentialIssuerVciOfferInfoApiForm failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.VciOfferInfoApiFormRequest](../../models/operations/vciofferinfoapiformrequest.md)                                                                                 | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.VciOfferInfoApiFormResponse](../../models/operations/vciofferinfoapiformresponse.md)\>**
-
-### Errors
-
-| Error Type                                    | Status Code                                   | Content Type                                  |
-| --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
-| errors.VciOfferInfoApiFormBadRequestError     | 400                                           | application/json                              |
-| errors.VciOfferInfoApiFormUnauthorizedError   | 401                                           | application/json                              |
-| errors.VciOfferInfoApiFormForbiddenError      | 403                                           | application/json                              |
-| errors.VciOfferInfoApiFormInternalServerError | 500                                           | application/json                              |
-| errors.AutheleteBundledDefaultError           | 4XX, 5XX                                      | \*/\*                                         |
-
-## vciSingleParseApi
-
-/api/{serviceId}/vci/single/parse API
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="vci_single_parse_api" method="post" path="/api/{serviceId}/vci/single/parse" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciSingleParseApi({
-    serviceId: "<id>",
-    requestBody: {},
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciSingleParseApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciSingleParseApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await verifiableCredentialIssuerVciSingleParseApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {},
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("verifiableCredentialIssuerVciSingleParseApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.VciSingleParseApiRequest](../../models/operations/vcisingleparseapirequest.md)                                                                                     | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.VciSingleParseApiResponse](../../models/operations/vcisingleparseapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                  | Status Code                                 | Content Type                                |
-| ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
-| errors.VciSingleParseApiBadRequestError     | 400                                         | application/json                            |
-| errors.VciSingleParseApiUnauthorizedError   | 401                                         | application/json                            |
-| errors.VciSingleParseApiForbiddenError      | 403                                         | application/json                            |
-| errors.VciSingleParseApiInternalServerError | 500                                         | application/json                            |
-| errors.AutheleteBundledDefaultError         | 4XX, 5XX                                    | \*/\*                                       |
-
-## vciSingleParseApiForm
-
-/api/{serviceId}/vci/single/parse API
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="vci_single_parse_api_form" method="post" path="/api/{serviceId}/vci/single/parse" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciSingleParseApiForm({
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: true,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciSingleParseApiForm } from "authelete-bundled/funcs/verifiableCredentialIssuerVciSingleParseApiForm.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await verifiableCredentialIssuerVciSingleParseApiForm(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: false,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("verifiableCredentialIssuerVciSingleParseApiForm failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.VciSingleParseApiFormRequest](../../models/operations/vcisingleparseapiformrequest.md)                                                                             | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.VciSingleParseApiFormResponse](../../models/operations/vcisingleparseapiformresponse.md)\>**
-
-### Errors
-
-| Error Type                                      | Status Code                                     | Content Type                                    |
-| ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
-| errors.VciSingleParseApiFormBadRequestError     | 400                                             | application/json                                |
-| errors.VciSingleParseApiFormUnauthorizedError   | 401                                             | application/json                                |
-| errors.VciSingleParseApiFormForbiddenError      | 403                                             | application/json                                |
-| errors.VciSingleParseApiFormInternalServerError | 500                                             | application/json                                |
-| errors.AutheleteBundledDefaultError             | 4XX, 5XX                                        | \*/\*                                           |
-
-## vciSingleIssueApi
-
-/api/{serviceId}/vci/single/issue API
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="vci_single_issue_api" method="post" path="/api/{serviceId}/vci/single/issue" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciSingleIssueApi({
-    serviceId: "<id>",
-    requestBody: {},
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciSingleIssueApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciSingleIssueApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await verifiableCredentialIssuerVciSingleIssueApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {},
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("verifiableCredentialIssuerVciSingleIssueApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.VciSingleIssueApiRequest](../../models/operations/vcisingleissueapirequest.md)                                                                                     | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.VciSingleIssueApiResponse](../../models/operations/vcisingleissueapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                  | Status Code                                 | Content Type                                |
-| ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
-| errors.VciSingleIssueApiBadRequestError     | 400                                         | application/json                            |
-| errors.VciSingleIssueApiUnauthorizedError   | 401                                         | application/json                            |
-| errors.VciSingleIssueApiForbiddenError      | 403                                         | application/json                            |
-| errors.VciSingleIssueApiInternalServerError | 500                                         | application/json                            |
-| errors.AutheleteBundledDefaultError         | 4XX, 5XX                                    | \*/\*                                       |
-
-## vciBatchParseApi
-
-/api/{serviceId}/vci/batch/parse API
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="vci_batch_parse_api" method="post" path="/api/{serviceId}/vci/batch/parse" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciBatchParseApi({
-    serviceId: "<id>",
-    requestBody: {},
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciBatchParseApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciBatchParseApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await verifiableCredentialIssuerVciBatchParseApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {},
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("verifiableCredentialIssuerVciBatchParseApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.VciBatchParseApiRequest](../../models/operations/vcibatchparseapirequest.md)                                                                                       | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.VciBatchParseApiResponse](../../models/operations/vcibatchparseapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                 | Status Code                                | Content Type                               |
-| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
-| errors.VciBatchParseApiBadRequestError     | 400                                        | application/json                           |
-| errors.VciBatchParseApiUnauthorizedError   | 401                                        | application/json                           |
-| errors.VciBatchParseApiForbiddenError      | 403                                        | application/json                           |
-| errors.VciBatchParseApiInternalServerError | 500                                        | application/json                           |
-| errors.AutheleteBundledDefaultError        | 4XX, 5XX                                   | \*/\*                                      |
-
-## vciBatchParseApiForm
-
-/api/{serviceId}/vci/batch/parse API
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="vci_batch_parse_api_form" method="post" path="/api/{serviceId}/vci/batch/parse" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciBatchParseApiForm({
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: true,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciBatchParseApiForm } from "authelete-bundled/funcs/verifiableCredentialIssuerVciBatchParseApiForm.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await verifiableCredentialIssuerVciBatchParseApiForm(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: false,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("verifiableCredentialIssuerVciBatchParseApiForm failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.VciBatchParseApiFormRequest](../../models/operations/vcibatchparseapiformrequest.md)                                                                               | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.VciBatchParseApiFormResponse](../../models/operations/vcibatchparseapiformresponse.md)\>**
-
-### Errors
-
-| Error Type                                     | Status Code                                    | Content Type                                   |
-| ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| errors.VciBatchParseApiFormBadRequestError     | 400                                            | application/json                               |
-| errors.VciBatchParseApiFormUnauthorizedError   | 401                                            | application/json                               |
-| errors.VciBatchParseApiFormForbiddenError      | 403                                            | application/json                               |
-| errors.VciBatchParseApiFormInternalServerError | 500                                            | application/json                               |
-| errors.AutheleteBundledDefaultError            | 4XX, 5XX                                       | \*/\*                                          |
-
-## vciBatchIssueApi
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
+
+## batchIssue
 
 /api/{serviceId}/vci/batch/issue API
 
@@ -1344,7 +557,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciBatchIssueApi({
+  const result = await autheleteBundled.verifiableCredentialIssuer.batchIssue({
     serviceId: "<id>",
     requestBody: {},
   });
@@ -1361,7 +574,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciBatchIssueApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciBatchIssueApi.js";
+import { verifiableCredentialIssuerBatchIssue } from "authelete-bundled/funcs/verifiableCredentialIssuerBatchIssue.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1372,7 +585,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciBatchIssueApi(autheleteBundled, {
+  const res = await verifiableCredentialIssuerBatchIssue(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {},
   });
@@ -1380,7 +593,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciBatchIssueApi failed:", res.error);
+    console.log("verifiableCredentialIssuerBatchIssue failed:", res.error);
   }
 }
 
@@ -1403,15 +616,15 @@ run();
 
 ### Errors
 
-| Error Type                                 | Status Code                                | Content Type                               |
-| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
-| errors.VciBatchIssueApiBadRequestError     | 400                                        | application/json                           |
-| errors.VciBatchIssueApiUnauthorizedError   | 401                                        | application/json                           |
-| errors.VciBatchIssueApiForbiddenError      | 403                                        | application/json                           |
-| errors.VciBatchIssueApiInternalServerError | 500                                        | application/json                           |
-| errors.AutheleteBundledDefaultError        | 4XX, 5XX                                   | \*/\*                                      |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## vciDeferredParseApi
+## deferredParse
 
 /api/{serviceId}/vci/deferred/parse API
 
@@ -1428,7 +641,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciDeferredParseApi({
+  const result = await autheleteBundled.verifiableCredentialIssuer.deferredParse({
     serviceId: "<id>",
     requestBody: {},
   });
@@ -1445,7 +658,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciDeferredParseApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciDeferredParseApi.js";
+import { verifiableCredentialIssuerDeferredParse } from "authelete-bundled/funcs/verifiableCredentialIssuerDeferredParse.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1456,7 +669,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciDeferredParseApi(autheleteBundled, {
+  const res = await verifiableCredentialIssuerDeferredParse(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {},
   });
@@ -1464,7 +677,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciDeferredParseApi failed:", res.error);
+    console.log("verifiableCredentialIssuerDeferredParse failed:", res.error);
   }
 }
 
@@ -1487,15 +700,15 @@ run();
 
 ### Errors
 
-| Error Type                                    | Status Code                                   | Content Type                                  |
-| --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
-| errors.VciDeferredParseApiBadRequestError     | 400                                           | application/json                              |
-| errors.VciDeferredParseApiUnauthorizedError   | 401                                           | application/json                              |
-| errors.VciDeferredParseApiForbiddenError      | 403                                           | application/json                              |
-| errors.VciDeferredParseApiInternalServerError | 500                                           | application/json                              |
-| errors.AutheleteBundledDefaultError           | 4XX, 5XX                                      | \*/\*                                         |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## vciDeferredParseApiForm
+## deferredParseForm
 
 /api/{serviceId}/vci/deferred/parse API
 
@@ -1512,7 +725,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciDeferredParseApiForm({
+  const result = await autheleteBundled.verifiableCredentialIssuer.deferredParseForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -1531,7 +744,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciDeferredParseApiForm } from "authelete-bundled/funcs/verifiableCredentialIssuerVciDeferredParseApiForm.js";
+import { verifiableCredentialIssuerDeferredParseForm } from "authelete-bundled/funcs/verifiableCredentialIssuerDeferredParseForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1542,7 +755,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciDeferredParseApiForm(autheleteBundled, {
+  const res = await verifiableCredentialIssuerDeferredParseForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -1552,7 +765,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciDeferredParseApiForm failed:", res.error);
+    console.log("verifiableCredentialIssuerDeferredParseForm failed:", res.error);
   }
 }
 
@@ -1575,15 +788,15 @@ run();
 
 ### Errors
 
-| Error Type                                        | Status Code                                       | Content Type                                      |
-| ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- |
-| errors.VciDeferredParseApiFormBadRequestError     | 400                                               | application/json                                  |
-| errors.VciDeferredParseApiFormUnauthorizedError   | 401                                               | application/json                                  |
-| errors.VciDeferredParseApiFormForbiddenError      | 403                                               | application/json                                  |
-| errors.VciDeferredParseApiFormInternalServerError | 500                                               | application/json                                  |
-| errors.AutheleteBundledDefaultError               | 4XX, 5XX                                          | \*/\*                                             |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## vciDeferredIssueApi
+## issueDeferred
 
 /api/{serviceId}/vci/deferred/issue API
 
@@ -1600,7 +813,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.verifiableCredentialIssuer.vciDeferredIssueApi({
+  const result = await autheleteBundled.verifiableCredentialIssuer.issueDeferred({
     serviceId: "<id>",
     requestBody: {},
   });
@@ -1617,7 +830,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { verifiableCredentialIssuerVciDeferredIssueApi } from "authelete-bundled/funcs/verifiableCredentialIssuerVciDeferredIssueApi.js";
+import { verifiableCredentialIssuerIssueDeferred } from "authelete-bundled/funcs/verifiableCredentialIssuerIssueDeferred.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1628,7 +841,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await verifiableCredentialIssuerVciDeferredIssueApi(autheleteBundled, {
+  const res = await verifiableCredentialIssuerIssueDeferred(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {},
   });
@@ -1636,7 +849,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("verifiableCredentialIssuerVciDeferredIssueApi failed:", res.error);
+    console.log("verifiableCredentialIssuerIssueDeferred failed:", res.error);
   }
 }
 
@@ -1659,10 +872,10 @@ run();
 
 ### Errors
 
-| Error Type                                    | Status Code                                   | Content Type                                  |
-| --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
-| errors.VciDeferredIssueApiBadRequestError     | 400                                           | application/json                              |
-| errors.VciDeferredIssueApiUnauthorizedError   | 401                                           | application/json                              |
-| errors.VciDeferredIssueApiForbiddenError      | 403                                           | application/json                              |
-| errors.VciDeferredIssueApiInternalServerError | 500                                           | application/json                              |
-| errors.AutheleteBundledDefaultError           | 4XX, 5XX                                      | \*/\*                                         |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |

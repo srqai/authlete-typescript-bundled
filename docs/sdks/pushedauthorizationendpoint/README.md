@@ -3,14 +3,12 @@
 
 ## Overview
 
-API endpoints for implementing OAuth 2.0 Pushed Authorization Requests (PAR).
-
 ### Available Operations
 
-* [pushedAuthReqApi](#pushedauthreqapi) - Process Pushed Authorization Request
-* [pushedAuthReqApiForm](#pushedauthreqapiform) - Process Pushed Authorization Request
+* [processRequest](#processrequest) - Process Pushed Authorization Request
+* [processRequestForm](#processrequestform) - Process Pushed Authorization Request
 
-## pushedAuthReqApi
+## processRequest
 
 This API creates a pushed request authorization. It authenticates the client and creates a authorization_uri to be returned by the authorization server.
 
@@ -28,7 +26,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.pushedAuthorizationEndpoint.pushedAuthReqApi({
+  const result = await autheleteBundled.pushedAuthorizationEndpoint.processRequest({
     serviceId: "<id>",
     requestBody: {
       parameters: "response_type=code%20id_token&client_id=5921531358155430&redirect_uri=https%3A%2F%2Fserver.example.com%2Fcb&state=SOME_VALUE_ABLE_TO_PREVENT_CSRF&scope=openid&nonce=SOME_VALUE_ABLE_TO_PREVENT_REPLAY_ATTACK&code_challenge=5ZWDQJiryK3eaLtSeFV8y1XySMCWtyITxICLaTwvK8g&code_challenge_method=S256",
@@ -49,7 +47,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { pushedAuthorizationEndpointPushedAuthReqApi } from "authelete-bundled/funcs/pushedAuthorizationEndpointPushedAuthReqApi.js";
+import { pushedAuthorizationEndpointProcessRequest } from "authelete-bundled/funcs/pushedAuthorizationEndpointProcessRequest.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -60,7 +58,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await pushedAuthorizationEndpointPushedAuthReqApi(autheleteBundled, {
+  const res = await pushedAuthorizationEndpointProcessRequest(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       parameters: "response_type=code%20id_token&client_id=5921531358155430&redirect_uri=https%3A%2F%2Fserver.example.com%2Fcb&state=SOME_VALUE_ABLE_TO_PREVENT_CSRF&scope=openid&nonce=SOME_VALUE_ABLE_TO_PREVENT_REPLAY_ATTACK&code_challenge=5ZWDQJiryK3eaLtSeFV8y1XySMCWtyITxICLaTwvK8g&code_challenge_method=S256",
@@ -72,7 +70,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("pushedAuthorizationEndpointPushedAuthReqApi failed:", res.error);
+    console.log("pushedAuthorizationEndpointProcessRequest failed:", res.error);
   }
 }
 
@@ -95,15 +93,15 @@ run();
 
 ### Errors
 
-| Error Type                                 | Status Code                                | Content Type                               |
-| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
-| errors.PushedAuthReqApiBadRequestError     | 400                                        | application/json                           |
-| errors.PushedAuthReqApiUnauthorizedError   | 401                                        | application/json                           |
-| errors.PushedAuthReqApiForbiddenError      | 403                                        | application/json                           |
-| errors.PushedAuthReqApiInternalServerError | 500                                        | application/json                           |
-| errors.AutheleteBundledDefaultError        | 4XX, 5XX                                   | \*/\*                                      |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## pushedAuthReqApiForm
+## processRequestForm
 
 This API creates a pushed request authorization. It authenticates the client and creates a authorization_uri to be returned by the authorization server.
 
@@ -121,7 +119,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.pushedAuthorizationEndpoint.pushedAuthReqApiForm({
+  const result = await autheleteBundled.pushedAuthorizationEndpoint.processRequestForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -140,7 +138,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { pushedAuthorizationEndpointPushedAuthReqApiForm } from "authelete-bundled/funcs/pushedAuthorizationEndpointPushedAuthReqApiForm.js";
+import { pushedAuthorizationEndpointProcessRequestForm } from "authelete-bundled/funcs/pushedAuthorizationEndpointProcessRequestForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -151,7 +149,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await pushedAuthorizationEndpointPushedAuthReqApiForm(autheleteBundled, {
+  const res = await pushedAuthorizationEndpointProcessRequestForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -161,7 +159,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("pushedAuthorizationEndpointPushedAuthReqApiForm failed:", res.error);
+    console.log("pushedAuthorizationEndpointProcessRequestForm failed:", res.error);
   }
 }
 
@@ -184,10 +182,10 @@ run();
 
 ### Errors
 
-| Error Type                                     | Status Code                                    | Content Type                                   |
-| ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| errors.PushedAuthReqApiFormBadRequestError     | 400                                            | application/json                               |
-| errors.PushedAuthReqApiFormUnauthorizedError   | 401                                            | application/json                               |
-| errors.PushedAuthReqApiFormForbiddenError      | 403                                            | application/json                               |
-| errors.PushedAuthReqApiFormInternalServerError | 500                                            | application/json                               |
-| errors.AutheleteBundledDefaultError            | 4XX, 5XX                                       | \*/\*                                          |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |

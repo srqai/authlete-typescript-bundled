@@ -3,20 +3,16 @@
 
 ## Overview
 
-API endpoints for implementing Client-Initiated Backchannel Authentication (CIBA).
-
 ### Available Operations
 
-* [backchannelAuthenticationApi](#backchannelauthenticationapi) - Process Backchannel Authentication Request
-* [backchannelAuthenticationApiForm](#backchannelauthenticationapiform) - Process Backchannel Authentication Request
-* [backchannelAuthenticationIssueApi](#backchannelauthenticationissueapi) - Issue Backchannel Authentication Response
-* [backchannelAuthenticationIssueApiForm](#backchannelauthenticationissueapiform) - Issue Backchannel Authentication Response
-* [backchannelAuthenticationFailApi](#backchannelauthenticationfailapi) - Fail Backchannel Authentication Request
-* [backchannelAuthenticationFailApiForm](#backchannelauthenticationfailapiform) - Fail Backchannel Authentication Request
-* [backchannelAuthenticationCompleteApi](#backchannelauthenticationcompleteapi) - Complete Backchannel Authentication
-* [backchannelAuthenticationCompleteApiForm](#backchannelauthenticationcompleteapiform) - Complete Backchannel Authentication
+* [processAuthentication](#processauthentication) - Process Backchannel Authentication Request
+* [processAuthenticationForm](#processauthenticationform) - Process Backchannel Authentication Request
+* [failAuthentication](#failauthentication) - Fail Backchannel Authentication Request
+* [failAuthenticationForm](#failauthenticationform) - Fail Backchannel Authentication Request
+* [completeAuthentication](#completeauthentication) - Complete Backchannel Authentication
+* [completeAuthenticationForm](#completeauthenticationform) - Complete Backchannel Authentication
 
-## backchannelAuthenticationApi
+## processAuthentication
 
 This API parses request parameters of a [backchannel authentication request](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html#auth_request)
 and returns necessary data for the authorization server implementation to process the backchannel
@@ -343,7 +339,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.ciba.backchannelAuthenticationApi({
+  const result = await autheleteBundled.ciba.processAuthentication({
     serviceId: "<id>",
     requestBody: {
       parameters: "login_hint=john&scope=openid&client_notification_token=my-client-notification-token&user_code=my-user-code",
@@ -364,7 +360,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { cibaBackchannelAuthenticationApi } from "authelete-bundled/funcs/cibaBackchannelAuthenticationApi.js";
+import { cibaProcessAuthentication } from "authelete-bundled/funcs/cibaProcessAuthentication.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -375,7 +371,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await cibaBackchannelAuthenticationApi(autheleteBundled, {
+  const res = await cibaProcessAuthentication(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       parameters: "login_hint=john&scope=openid&client_notification_token=my-client-notification-token&user_code=my-user-code",
@@ -387,7 +383,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("cibaBackchannelAuthenticationApi failed:", res.error);
+    console.log("cibaProcessAuthentication failed:", res.error);
   }
 }
 
@@ -410,15 +406,15 @@ run();
 
 ### Errors
 
-| Error Type                                             | Status Code                                            | Content Type                                           |
-| ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------ |
-| errors.BackchannelAuthenticationApiBadRequestError     | 400                                                    | application/json                                       |
-| errors.BackchannelAuthenticationApiUnauthorizedError   | 401                                                    | application/json                                       |
-| errors.BackchannelAuthenticationApiForbiddenError      | 403                                                    | application/json                                       |
-| errors.BackchannelAuthenticationApiInternalServerError | 500                                                    | application/json                                       |
-| errors.AutheleteBundledDefaultError                    | 4XX, 5XX                                               | \*/\*                                                  |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## backchannelAuthenticationApiForm
+## processAuthenticationForm
 
 This API parses request parameters of a [backchannel authentication request](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html#auth_request)
 and returns necessary data for the authorization server implementation to process the backchannel
@@ -745,7 +741,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.ciba.backchannelAuthenticationApiForm({
+  const result = await autheleteBundled.ciba.processAuthenticationForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -764,7 +760,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { cibaBackchannelAuthenticationApiForm } from "authelete-bundled/funcs/cibaBackchannelAuthenticationApiForm.js";
+import { cibaProcessAuthenticationForm } from "authelete-bundled/funcs/cibaProcessAuthenticationForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -775,7 +771,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await cibaBackchannelAuthenticationApiForm(autheleteBundled, {
+  const res = await cibaProcessAuthenticationForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -785,7 +781,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("cibaBackchannelAuthenticationApiForm failed:", res.error);
+    console.log("cibaProcessAuthenticationForm failed:", res.error);
   }
 }
 
@@ -808,369 +804,15 @@ run();
 
 ### Errors
 
-| Error Type                                                 | Status Code                                                | Content Type                                               |
-| ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
-| errors.BackchannelAuthenticationApiFormBadRequestError     | 400                                                        | application/json                                           |
-| errors.BackchannelAuthenticationApiFormUnauthorizedError   | 401                                                        | application/json                                           |
-| errors.BackchannelAuthenticationApiFormForbiddenError      | 403                                                        | application/json                                           |
-| errors.BackchannelAuthenticationApiFormInternalServerError | 500                                                        | application/json                                           |
-| errors.AutheleteBundledDefaultError                        | 4XX, 5XX                                                   | \*/\*                                                      |
-
-## backchannelAuthenticationIssueApi
-
-This API prepares JSON that contains an `auth_req_id`. The JSON should be used as the response body
-of the response which is returned to the client from the [backchannel authentication endpoint](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html#auth_backchannel_endpoint)
-
-<br>
-<details>
-<summary>Description</summary>
-
-This API is supposed to be called from within the implementation of the backchannel authentication
-endpoint of the service in order to generate a successful response to the client application.
-
-The description of the `/backchannel/authentication` API describes the timing when this API should
-be called and the meaning of request parameters. See [AUTH_REQ_ID ISSUE] in `USER_IDENTIFICATION`.
-
-The response from `/backchannel/authentication/issue` API has some parameters. Among them, it is
-`action` parameter that the authorization server implementation should check first because it denotes
-the next `action` that the authorization server implementation should take. According to the value
-of `action`, the authorization server implementation must take the steps described below.
-
-```java
-@POST
-@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-public Response post(String parameters)
-{
-    // 'parameters' is the entity body of the backchannel authentication request.
-    ......
-}
-```
-
-The endpoint implementation does not have to parse the request parameters from the client application
-because Authlete's `/backchannel/authentication` API does it.
-
-The response from `/backchannel/authentication` API has various parameters. Among them, it is `action`
-parameter that the authorization server implementation should check first because it denotes the
-next action that the authorization server implementation should take. According to the value of
-`action`, the service implementation must take the steps described below.
-
-**INTERNAL_SERVER_ERROR**
-
-When the value of `action` is `INTERNAL_SERVER_ERROR`, it means that the request from the authorization
-server implementation was wrong or that an error occurred in Authlete.
-In either case, from the viewpoint of the client application, it is an error on the server side.
-Therefore, the service implementation should generate a response to the client application with
-HTTP status of "500 Internal Server Error" and `application/json`.
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used as
-the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-**INVALID_TICKET**
-
-When the value of `action` is `INVALID_TICKET`, it means that the ticket included in the API call
-was invalid. For example, it does not exist or has expired.
-
-From a viewpoint of the client application, this is an error on the server side. Therefore, the
-authorization server implementation should generate a response to the client application with
-"500 Internal Server Error" and `application/json`.
-
-You can build an error response in the same way as shown in the description for the case of `INTERNAL_SERVER_ERROR`.
-
-**OK**
-
-When the value of `action` is `OK`, it means that Authlete has succeeded in preparing JSON that
-contains an `auth_req_id`. The JSON should be used as the response body of the response that is
-returned to the client from the backchannel authentication endpoint. `responseContent` contains
-the JSON.
-
-The following illustrates the response which the authorization server implementation should generate
-and return to the client application.
-
-```
-HTTP/1.1 200 OK
-Content-Type: text/html;charset=UTF-8
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-</details>
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="backchannel_authentication_issue_api" method="post" path="/api/{serviceId}/backchannel/authentication/issue" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.ciba.backchannelAuthenticationIssueApi({
-    serviceId: "<id>",
-    requestBody: {
-      ticket: "NFIHGx_btVrWmtAD093D-87JxvT4DAtuijEkLVHbS4Q",
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { cibaBackchannelAuthenticationIssueApi } from "authelete-bundled/funcs/cibaBackchannelAuthenticationIssueApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await cibaBackchannelAuthenticationIssueApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      ticket: "NFIHGx_btVrWmtAD093D-87JxvT4DAtuijEkLVHbS4Q",
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("cibaBackchannelAuthenticationIssueApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.BackchannelAuthenticationIssueApiRequest](../../models/operations/backchannelauthenticationissueapirequest.md)                                                     | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.BackchannelAuthenticationIssueApiResponse](../../models/operations/backchannelauthenticationissueapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                                  | Status Code                                                 | Content Type                                                |
-| ----------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| errors.BackchannelAuthenticationIssueApiBadRequestError     | 400                                                         | application/json                                            |
-| errors.BackchannelAuthenticationIssueApiUnauthorizedError   | 401                                                         | application/json                                            |
-| errors.BackchannelAuthenticationIssueApiForbiddenError      | 403                                                         | application/json                                            |
-| errors.BackchannelAuthenticationIssueApiInternalServerError | 500                                                         | application/json                                            |
-| errors.AutheleteBundledDefaultError                         | 4XX, 5XX                                                    | \*/\*                                                       |
-
-## backchannelAuthenticationIssueApiForm
-
-This API prepares JSON that contains an `auth_req_id`. The JSON should be used as the response body
-of the response which is returned to the client from the [backchannel authentication endpoint](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html#auth_backchannel_endpoint)
-
-<br>
-<details>
-<summary>Description</summary>
-
-This API is supposed to be called from within the implementation of the backchannel authentication
-endpoint of the service in order to generate a successful response to the client application.
-
-The description of the `/backchannel/authentication` API describes the timing when this API should
-be called and the meaning of request parameters. See [AUTH_REQ_ID ISSUE] in `USER_IDENTIFICATION`.
-
-The response from `/backchannel/authentication/issue` API has some parameters. Among them, it is
-`action` parameter that the authorization server implementation should check first because it denotes
-the next `action` that the authorization server implementation should take. According to the value
-of `action`, the authorization server implementation must take the steps described below.
-
-```java
-@POST
-@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-public Response post(String parameters)
-{
-    // 'parameters' is the entity body of the backchannel authentication request.
-    ......
-}
-```
-
-The endpoint implementation does not have to parse the request parameters from the client application
-because Authlete's `/backchannel/authentication` API does it.
-
-The response from `/backchannel/authentication` API has various parameters. Among them, it is `action`
-parameter that the authorization server implementation should check first because it denotes the
-next action that the authorization server implementation should take. According to the value of
-`action`, the service implementation must take the steps described below.
-
-**INTERNAL_SERVER_ERROR**
-
-When the value of `action` is `INTERNAL_SERVER_ERROR`, it means that the request from the authorization
-server implementation was wrong or that an error occurred in Authlete.
-In either case, from the viewpoint of the client application, it is an error on the server side.
-Therefore, the service implementation should generate a response to the client application with
-HTTP status of "500 Internal Server Error" and `application/json`.
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used as
-the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-**INVALID_TICKET**
-
-When the value of `action` is `INVALID_TICKET`, it means that the ticket included in the API call
-was invalid. For example, it does not exist or has expired.
-
-From a viewpoint of the client application, this is an error on the server side. Therefore, the
-authorization server implementation should generate a response to the client application with
-"500 Internal Server Error" and `application/json`.
-
-You can build an error response in the same way as shown in the description for the case of `INTERNAL_SERVER_ERROR`.
-
-**OK**
-
-When the value of `action` is `OK`, it means that Authlete has succeeded in preparing JSON that
-contains an `auth_req_id`. The JSON should be used as the response body of the response that is
-returned to the client from the backchannel authentication endpoint. `responseContent` contains
-the JSON.
-
-The following illustrates the response which the authorization server implementation should generate
-and return to the client application.
-
-```
-HTTP/1.1 200 OK
-Content-Type: text/html;charset=UTF-8
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-</details>
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="backchannel_authentication_issue_api_form" method="post" path="/api/{serviceId}/backchannel/authentication/issue" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.ciba.backchannelAuthenticationIssueApiForm({
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: true,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { cibaBackchannelAuthenticationIssueApiForm } from "authelete-bundled/funcs/cibaBackchannelAuthenticationIssueApiForm.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await cibaBackchannelAuthenticationIssueApiForm(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: false,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("cibaBackchannelAuthenticationIssueApiForm failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.BackchannelAuthenticationIssueApiFormRequest](../../models/operations/backchannelauthenticationissueapiformrequest.md)                                             | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.BackchannelAuthenticationIssueApiFormResponse](../../models/operations/backchannelauthenticationissueapiformresponse.md)\>**
-
-### Errors
-
-| Error Type                                                      | Status Code                                                     | Content Type                                                    |
-| --------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| errors.BackchannelAuthenticationIssueApiFormBadRequestError     | 400                                                             | application/json                                                |
-| errors.BackchannelAuthenticationIssueApiFormUnauthorizedError   | 401                                                             | application/json                                                |
-| errors.BackchannelAuthenticationIssueApiFormForbiddenError      | 403                                                             | application/json                                                |
-| errors.BackchannelAuthenticationIssueApiFormInternalServerError | 500                                                             | application/json                                                |
-| errors.AutheleteBundledDefaultError                             | 4XX, 5XX                                                        | \*/\*                                                           |
-
-## backchannelAuthenticationFailApi
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
+
+## failAuthentication
 
 The API prepares JSON that contains an error. The JSON should be used as the response body of the
 response which is returned to the client from the [backchannel authentication endpoint](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html#auth_backchannel_endpoint).
@@ -1223,7 +865,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.ciba.backchannelAuthenticationFailApi({
+  const result = await autheleteBundled.ciba.failAuthentication({
     serviceId: "<id>",
     requestBody: {
       ticket: "<value>",
@@ -1243,7 +885,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { cibaBackchannelAuthenticationFailApi } from "authelete-bundled/funcs/cibaBackchannelAuthenticationFailApi.js";
+import { cibaFailAuthentication } from "authelete-bundled/funcs/cibaFailAuthentication.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1254,7 +896,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await cibaBackchannelAuthenticationFailApi(autheleteBundled, {
+  const res = await cibaFailAuthentication(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       ticket: "<value>",
@@ -1265,7 +907,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("cibaBackchannelAuthenticationFailApi failed:", res.error);
+    console.log("cibaFailAuthentication failed:", res.error);
   }
 }
 
@@ -1288,15 +930,15 @@ run();
 
 ### Errors
 
-| Error Type                                                 | Status Code                                                | Content Type                                               |
-| ---------------------------------------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
-| errors.BackchannelAuthenticationFailApiBadRequestError     | 400                                                        | application/json                                           |
-| errors.BackchannelAuthenticationFailApiUnauthorizedError   | 401                                                        | application/json                                           |
-| errors.BackchannelAuthenticationFailApiForbiddenError      | 403                                                        | application/json                                           |
-| errors.BackchannelAuthenticationFailApiInternalServerError | 500                                                        | application/json                                           |
-| errors.AutheleteBundledDefaultError                        | 4XX, 5XX                                                   | \*/\*                                                      |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## backchannelAuthenticationFailApiForm
+## failAuthenticationForm
 
 The API prepares JSON that contains an error. The JSON should be used as the response body of the
 response which is returned to the client from the [backchannel authentication endpoint](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html#auth_backchannel_endpoint).
@@ -1349,7 +991,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.ciba.backchannelAuthenticationFailApiForm({
+  const result = await autheleteBundled.ciba.failAuthenticationForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -1368,7 +1010,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { cibaBackchannelAuthenticationFailApiForm } from "authelete-bundled/funcs/cibaBackchannelAuthenticationFailApiForm.js";
+import { cibaFailAuthenticationForm } from "authelete-bundled/funcs/cibaFailAuthenticationForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1379,7 +1021,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await cibaBackchannelAuthenticationFailApiForm(autheleteBundled, {
+  const res = await cibaFailAuthenticationForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -1389,7 +1031,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("cibaBackchannelAuthenticationFailApiForm failed:", res.error);
+    console.log("cibaFailAuthenticationForm failed:", res.error);
   }
 }
 
@@ -1412,15 +1054,15 @@ run();
 
 ### Errors
 
-| Error Type                                                     | Status Code                                                    | Content Type                                                   |
-| -------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- |
-| errors.BackchannelAuthenticationFailApiFormBadRequestError     | 400                                                            | application/json                                               |
-| errors.BackchannelAuthenticationFailApiFormUnauthorizedError   | 401                                                            | application/json                                               |
-| errors.BackchannelAuthenticationFailApiFormForbiddenError      | 403                                                            | application/json                                               |
-| errors.BackchannelAuthenticationFailApiFormInternalServerError | 500                                                            | application/json                                               |
-| errors.AutheleteBundledDefaultError                            | 4XX, 5XX                                                       | \*/\*                                                          |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## backchannelAuthenticationCompleteApi
+## completeAuthentication
 
 This API returns information about what action the authorization server should take after it receives
 the result of end-user's decision about whether the end-user has approved or rejected a client application's
@@ -1545,7 +1187,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.ciba.backchannelAuthenticationCompleteApi({
+  const result = await autheleteBundled.ciba.completeAuthentication({
     serviceId: "<id>",
     requestBody: {
       ticket: "NFIHGx_btVrWmtAD093D-87JxvT4DAtuijEkLVHbS4Q",
@@ -1566,7 +1208,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { cibaBackchannelAuthenticationCompleteApi } from "authelete-bundled/funcs/cibaBackchannelAuthenticationCompleteApi.js";
+import { cibaCompleteAuthentication } from "authelete-bundled/funcs/cibaCompleteAuthentication.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1577,7 +1219,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await cibaBackchannelAuthenticationCompleteApi(autheleteBundled, {
+  const res = await cibaCompleteAuthentication(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       ticket: "NFIHGx_btVrWmtAD093D-87JxvT4DAtuijEkLVHbS4Q",
@@ -1589,7 +1231,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("cibaBackchannelAuthenticationCompleteApi failed:", res.error);
+    console.log("cibaCompleteAuthentication failed:", res.error);
   }
 }
 
@@ -1612,15 +1254,15 @@ run();
 
 ### Errors
 
-| Error Type                                                     | Status Code                                                    | Content Type                                                   |
-| -------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- |
-| errors.BackchannelAuthenticationCompleteApiBadRequestError     | 400                                                            | application/json                                               |
-| errors.BackchannelAuthenticationCompleteApiUnauthorizedError   | 401                                                            | application/json                                               |
-| errors.BackchannelAuthenticationCompleteApiForbiddenError      | 403                                                            | application/json                                               |
-| errors.BackchannelAuthenticationCompleteApiInternalServerError | 500                                                            | application/json                                               |
-| errors.AutheleteBundledDefaultError                            | 4XX, 5XX                                                       | \*/\*                                                          |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## backchannelAuthenticationCompleteApiForm
+## completeAuthenticationForm
 
 This API returns information about what action the authorization server should take after it receives
 the result of end-user's decision about whether the end-user has approved or rejected a client application's
@@ -1745,7 +1387,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.ciba.backchannelAuthenticationCompleteApiForm({
+  const result = await autheleteBundled.ciba.completeAuthenticationForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -1764,7 +1406,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { cibaBackchannelAuthenticationCompleteApiForm } from "authelete-bundled/funcs/cibaBackchannelAuthenticationCompleteApiForm.js";
+import { cibaCompleteAuthenticationForm } from "authelete-bundled/funcs/cibaCompleteAuthenticationForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1775,7 +1417,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await cibaBackchannelAuthenticationCompleteApiForm(autheleteBundled, {
+  const res = await cibaCompleteAuthenticationForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -1785,7 +1427,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("cibaBackchannelAuthenticationCompleteApiForm failed:", res.error);
+    console.log("cibaCompleteAuthenticationForm failed:", res.error);
   }
 }
 
@@ -1808,10 +1450,10 @@ run();
 
 ### Errors
 
-| Error Type                                                         | Status Code                                                        | Content Type                                                       |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| errors.BackchannelAuthenticationCompleteApiFormBadRequestError     | 400                                                                | application/json                                                   |
-| errors.BackchannelAuthenticationCompleteApiFormUnauthorizedError   | 401                                                                | application/json                                                   |
-| errors.BackchannelAuthenticationCompleteApiFormForbiddenError      | 403                                                                | application/json                                                   |
-| errors.BackchannelAuthenticationCompleteApiFormInternalServerError | 500                                                                | application/json                                                   |
-| errors.AutheleteBundledDefaultError                                | 4XX, 5XX                                                           | \*/\*                                                              |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |

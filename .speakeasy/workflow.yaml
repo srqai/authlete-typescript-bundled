@@ -4,6 +4,8 @@ sources:
     Authlete API Explorer:
         inputs:
             - location: ./specs/spec1.json
+        overlays:
+            - location: .speakeasy/speakeasy-modifications-overlay.yaml
         transformations:
             - removeUnused: true
         output: .speakeasy/out.openapi.yaml

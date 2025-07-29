@@ -133,34 +133,30 @@ Authlete API Explorer: <div class="min-h-screen bg-gray-100 dark:bg-gray-900 tex
 <!-- Start SDK Installation [installation] -->
 ## SDK Installation
 
-> [!TIP]
-> To finish publishing your SDK to npm and others you must [run your first generation action](https://www.speakeasy.com/docs/github-setup#step-by-step-guide).
-
-
 The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/), [bun](https://bun.sh/) or [yarn](https://classic.yarnpkg.com/en/) package managers.
 
 ### NPM
 
 ```bash
-npm add <UNSET>
+npm add authelete-bundled
 ```
 
 ### PNPM
 
 ```bash
-pnpm add <UNSET>
+pnpm add authelete-bundled
 ```
 
 ### Bun
 
 ```bash
-bun add <UNSET>
+bun add authelete-bundled
 ```
 
 ### Yarn
 
 ```bash
-yarn add <UNSET> zod
+yarn add authelete-bundled zod
 
 # Note that Yarn does not install peer dependencies automatically. You will need
 # to install zod as shown above.
@@ -191,7 +187,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.serviceManagement.serviceGetApi({
+  const result = await autheleteBundled.serviceManagement.get({
     serviceId: "<id>",
   });
 
@@ -226,7 +222,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.serviceManagement.serviceGetApi({
+  const result = await autheleteBundled.serviceManagement.get({
     serviceId: "<id>",
   });
 
@@ -245,176 +241,209 @@ run();
 <summary>Available methods</summary>
 
 
+### [authorization](docs/sdks/authorization/README.md)
+
+* [process](docs/sdks/authorization/README.md#process) - Process Authorization Request
+* [processForm](docs/sdks/authorization/README.md#processform) - Process Authorization Request
+
 ### [authorizationEndpoint](docs/sdks/authorizationendpoint/README.md)
 
-* [authAuthorizationApi](docs/sdks/authorizationendpoint/README.md#authauthorizationapi) - Process Authorization Request
-* [authAuthorizationApiForm](docs/sdks/authorizationendpoint/README.md#authauthorizationapiform) - Process Authorization Request
-* [authAuthorizationFailApi](docs/sdks/authorizationendpoint/README.md#authauthorizationfailapi) - Fail Authorization Request
-* [authAuthorizationFailApiForm](docs/sdks/authorizationendpoint/README.md#authauthorizationfailapiform) - Fail Authorization Request
-* [authAuthorizationIssueApi](docs/sdks/authorizationendpoint/README.md#authauthorizationissueapi) - Issue Authorization Response
-* [authAuthorizationIssueApiForm](docs/sdks/authorizationendpoint/README.md#authauthorizationissueapiform) - Issue Authorization Response
-* [getApiServiceIdAuthAuthorizationTicketInfo](docs/sdks/authorizationendpoint/README.md#getapiserviceidauthauthorizationticketinfo) - Get Ticket Information
-* [postApiServiceIdAuthAuthorizationTicketUpdate](docs/sdks/authorizationendpoint/README.md#postapiserviceidauthauthorizationticketupdate) - Update Ticket Information
-* [postApiServiceIdAuthAuthorizationTicketUpdateForm](docs/sdks/authorizationendpoint/README.md#postapiserviceidauthauthorizationticketupdateform) - Update Ticket Information
+* [failRequest](docs/sdks/authorizationendpoint/README.md#failrequest) - Fail Authorization Request
+* [failRequestForm](docs/sdks/authorizationendpoint/README.md#failrequestform) - Fail Authorization Request
+* [issue](docs/sdks/authorizationendpoint/README.md#issue) - Issue Authorization Response
+* [issueForm](docs/sdks/authorizationendpoint/README.md#issueform) - Issue Authorization Response
+* [getTicketInfo](docs/sdks/authorizationendpoint/README.md#getticketinfo) - Get Ticket Information
+* [updateTicket](docs/sdks/authorizationendpoint/README.md#updateticket) - Update Ticket Information
+* [updateTicketForm](docs/sdks/authorizationendpoint/README.md#updateticketform) - Update Ticket Information
+
+### [backchannelAuthentication](docs/sdks/backchannelauthentication/README.md)
+
+* [issue](docs/sdks/backchannelauthentication/README.md#issue) - Issue Backchannel Authentication Response
+* [issueForm](docs/sdks/backchannelauthentication/README.md#issueform) - Issue Backchannel Authentication Response
 
 ### [ciba](docs/sdks/ciba/README.md)
 
-* [backchannelAuthenticationApi](docs/sdks/ciba/README.md#backchannelauthenticationapi) - Process Backchannel Authentication Request
-* [backchannelAuthenticationApiForm](docs/sdks/ciba/README.md#backchannelauthenticationapiform) - Process Backchannel Authentication Request
-* [backchannelAuthenticationIssueApi](docs/sdks/ciba/README.md#backchannelauthenticationissueapi) - Issue Backchannel Authentication Response
-* [backchannelAuthenticationIssueApiForm](docs/sdks/ciba/README.md#backchannelauthenticationissueapiform) - Issue Backchannel Authentication Response
-* [backchannelAuthenticationFailApi](docs/sdks/ciba/README.md#backchannelauthenticationfailapi) - Fail Backchannel Authentication Request
-* [backchannelAuthenticationFailApiForm](docs/sdks/ciba/README.md#backchannelauthenticationfailapiform) - Fail Backchannel Authentication Request
-* [backchannelAuthenticationCompleteApi](docs/sdks/ciba/README.md#backchannelauthenticationcompleteapi) - Complete Backchannel Authentication
-* [backchannelAuthenticationCompleteApiForm](docs/sdks/ciba/README.md#backchannelauthenticationcompleteapiform) - Complete Backchannel Authentication
+* [processAuthentication](docs/sdks/ciba/README.md#processauthentication) - Process Backchannel Authentication Request
+* [processAuthenticationForm](docs/sdks/ciba/README.md#processauthenticationform) - Process Backchannel Authentication Request
+* [failAuthentication](docs/sdks/ciba/README.md#failauthentication) - Fail Backchannel Authentication Request
+* [failAuthenticationForm](docs/sdks/ciba/README.md#failauthenticationform) - Fail Backchannel Authentication Request
+* [completeAuthentication](docs/sdks/ciba/README.md#completeauthentication) - Complete Backchannel Authentication
+* [completeAuthenticationForm](docs/sdks/ciba/README.md#completeauthenticationform) - Complete Backchannel Authentication
 
 ### [clientManagement](docs/sdks/clientmanagement/README.md)
 
-* [clientGetApi](docs/sdks/clientmanagement/README.md#clientgetapi) - Get Client
-* [clientGetListApi](docs/sdks/clientmanagement/README.md#clientgetlistapi) - List Clients
-* [clientCreateApi](docs/sdks/clientmanagement/README.md#clientcreateapi) - Create Client
-* [clientUpdateApi](docs/sdks/clientmanagement/README.md#clientupdateapi) - Update Client
-* [clientDeleteApi](docs/sdks/clientmanagement/README.md#clientdeleteapi) - Delete Client ⚡
-* [clientFlagUpdateApi](docs/sdks/clientmanagement/README.md#clientflagupdateapi) - Update Client Lock
-* [clientSecretRefreshApi](docs/sdks/clientmanagement/README.md#clientsecretrefreshapi) - Rotate Client Secret
-* [clientSecretUpdateApi](docs/sdks/clientmanagement/README.md#clientsecretupdateapi) - Update Client Secret
-* [clientSecretUpdateApiForm](docs/sdks/clientmanagement/README.md#clientsecretupdateapiform) - Update Client Secret
-* [clientAuthorizationGetListApi](docs/sdks/clientmanagement/README.md#clientauthorizationgetlistapi) - Get Authorized Applications
-* [clientAuthorizationUpdateApi](docs/sdks/clientmanagement/README.md#clientauthorizationupdateapi) - Update Client Tokens
-* [clientAuthorizationUpdateApiForm](docs/sdks/clientmanagement/README.md#clientauthorizationupdateapiform) - Update Client Tokens
-* [clientAuthorizationDeleteApi](docs/sdks/clientmanagement/README.md#clientauthorizationdeleteapi) - Delete Client Tokens
-* [clientGrantedScopesGetApi](docs/sdks/clientmanagement/README.md#clientgrantedscopesgetapi) - Get Granted Scopes
-* [clientGrantedScopesDeleteApi](docs/sdks/clientmanagement/README.md#clientgrantedscopesdeleteapi) - Delete Granted Scopes
-* [clientExtensionRequestablesScopesGetApi](docs/sdks/clientmanagement/README.md#clientextensionrequestablesscopesgetapi) - Get Requestable Scopes
-* [clientExtensionRequestablesScopesUpdateApi](docs/sdks/clientmanagement/README.md#clientextensionrequestablesscopesupdateapi) - Update Requestable Scopes
-* [clientExtensionRequestablesScopesDeleteApi](docs/sdks/clientmanagement/README.md#clientextensionrequestablesscopesdeleteapi) - Delete Requestable Scopes
+* [deleteClient](docs/sdks/clientmanagement/README.md#deleteclient) - Delete Client ⚡
+* [updateClientLock](docs/sdks/clientmanagement/README.md#updateclientlock) - Update Client Lock
+* [updateSecret](docs/sdks/clientmanagement/README.md#updatesecret) - Update Client Secret
+* [updateSecretForm](docs/sdks/clientmanagement/README.md#updatesecretform) - Update Client Secret
+* [getAuthorizedApplications](docs/sdks/clientmanagement/README.md#getauthorizedapplications) - Get Authorized Applications
+* [updateTokens](docs/sdks/clientmanagement/README.md#updatetokens) - Update Client Tokens
+* [updateTokensForm](docs/sdks/clientmanagement/README.md#updatetokensform) - Update Client Tokens
+* [deleteAuthorization](docs/sdks/clientmanagement/README.md#deleteauthorization) - Delete Client Tokens
+* [getGrantedScopes](docs/sdks/clientmanagement/README.md#getgrantedscopes) - Get Granted Scopes
+* [deleteGrantedScopes](docs/sdks/clientmanagement/README.md#deletegrantedscopes) - Delete Granted Scopes
+* [getRequestableScopes](docs/sdks/clientmanagement/README.md#getrequestablescopes) - Get Requestable Scopes
+* [updateRequestableScopes](docs/sdks/clientmanagement/README.md#updaterequestablescopes) - Update Requestable Scopes
+* [deleteRequestableScopes](docs/sdks/clientmanagement/README.md#deleterequestablescopes) - Delete Requestable Scopes
+
+### [clientRegistrations](docs/sdks/clientregistrations/README.md)
+
+* [get](docs/sdks/clientregistrations/README.md#get) - Get Client
+
+### [clients](docs/sdks/clients/README.md)
+
+* [get](docs/sdks/clients/README.md#get) - Get Client
+* [list](docs/sdks/clients/README.md#list) - List Clients
+* [create](docs/sdks/clients/README.md#create) - Create Client
+* [update](docs/sdks/clients/README.md#update) - Update Client
+* [rotateSecret](docs/sdks/clients/README.md#rotatesecret) - Rotate Client Secret
+* [updateRegistration](docs/sdks/clients/README.md#updateregistration) - Update Client
+* [updateRegistrationForm](docs/sdks/clients/README.md#updateregistrationform) - Update Client
 
 ### [deviceFlow](docs/sdks/deviceflow/README.md)
 
-* [deviceAuthorizationApi](docs/sdks/deviceflow/README.md#deviceauthorizationapi) - Process Device Authorization Request
-* [deviceAuthorizationApiForm](docs/sdks/deviceflow/README.md#deviceauthorizationapiform) - Process Device Authorization Request
-* [deviceVerificationApi](docs/sdks/deviceflow/README.md#deviceverificationapi) - Process Device Verification Request
-* [deviceVerificationApiForm](docs/sdks/deviceflow/README.md#deviceverificationapiform) - Process Device Verification Request
-* [deviceCompleteApi](docs/sdks/deviceflow/README.md#devicecompleteapi) - Complete Device Authorization
-* [deviceCompleteApiForm](docs/sdks/deviceflow/README.md#devicecompleteapiform) - Complete Device Authorization
+* [authorize](docs/sdks/deviceflow/README.md#authorize) - Process Device Authorization Request
+* [authorizeForm](docs/sdks/deviceflow/README.md#authorizeform) - Process Device Authorization Request
+* [verify](docs/sdks/deviceflow/README.md#verify) - Process Device Verification Request
+* [verifyForm](docs/sdks/deviceflow/README.md#verifyform) - Process Device Verification Request
+* [completeAuthorization](docs/sdks/deviceflow/README.md#completeauthorization) - Complete Device Authorization
+* [completeAuthorizationForm](docs/sdks/deviceflow/README.md#completeauthorizationform) - Complete Device Authorization
 
 ### [dynamicClientRegistration](docs/sdks/dynamicclientregistration/README.md)
 
-* [clientRegistrationApi](docs/sdks/dynamicclientregistration/README.md#clientregistrationapi) - Register Client
-* [clientRegistrationApiForm](docs/sdks/dynamicclientregistration/README.md#clientregistrationapiform) - Register Client
-* [clientRegistrationGetApi](docs/sdks/dynamicclientregistration/README.md#clientregistrationgetapi) - Get Client
-* [clientRegistrationUpdateApi](docs/sdks/dynamicclientregistration/README.md#clientregistrationupdateapi) - Update Client
-* [clientRegistrationUpdateApiForm](docs/sdks/dynamicclientregistration/README.md#clientregistrationupdateapiform) - Update Client
-* [clientRegistrationDeleteApi](docs/sdks/dynamicclientregistration/README.md#clientregistrationdeleteapi) - Delete Client
-* [clientRegistrationDeleteApiForm](docs/sdks/dynamicclientregistration/README.md#clientregistrationdeleteapiform) - Delete Client
+* [register](docs/sdks/dynamicclientregistration/README.md#register) - Register Client
+* [registerForm](docs/sdks/dynamicclientregistration/README.md#registerform) - Register Client
+* [delete](docs/sdks/dynamicclientregistration/README.md#delete) - Delete Client
+* [deleteForm](docs/sdks/dynamicclientregistration/README.md#deleteform) - Delete Client
 
-### [federationEndpoint](docs/sdks/federationendpoint/README.md)
+### [federation](docs/sdks/federation/README.md)
 
-* [federationConfigurationApi](docs/sdks/federationendpoint/README.md#federationconfigurationapi) - Process Entity Configuration Request
-* [federationRegistrationApi](docs/sdks/federationendpoint/README.md#federationregistrationapi) - Process Federation Registration Request
-* [federationRegistrationApiForm](docs/sdks/federationendpoint/README.md#federationregistrationapiform) - Process Federation Registration Request
+* [processConfiguration](docs/sdks/federation/README.md#processconfiguration) - Process Entity Configuration Request
+* [register](docs/sdks/federation/README.md#register) - Process Federation Registration Request
+* [registerForm](docs/sdks/federation/README.md#registerform) - Process Federation Registration Request
 
-### [grantManagementEndpoint](docs/sdks/grantmanagementendpoint/README.md)
+### [grantManagement](docs/sdks/grantmanagement/README.md)
 
-* [grantMApi](docs/sdks/grantmanagementendpoint/README.md#grantmapi) - Process Grant Management Request
+* [process](docs/sdks/grantmanagement/README.md#process) - Process Grant Management Request
 
 ### [hardwareSecurityKey](docs/sdks/hardwaresecuritykey/README.md)
 
-* [hskCreateApi](docs/sdks/hardwaresecuritykey/README.md#hskcreateapi) - Create Security Key
-* [hskCreateApiForm](docs/sdks/hardwaresecuritykey/README.md#hskcreateapiform) - Create Security Key
-* [hskDeleteApi](docs/sdks/hardwaresecuritykey/README.md#hskdeleteapi) - Delete Security Key
-* [hskGetApi](docs/sdks/hardwaresecuritykey/README.md#hskgetapi) - Get Security Key
-* [hskGetListApi](docs/sdks/hardwaresecuritykey/README.md#hskgetlistapi) - List Security Keys
+* [create](docs/sdks/hardwaresecuritykey/README.md#create) - Create Security Key
+* [createForm](docs/sdks/hardwaresecuritykey/README.md#createform) - Create Security Key
+* [get](docs/sdks/hardwaresecuritykey/README.md#get) - Get Security Key
+
+### [hardwareSecurityKeys](docs/sdks/hardwaresecuritykeys/README.md)
+
+* [delete](docs/sdks/hardwaresecuritykeys/README.md#delete) - Delete Security Key
+* [list](docs/sdks/hardwaresecuritykeys/README.md#list) - List Security Keys
+
+### [introspection](docs/sdks/introspection/README.md)
+
+* [process](docs/sdks/introspection/README.md#process) - Process Introspection Request
+* [processForm](docs/sdks/introspection/README.md#processform) - Process Introspection Request
 
 ### [introspectionEndpoint](docs/sdks/introspectionendpoint/README.md)
 
-* [authIntrospectionApi](docs/sdks/introspectionendpoint/README.md#authintrospectionapi) - Process Introspection Request
-* [authIntrospectionApiForm](docs/sdks/introspectionendpoint/README.md#authintrospectionapiform) - Process Introspection Request
-* [authIntrospectionStandardApi](docs/sdks/introspectionendpoint/README.md#authintrospectionstandardapi) - Process OAuth 2.0 Introspection Request
-* [authIntrospectionStandardApiForm](docs/sdks/introspectionendpoint/README.md#authintrospectionstandardapiform) - Process OAuth 2.0 Introspection Request
+* [processRequest](docs/sdks/introspectionendpoint/README.md#processrequest) - Process OAuth 2.0 Introspection Request
+* [processRequestForm](docs/sdks/introspectionendpoint/README.md#processrequestform) - Process OAuth 2.0 Introspection Request
 
-### [joseObject](docs/sdks/joseobject/README.md)
+### [jose](docs/sdks/jose/README.md)
 
-* [joseVerifyApi](docs/sdks/joseobject/README.md#joseverifyapi) - Verify JOSE
-* [joseVerifyApiForm](docs/sdks/joseobject/README.md#joseverifyapiform) - Verify JOSE
+* [verify](docs/sdks/jose/README.md#verify) - Verify JOSE
+* [verifyForm](docs/sdks/jose/README.md#verifyform) - Verify JOSE
 
-### [jwkSetEndpoint](docs/sdks/jwksetendpoint/README.md)
+### [jwks](docs/sdks/jwks/README.md)
 
-* [serviceJwksGetApi](docs/sdks/jwksetendpoint/README.md#servicejwksgetapi) - Get JWK Set
+* [get](docs/sdks/jwks/README.md#get) - Get JWK Set
 
 ### [pushedAuthorizationEndpoint](docs/sdks/pushedauthorizationendpoint/README.md)
 
-* [pushedAuthReqApi](docs/sdks/pushedauthorizationendpoint/README.md#pushedauthreqapi) - Process Pushed Authorization Request
-* [pushedAuthReqApiForm](docs/sdks/pushedauthorizationendpoint/README.md#pushedauthreqapiform) - Process Pushed Authorization Request
+* [processRequest](docs/sdks/pushedauthorizationendpoint/README.md#processrequest) - Process Pushed Authorization Request
+* [processRequestForm](docs/sdks/pushedauthorizationendpoint/README.md#processrequestform) - Process Pushed Authorization Request
 
-### [revocationEndpoint](docs/sdks/revocationendpoint/README.md)
+### [revocation](docs/sdks/revocation/README.md)
 
-* [authRevocationApi](docs/sdks/revocationendpoint/README.md#authrevocationapi) - Process Revocation Request
-* [authRevocationApiForm](docs/sdks/revocationendpoint/README.md#authrevocationapiform) - Process Revocation Request
+* [process](docs/sdks/revocation/README.md#process) - Process Revocation Request
+* [processForm](docs/sdks/revocation/README.md#processform) - Process Revocation Request
 
 ### [serviceManagement](docs/sdks/servicemanagement/README.md)
 
-* [serviceGetApi](docs/sdks/servicemanagement/README.md#servicegetapi) - Get Service
-* [serviceGetListApi](docs/sdks/servicemanagement/README.md#servicegetlistapi) - List Services
-* [serviceCreateApi](docs/sdks/servicemanagement/README.md#servicecreateapi) - Create Service
-* [serviceUpdateApi](docs/sdks/servicemanagement/README.md#serviceupdateapi) - Update Service
-* [serviceDeleteApi](docs/sdks/servicemanagement/README.md#servicedeleteapi) - Delete Service ⚡
-* [serviceConfigurationApi](docs/sdks/servicemanagement/README.md#serviceconfigurationapi) - Get Service Configuration
+* [get](docs/sdks/servicemanagement/README.md#get) - Get Service
+* [list](docs/sdks/servicemanagement/README.md#list) - List Services
+* [create](docs/sdks/servicemanagement/README.md#create) - Create Service
+* [update](docs/sdks/servicemanagement/README.md#update) - Update Service
+* [getConfiguration](docs/sdks/servicemanagement/README.md#getconfiguration) - Get Service Configuration
+
+### [services](docs/sdks/services/README.md)
+
+* [delete](docs/sdks/services/README.md#delete) - Delete Service ⚡
 
 ### [tokenEndpoint](docs/sdks/tokenendpoint/README.md)
 
-* [authTokenApi](docs/sdks/tokenendpoint/README.md#authtokenapi) - Process Token Request
-* [authTokenApiForm](docs/sdks/tokenendpoint/README.md#authtokenapiform) - Process Token Request
-* [authTokenFailApi](docs/sdks/tokenendpoint/README.md#authtokenfailapi) - Fail Token Request
-* [authTokenFailApiForm](docs/sdks/tokenendpoint/README.md#authtokenfailapiform) - Fail Token Request
-* [authTokenIssueApi](docs/sdks/tokenendpoint/README.md#authtokenissueapi) - Issue Token Response
-* [authTokenIssueApiForm](docs/sdks/tokenendpoint/README.md#authtokenissueapiform) - Issue Token Response
-* [idtokenReissueApi](docs/sdks/tokenendpoint/README.md#idtokenreissueapi) - Reissue ID Token
+* [process](docs/sdks/tokenendpoint/README.md#process) - Process Token Request
+* [processForm](docs/sdks/tokenendpoint/README.md#processform) - Process Token Request
+* [reissueIdToken](docs/sdks/tokenendpoint/README.md#reissueidtoken) - Reissue ID Token
 
 ### [tokenOperations](docs/sdks/tokenoperations/README.md)
 
-* [authTokenGetListApi](docs/sdks/tokenoperations/README.md#authtokengetlistapi) - List Issued Tokens
-* [authTokenCreateApi](docs/sdks/tokenoperations/README.md#authtokencreateapi) - Create Access Token
-* [authTokenCreateApiForm](docs/sdks/tokenoperations/README.md#authtokencreateapiform) - Create Access Token
-* [authTokenUpdateApi](docs/sdks/tokenoperations/README.md#authtokenupdateapi) - Update Access Token
-* [authTokenUpdateApiForm](docs/sdks/tokenoperations/README.md#authtokenupdateapiform) - Update Access Token
-* [authTokenDeleteApi](docs/sdks/tokenoperations/README.md#authtokendeleteapi) - Delete Access Token
-* [authTokenRevokeApi](docs/sdks/tokenoperations/README.md#authtokenrevokeapi) - Revoke Access Token
-* [authTokenRevokeApiForm](docs/sdks/tokenoperations/README.md#authtokenrevokeapiform) - Revoke Access Token
+* [updateToken](docs/sdks/tokenoperations/README.md#updatetoken) - Update Access Token
+* [updateTokenForm](docs/sdks/tokenoperations/README.md#updatetokenform) - Update Access Token
+* [delete](docs/sdks/tokenoperations/README.md#delete) - Delete Access Token
+* [revokeToken](docs/sdks/tokenoperations/README.md#revoketoken) - Revoke Access Token
+* [revokeTokenForm](docs/sdks/tokenoperations/README.md#revoketokenform) - Revoke Access Token
+
+### [tokens](docs/sdks/tokens/README.md)
+
+* [fail](docs/sdks/tokens/README.md#fail) - Fail Token Request
+* [failForm](docs/sdks/tokens/README.md#failform) - Fail Token Request
+* [issue](docs/sdks/tokens/README.md#issue) - Issue Token Response
+* [issueForm](docs/sdks/tokens/README.md#issueform) - Issue Token Response
+* [list](docs/sdks/tokens/README.md#list) - List Issued Tokens
+* [create](docs/sdks/tokens/README.md#create) - Create Access Token
+* [createForm](docs/sdks/tokens/README.md#createform) - Create Access Token
+
+### [userinfo](docs/sdks/userinfo/README.md)
+
+* [process](docs/sdks/userinfo/README.md#process) - Process UserInfo Request
+* [processForm](docs/sdks/userinfo/README.md#processform) - Process UserInfo Request
 
 ### [userInfoEndpoint](docs/sdks/userinfoendpoint/README.md)
 
-* [authUserinfoApi](docs/sdks/userinfoendpoint/README.md#authuserinfoapi) - Process UserInfo Request
-* [authUserinfoApiForm](docs/sdks/userinfoendpoint/README.md#authuserinfoapiform) - Process UserInfo Request
-* [authUserinfoIssueApi](docs/sdks/userinfoendpoint/README.md#authuserinfoissueapi) - Issue UserInfo Response
-* [authUserinfoIssueApiForm](docs/sdks/userinfoendpoint/README.md#authuserinfoissueapiform) - Issue UserInfo Response
+* [issue](docs/sdks/userinfoendpoint/README.md#issue) - Issue UserInfo Response
+* [issueForm](docs/sdks/userinfoendpoint/README.md#issueform) - Issue UserInfo Response
 
 ### [utilityEndpoints](docs/sdks/utilityendpoints/README.md)
 
-* [infoApi](docs/sdks/utilityendpoints/README.md#infoapi) - Get Server Metadata
-* [miscEchoApi](docs/sdks/utilityendpoints/README.md#miscechoapi) - Echo
+* [getInfo](docs/sdks/utilityendpoints/README.md#getinfo) - Get Server Metadata
+* [echo](docs/sdks/utilityendpoints/README.md#echo) - Echo
+
+### [vci](docs/sdks/vci/README.md)
+
+* [metadata](docs/sdks/vci/README.md#metadata) - /api/{serviceId}/vci/metadata API
+* [metadataForm](docs/sdks/vci/README.md#metadataform) - /api/{serviceId}/vci/metadata API
+* [parseBatch](docs/sdks/vci/README.md#parsebatch) - /api/{serviceId}/vci/batch/parse API
+* [parseBatchForm](docs/sdks/vci/README.md#parsebatchform) - /api/{serviceId}/vci/batch/parse API
 
 ### [verifiableCredentialIssuer](docs/sdks/verifiablecredentialissuer/README.md)
 
-* [vciMetadataApi](docs/sdks/verifiablecredentialissuer/README.md#vcimetadataapi) - /api/{serviceId}/vci/metadata API
-* [vciMetadataApiForm](docs/sdks/verifiablecredentialissuer/README.md#vcimetadataapiform) - /api/{serviceId}/vci/metadata API
-* [vciJwtissuerApi](docs/sdks/verifiablecredentialissuer/README.md#vcijwtissuerapi) - /api/{serviceId}/vci/jwtissuer API
-* [vciJwtissuerApiForm](docs/sdks/verifiablecredentialissuer/README.md#vcijwtissuerapiform) - /api/{serviceId}/vci/jwtissuer API
-* [vciJwksApi](docs/sdks/verifiablecredentialissuer/README.md#vcijwksapi) - /api/{serviceId}/vci/jwks API
-* [vciJwksApiForm](docs/sdks/verifiablecredentialissuer/README.md#vcijwksapiform) - /api/{serviceId}/vci/jwks API
-* [vciOfferCreateApi](docs/sdks/verifiablecredentialissuer/README.md#vcioffercreateapi) - /api/{serviceId}/vci/offer/create API
-* [vciOfferCreateApiForm](docs/sdks/verifiablecredentialissuer/README.md#vcioffercreateapiform) - /api/{serviceId}/vci/offer/create API
-* [vciOfferInfoApi](docs/sdks/verifiablecredentialissuer/README.md#vciofferinfoapi) - /api/{serviceId}/vci/offer/info API
-* [vciOfferInfoApiForm](docs/sdks/verifiablecredentialissuer/README.md#vciofferinfoapiform) - /api/{serviceId}/vci/offer/info API
-* [vciSingleParseApi](docs/sdks/verifiablecredentialissuer/README.md#vcisingleparseapi) - /api/{serviceId}/vci/single/parse API
-* [vciSingleParseApiForm](docs/sdks/verifiablecredentialissuer/README.md#vcisingleparseapiform) - /api/{serviceId}/vci/single/parse API
-* [vciSingleIssueApi](docs/sdks/verifiablecredentialissuer/README.md#vcisingleissueapi) - /api/{serviceId}/vci/single/issue API
-* [vciBatchParseApi](docs/sdks/verifiablecredentialissuer/README.md#vcibatchparseapi) - /api/{serviceId}/vci/batch/parse API
-* [vciBatchParseApiForm](docs/sdks/verifiablecredentialissuer/README.md#vcibatchparseapiform) - /api/{serviceId}/vci/batch/parse API
-* [vciBatchIssueApi](docs/sdks/verifiablecredentialissuer/README.md#vcibatchissueapi) - /api/{serviceId}/vci/batch/issue API
-* [vciDeferredParseApi](docs/sdks/verifiablecredentialissuer/README.md#vcideferredparseapi) - /api/{serviceId}/vci/deferred/parse API
-* [vciDeferredParseApiForm](docs/sdks/verifiablecredentialissuer/README.md#vcideferredparseapiform) - /api/{serviceId}/vci/deferred/parse API
-* [vciDeferredIssueApi](docs/sdks/verifiablecredentialissuer/README.md#vcideferredissueapi) - /api/{serviceId}/vci/deferred/issue API
+* [issueJwt](docs/sdks/verifiablecredentialissuer/README.md#issuejwt) - /api/{serviceId}/vci/jwtissuer API
+* [issueJwtForm](docs/sdks/verifiablecredentialissuer/README.md#issuejwtform) - /api/{serviceId}/vci/jwtissuer API
+* [jwks](docs/sdks/verifiablecredentialissuer/README.md#jwks) - /api/{serviceId}/vci/jwks API
+* [jwksForm](docs/sdks/verifiablecredentialissuer/README.md#jwksform) - /api/{serviceId}/vci/jwks API
+* [createOffer](docs/sdks/verifiablecredentialissuer/README.md#createoffer) - /api/{serviceId}/vci/offer/create API
+* [createOfferForm](docs/sdks/verifiablecredentialissuer/README.md#createofferform) - /api/{serviceId}/vci/offer/create API
+* [batchIssue](docs/sdks/verifiablecredentialissuer/README.md#batchissue) - /api/{serviceId}/vci/batch/issue API
+* [deferredParse](docs/sdks/verifiablecredentialissuer/README.md#deferredparse) - /api/{serviceId}/vci/deferred/parse API
+* [deferredParseForm](docs/sdks/verifiablecredentialissuer/README.md#deferredparseform) - /api/{serviceId}/vci/deferred/parse API
+* [issueDeferred](docs/sdks/verifiablecredentialissuer/README.md#issuedeferred) - /api/{serviceId}/vci/deferred/issue API
+
+### [verifiableCredentials](docs/sdks/verifiablecredentials/README.md)
+
+* [offerInfo](docs/sdks/verifiablecredentials/README.md#offerinfo) - /api/{serviceId}/vci/offer/info API
+* [offerInfoForm](docs/sdks/verifiablecredentials/README.md#offerinfoform) - /api/{serviceId}/vci/offer/info API
+* [parse](docs/sdks/verifiablecredentials/README.md#parse) - /api/{serviceId}/vci/single/parse API
+* [parseForm](docs/sdks/verifiablecredentials/README.md#parseform) - /api/{serviceId}/vci/single/parse API
+* [issue](docs/sdks/verifiablecredentials/README.md#issue) - /api/{serviceId}/vci/single/issue API
 
 </details>
 <!-- End Available Resources and Operations [operations] -->
@@ -434,120 +463,120 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 
 <summary>Available standalone functions</summary>
 
-- [`authorizationEndpointAuthAuthorizationApi`](docs/sdks/authorizationendpoint/README.md#authauthorizationapi) - Process Authorization Request
-- [`authorizationEndpointAuthAuthorizationApiForm`](docs/sdks/authorizationendpoint/README.md#authauthorizationapiform) - Process Authorization Request
-- [`authorizationEndpointAuthAuthorizationFailApi`](docs/sdks/authorizationendpoint/README.md#authauthorizationfailapi) - Fail Authorization Request
-- [`authorizationEndpointAuthAuthorizationFailApiForm`](docs/sdks/authorizationendpoint/README.md#authauthorizationfailapiform) - Fail Authorization Request
-- [`authorizationEndpointAuthAuthorizationIssueApi`](docs/sdks/authorizationendpoint/README.md#authauthorizationissueapi) - Issue Authorization Response
-- [`authorizationEndpointAuthAuthorizationIssueApiForm`](docs/sdks/authorizationendpoint/README.md#authauthorizationissueapiform) - Issue Authorization Response
-- [`authorizationEndpointGetApiServiceIdAuthAuthorizationTicketInfo`](docs/sdks/authorizationendpoint/README.md#getapiserviceidauthauthorizationticketinfo) - Get Ticket Information
-- [`authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdate`](docs/sdks/authorizationendpoint/README.md#postapiserviceidauthauthorizationticketupdate) - Update Ticket Information
-- [`authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdateForm`](docs/sdks/authorizationendpoint/README.md#postapiserviceidauthauthorizationticketupdateform) - Update Ticket Information
-- [`cibaBackchannelAuthenticationApi`](docs/sdks/ciba/README.md#backchannelauthenticationapi) - Process Backchannel Authentication Request
-- [`cibaBackchannelAuthenticationApiForm`](docs/sdks/ciba/README.md#backchannelauthenticationapiform) - Process Backchannel Authentication Request
-- [`cibaBackchannelAuthenticationCompleteApi`](docs/sdks/ciba/README.md#backchannelauthenticationcompleteapi) - Complete Backchannel Authentication
-- [`cibaBackchannelAuthenticationCompleteApiForm`](docs/sdks/ciba/README.md#backchannelauthenticationcompleteapiform) - Complete Backchannel Authentication
-- [`cibaBackchannelAuthenticationFailApi`](docs/sdks/ciba/README.md#backchannelauthenticationfailapi) - Fail Backchannel Authentication Request
-- [`cibaBackchannelAuthenticationFailApiForm`](docs/sdks/ciba/README.md#backchannelauthenticationfailapiform) - Fail Backchannel Authentication Request
-- [`cibaBackchannelAuthenticationIssueApi`](docs/sdks/ciba/README.md#backchannelauthenticationissueapi) - Issue Backchannel Authentication Response
-- [`cibaBackchannelAuthenticationIssueApiForm`](docs/sdks/ciba/README.md#backchannelauthenticationissueapiform) - Issue Backchannel Authentication Response
-- [`clientManagementClientAuthorizationDeleteApi`](docs/sdks/clientmanagement/README.md#clientauthorizationdeleteapi) - Delete Client Tokens
-- [`clientManagementClientAuthorizationGetListApi`](docs/sdks/clientmanagement/README.md#clientauthorizationgetlistapi) - Get Authorized Applications
-- [`clientManagementClientAuthorizationUpdateApi`](docs/sdks/clientmanagement/README.md#clientauthorizationupdateapi) - Update Client Tokens
-- [`clientManagementClientAuthorizationUpdateApiForm`](docs/sdks/clientmanagement/README.md#clientauthorizationupdateapiform) - Update Client Tokens
-- [`clientManagementClientCreateApi`](docs/sdks/clientmanagement/README.md#clientcreateapi) - Create Client
-- [`clientManagementClientDeleteApi`](docs/sdks/clientmanagement/README.md#clientdeleteapi) - Delete Client ⚡
-- [`clientManagementClientExtensionRequestablesScopesDeleteApi`](docs/sdks/clientmanagement/README.md#clientextensionrequestablesscopesdeleteapi) - Delete Requestable Scopes
-- [`clientManagementClientExtensionRequestablesScopesGetApi`](docs/sdks/clientmanagement/README.md#clientextensionrequestablesscopesgetapi) - Get Requestable Scopes
-- [`clientManagementClientExtensionRequestablesScopesUpdateApi`](docs/sdks/clientmanagement/README.md#clientextensionrequestablesscopesupdateapi) - Update Requestable Scopes
-- [`clientManagementClientFlagUpdateApi`](docs/sdks/clientmanagement/README.md#clientflagupdateapi) - Update Client Lock
-- [`clientManagementClientGetApi`](docs/sdks/clientmanagement/README.md#clientgetapi) - Get Client
-- [`clientManagementClientGetListApi`](docs/sdks/clientmanagement/README.md#clientgetlistapi) - List Clients
-- [`clientManagementClientGrantedScopesDeleteApi`](docs/sdks/clientmanagement/README.md#clientgrantedscopesdeleteapi) - Delete Granted Scopes
-- [`clientManagementClientGrantedScopesGetApi`](docs/sdks/clientmanagement/README.md#clientgrantedscopesgetapi) - Get Granted Scopes
-- [`clientManagementClientSecretRefreshApi`](docs/sdks/clientmanagement/README.md#clientsecretrefreshapi) - Rotate Client Secret
-- [`clientManagementClientSecretUpdateApi`](docs/sdks/clientmanagement/README.md#clientsecretupdateapi) - Update Client Secret
-- [`clientManagementClientSecretUpdateApiForm`](docs/sdks/clientmanagement/README.md#clientsecretupdateapiform) - Update Client Secret
-- [`clientManagementClientUpdateApi`](docs/sdks/clientmanagement/README.md#clientupdateapi) - Update Client
-- [`deviceFlowDeviceAuthorizationApi`](docs/sdks/deviceflow/README.md#deviceauthorizationapi) - Process Device Authorization Request
-- [`deviceFlowDeviceAuthorizationApiForm`](docs/sdks/deviceflow/README.md#deviceauthorizationapiform) - Process Device Authorization Request
-- [`deviceFlowDeviceCompleteApi`](docs/sdks/deviceflow/README.md#devicecompleteapi) - Complete Device Authorization
-- [`deviceFlowDeviceCompleteApiForm`](docs/sdks/deviceflow/README.md#devicecompleteapiform) - Complete Device Authorization
-- [`deviceFlowDeviceVerificationApi`](docs/sdks/deviceflow/README.md#deviceverificationapi) - Process Device Verification Request
-- [`deviceFlowDeviceVerificationApiForm`](docs/sdks/deviceflow/README.md#deviceverificationapiform) - Process Device Verification Request
-- [`dynamicClientRegistrationClientRegistrationApi`](docs/sdks/dynamicclientregistration/README.md#clientregistrationapi) - Register Client
-- [`dynamicClientRegistrationClientRegistrationApiForm`](docs/sdks/dynamicclientregistration/README.md#clientregistrationapiform) - Register Client
-- [`dynamicClientRegistrationClientRegistrationDeleteApi`](docs/sdks/dynamicclientregistration/README.md#clientregistrationdeleteapi) - Delete Client
-- [`dynamicClientRegistrationClientRegistrationDeleteApiForm`](docs/sdks/dynamicclientregistration/README.md#clientregistrationdeleteapiform) - Delete Client
-- [`dynamicClientRegistrationClientRegistrationGetApi`](docs/sdks/dynamicclientregistration/README.md#clientregistrationgetapi) - Get Client
-- [`dynamicClientRegistrationClientRegistrationUpdateApi`](docs/sdks/dynamicclientregistration/README.md#clientregistrationupdateapi) - Update Client
-- [`dynamicClientRegistrationClientRegistrationUpdateApiForm`](docs/sdks/dynamicclientregistration/README.md#clientregistrationupdateapiform) - Update Client
-- [`federationEndpointFederationConfigurationApi`](docs/sdks/federationendpoint/README.md#federationconfigurationapi) - Process Entity Configuration Request
-- [`federationEndpointFederationRegistrationApi`](docs/sdks/federationendpoint/README.md#federationregistrationapi) - Process Federation Registration Request
-- [`federationEndpointFederationRegistrationApiForm`](docs/sdks/federationendpoint/README.md#federationregistrationapiform) - Process Federation Registration Request
-- [`grantManagementEndpointGrantMApi`](docs/sdks/grantmanagementendpoint/README.md#grantmapi) - Process Grant Management Request
-- [`hardwareSecurityKeyHskCreateApi`](docs/sdks/hardwaresecuritykey/README.md#hskcreateapi) - Create Security Key
-- [`hardwareSecurityKeyHskCreateApiForm`](docs/sdks/hardwaresecuritykey/README.md#hskcreateapiform) - Create Security Key
-- [`hardwareSecurityKeyHskDeleteApi`](docs/sdks/hardwaresecuritykey/README.md#hskdeleteapi) - Delete Security Key
-- [`hardwareSecurityKeyHskGetApi`](docs/sdks/hardwaresecuritykey/README.md#hskgetapi) - Get Security Key
-- [`hardwareSecurityKeyHskGetListApi`](docs/sdks/hardwaresecuritykey/README.md#hskgetlistapi) - List Security Keys
-- [`introspectionEndpointAuthIntrospectionApi`](docs/sdks/introspectionendpoint/README.md#authintrospectionapi) - Process Introspection Request
-- [`introspectionEndpointAuthIntrospectionApiForm`](docs/sdks/introspectionendpoint/README.md#authintrospectionapiform) - Process Introspection Request
-- [`introspectionEndpointAuthIntrospectionStandardApi`](docs/sdks/introspectionendpoint/README.md#authintrospectionstandardapi) - Process OAuth 2.0 Introspection Request
-- [`introspectionEndpointAuthIntrospectionStandardApiForm`](docs/sdks/introspectionendpoint/README.md#authintrospectionstandardapiform) - Process OAuth 2.0 Introspection Request
-- [`joseObjectJoseVerifyApi`](docs/sdks/joseobject/README.md#joseverifyapi) - Verify JOSE
-- [`joseObjectJoseVerifyApiForm`](docs/sdks/joseobject/README.md#joseverifyapiform) - Verify JOSE
-- [`jwkSetEndpointServiceJwksGetApi`](docs/sdks/jwksetendpoint/README.md#servicejwksgetapi) - Get JWK Set
-- [`pushedAuthorizationEndpointPushedAuthReqApi`](docs/sdks/pushedauthorizationendpoint/README.md#pushedauthreqapi) - Process Pushed Authorization Request
-- [`pushedAuthorizationEndpointPushedAuthReqApiForm`](docs/sdks/pushedauthorizationendpoint/README.md#pushedauthreqapiform) - Process Pushed Authorization Request
-- [`revocationEndpointAuthRevocationApi`](docs/sdks/revocationendpoint/README.md#authrevocationapi) - Process Revocation Request
-- [`revocationEndpointAuthRevocationApiForm`](docs/sdks/revocationendpoint/README.md#authrevocationapiform) - Process Revocation Request
-- [`serviceManagementServiceConfigurationApi`](docs/sdks/servicemanagement/README.md#serviceconfigurationapi) - Get Service Configuration
-- [`serviceManagementServiceCreateApi`](docs/sdks/servicemanagement/README.md#servicecreateapi) - Create Service
-- [`serviceManagementServiceDeleteApi`](docs/sdks/servicemanagement/README.md#servicedeleteapi) - Delete Service ⚡
-- [`serviceManagementServiceGetApi`](docs/sdks/servicemanagement/README.md#servicegetapi) - Get Service
-- [`serviceManagementServiceGetListApi`](docs/sdks/servicemanagement/README.md#servicegetlistapi) - List Services
-- [`serviceManagementServiceUpdateApi`](docs/sdks/servicemanagement/README.md#serviceupdateapi) - Update Service
-- [`tokenEndpointAuthTokenApi`](docs/sdks/tokenendpoint/README.md#authtokenapi) - Process Token Request
-- [`tokenEndpointAuthTokenApiForm`](docs/sdks/tokenendpoint/README.md#authtokenapiform) - Process Token Request
-- [`tokenEndpointAuthTokenFailApi`](docs/sdks/tokenendpoint/README.md#authtokenfailapi) - Fail Token Request
-- [`tokenEndpointAuthTokenFailApiForm`](docs/sdks/tokenendpoint/README.md#authtokenfailapiform) - Fail Token Request
-- [`tokenEndpointAuthTokenIssueApi`](docs/sdks/tokenendpoint/README.md#authtokenissueapi) - Issue Token Response
-- [`tokenEndpointAuthTokenIssueApiForm`](docs/sdks/tokenendpoint/README.md#authtokenissueapiform) - Issue Token Response
-- [`tokenEndpointIdtokenReissueApi`](docs/sdks/tokenendpoint/README.md#idtokenreissueapi) - Reissue ID Token
-- [`tokenOperationsAuthTokenCreateApi`](docs/sdks/tokenoperations/README.md#authtokencreateapi) - Create Access Token
-- [`tokenOperationsAuthTokenCreateApiForm`](docs/sdks/tokenoperations/README.md#authtokencreateapiform) - Create Access Token
-- [`tokenOperationsAuthTokenDeleteApi`](docs/sdks/tokenoperations/README.md#authtokendeleteapi) - Delete Access Token
-- [`tokenOperationsAuthTokenGetListApi`](docs/sdks/tokenoperations/README.md#authtokengetlistapi) - List Issued Tokens
-- [`tokenOperationsAuthTokenRevokeApi`](docs/sdks/tokenoperations/README.md#authtokenrevokeapi) - Revoke Access Token
-- [`tokenOperationsAuthTokenRevokeApiForm`](docs/sdks/tokenoperations/README.md#authtokenrevokeapiform) - Revoke Access Token
-- [`tokenOperationsAuthTokenUpdateApi`](docs/sdks/tokenoperations/README.md#authtokenupdateapi) - Update Access Token
-- [`tokenOperationsAuthTokenUpdateApiForm`](docs/sdks/tokenoperations/README.md#authtokenupdateapiform) - Update Access Token
-- [`userInfoEndpointAuthUserinfoApi`](docs/sdks/userinfoendpoint/README.md#authuserinfoapi) - Process UserInfo Request
-- [`userInfoEndpointAuthUserinfoApiForm`](docs/sdks/userinfoendpoint/README.md#authuserinfoapiform) - Process UserInfo Request
-- [`userInfoEndpointAuthUserinfoIssueApi`](docs/sdks/userinfoendpoint/README.md#authuserinfoissueapi) - Issue UserInfo Response
-- [`userInfoEndpointAuthUserinfoIssueApiForm`](docs/sdks/userinfoendpoint/README.md#authuserinfoissueapiform) - Issue UserInfo Response
-- [`utilityEndpointsInfoApi`](docs/sdks/utilityendpoints/README.md#infoapi) - Get Server Metadata
-- [`utilityEndpointsMiscEchoApi`](docs/sdks/utilityendpoints/README.md#miscechoapi) - Echo
-- [`verifiableCredentialIssuerVciBatchIssueApi`](docs/sdks/verifiablecredentialissuer/README.md#vcibatchissueapi) - /api/{serviceId}/vci/batch/issue API
-- [`verifiableCredentialIssuerVciBatchParseApi`](docs/sdks/verifiablecredentialissuer/README.md#vcibatchparseapi) - /api/{serviceId}/vci/batch/parse API
-- [`verifiableCredentialIssuerVciBatchParseApiForm`](docs/sdks/verifiablecredentialissuer/README.md#vcibatchparseapiform) - /api/{serviceId}/vci/batch/parse API
-- [`verifiableCredentialIssuerVciDeferredIssueApi`](docs/sdks/verifiablecredentialissuer/README.md#vcideferredissueapi) - /api/{serviceId}/vci/deferred/issue API
-- [`verifiableCredentialIssuerVciDeferredParseApi`](docs/sdks/verifiablecredentialissuer/README.md#vcideferredparseapi) - /api/{serviceId}/vci/deferred/parse API
-- [`verifiableCredentialIssuerVciDeferredParseApiForm`](docs/sdks/verifiablecredentialissuer/README.md#vcideferredparseapiform) - /api/{serviceId}/vci/deferred/parse API
-- [`verifiableCredentialIssuerVciJwksApi`](docs/sdks/verifiablecredentialissuer/README.md#vcijwksapi) - /api/{serviceId}/vci/jwks API
-- [`verifiableCredentialIssuerVciJwksApiForm`](docs/sdks/verifiablecredentialissuer/README.md#vcijwksapiform) - /api/{serviceId}/vci/jwks API
-- [`verifiableCredentialIssuerVciJwtissuerApi`](docs/sdks/verifiablecredentialissuer/README.md#vcijwtissuerapi) - /api/{serviceId}/vci/jwtissuer API
-- [`verifiableCredentialIssuerVciJwtissuerApiForm`](docs/sdks/verifiablecredentialissuer/README.md#vcijwtissuerapiform) - /api/{serviceId}/vci/jwtissuer API
-- [`verifiableCredentialIssuerVciMetadataApi`](docs/sdks/verifiablecredentialissuer/README.md#vcimetadataapi) - /api/{serviceId}/vci/metadata API
-- [`verifiableCredentialIssuerVciMetadataApiForm`](docs/sdks/verifiablecredentialissuer/README.md#vcimetadataapiform) - /api/{serviceId}/vci/metadata API
-- [`verifiableCredentialIssuerVciOfferCreateApi`](docs/sdks/verifiablecredentialissuer/README.md#vcioffercreateapi) - /api/{serviceId}/vci/offer/create API
-- [`verifiableCredentialIssuerVciOfferCreateApiForm`](docs/sdks/verifiablecredentialissuer/README.md#vcioffercreateapiform) - /api/{serviceId}/vci/offer/create API
-- [`verifiableCredentialIssuerVciOfferInfoApi`](docs/sdks/verifiablecredentialissuer/README.md#vciofferinfoapi) - /api/{serviceId}/vci/offer/info API
-- [`verifiableCredentialIssuerVciOfferInfoApiForm`](docs/sdks/verifiablecredentialissuer/README.md#vciofferinfoapiform) - /api/{serviceId}/vci/offer/info API
-- [`verifiableCredentialIssuerVciSingleIssueApi`](docs/sdks/verifiablecredentialissuer/README.md#vcisingleissueapi) - /api/{serviceId}/vci/single/issue API
-- [`verifiableCredentialIssuerVciSingleParseApi`](docs/sdks/verifiablecredentialissuer/README.md#vcisingleparseapi) - /api/{serviceId}/vci/single/parse API
-- [`verifiableCredentialIssuerVciSingleParseApiForm`](docs/sdks/verifiablecredentialissuer/README.md#vcisingleparseapiform) - /api/{serviceId}/vci/single/parse API
+- [`authorizationEndpointFailRequest`](docs/sdks/authorizationendpoint/README.md#failrequest) - Fail Authorization Request
+- [`authorizationEndpointFailRequestForm`](docs/sdks/authorizationendpoint/README.md#failrequestform) - Fail Authorization Request
+- [`authorizationEndpointGetTicketInfo`](docs/sdks/authorizationendpoint/README.md#getticketinfo) - Get Ticket Information
+- [`authorizationEndpointIssue`](docs/sdks/authorizationendpoint/README.md#issue) - Issue Authorization Response
+- [`authorizationEndpointIssueForm`](docs/sdks/authorizationendpoint/README.md#issueform) - Issue Authorization Response
+- [`authorizationEndpointUpdateTicket`](docs/sdks/authorizationendpoint/README.md#updateticket) - Update Ticket Information
+- [`authorizationEndpointUpdateTicketForm`](docs/sdks/authorizationendpoint/README.md#updateticketform) - Update Ticket Information
+- [`authorizationProcess`](docs/sdks/authorization/README.md#process) - Process Authorization Request
+- [`authorizationProcessForm`](docs/sdks/authorization/README.md#processform) - Process Authorization Request
+- [`backchannelAuthenticationIssue`](docs/sdks/backchannelauthentication/README.md#issue) - Issue Backchannel Authentication Response
+- [`backchannelAuthenticationIssueForm`](docs/sdks/backchannelauthentication/README.md#issueform) - Issue Backchannel Authentication Response
+- [`cibaCompleteAuthentication`](docs/sdks/ciba/README.md#completeauthentication) - Complete Backchannel Authentication
+- [`cibaCompleteAuthenticationForm`](docs/sdks/ciba/README.md#completeauthenticationform) - Complete Backchannel Authentication
+- [`cibaFailAuthentication`](docs/sdks/ciba/README.md#failauthentication) - Fail Backchannel Authentication Request
+- [`cibaFailAuthenticationForm`](docs/sdks/ciba/README.md#failauthenticationform) - Fail Backchannel Authentication Request
+- [`cibaProcessAuthentication`](docs/sdks/ciba/README.md#processauthentication) - Process Backchannel Authentication Request
+- [`cibaProcessAuthenticationForm`](docs/sdks/ciba/README.md#processauthenticationform) - Process Backchannel Authentication Request
+- [`clientManagementDeleteAuthorization`](docs/sdks/clientmanagement/README.md#deleteauthorization) - Delete Client Tokens
+- [`clientManagementDeleteClient`](docs/sdks/clientmanagement/README.md#deleteclient) - Delete Client ⚡
+- [`clientManagementDeleteGrantedScopes`](docs/sdks/clientmanagement/README.md#deletegrantedscopes) - Delete Granted Scopes
+- [`clientManagementDeleteRequestableScopes`](docs/sdks/clientmanagement/README.md#deleterequestablescopes) - Delete Requestable Scopes
+- [`clientManagementGetAuthorizedApplications`](docs/sdks/clientmanagement/README.md#getauthorizedapplications) - Get Authorized Applications
+- [`clientManagementGetGrantedScopes`](docs/sdks/clientmanagement/README.md#getgrantedscopes) - Get Granted Scopes
+- [`clientManagementGetRequestableScopes`](docs/sdks/clientmanagement/README.md#getrequestablescopes) - Get Requestable Scopes
+- [`clientManagementUpdateClientLock`](docs/sdks/clientmanagement/README.md#updateclientlock) - Update Client Lock
+- [`clientManagementUpdateRequestableScopes`](docs/sdks/clientmanagement/README.md#updaterequestablescopes) - Update Requestable Scopes
+- [`clientManagementUpdateSecret`](docs/sdks/clientmanagement/README.md#updatesecret) - Update Client Secret
+- [`clientManagementUpdateSecretForm`](docs/sdks/clientmanagement/README.md#updatesecretform) - Update Client Secret
+- [`clientManagementUpdateTokens`](docs/sdks/clientmanagement/README.md#updatetokens) - Update Client Tokens
+- [`clientManagementUpdateTokensForm`](docs/sdks/clientmanagement/README.md#updatetokensform) - Update Client Tokens
+- [`clientRegistrationsGet`](docs/sdks/clientregistrations/README.md#get) - Get Client
+- [`clientsCreate`](docs/sdks/clients/README.md#create) - Create Client
+- [`clientsGet`](docs/sdks/clients/README.md#get) - Get Client
+- [`clientsList`](docs/sdks/clients/README.md#list) - List Clients
+- [`clientsRotateSecret`](docs/sdks/clients/README.md#rotatesecret) - Rotate Client Secret
+- [`clientsUpdate`](docs/sdks/clients/README.md#update) - Update Client
+- [`clientsUpdateRegistration`](docs/sdks/clients/README.md#updateregistration) - Update Client
+- [`clientsUpdateRegistrationForm`](docs/sdks/clients/README.md#updateregistrationform) - Update Client
+- [`deviceFlowAuthorize`](docs/sdks/deviceflow/README.md#authorize) - Process Device Authorization Request
+- [`deviceFlowAuthorizeForm`](docs/sdks/deviceflow/README.md#authorizeform) - Process Device Authorization Request
+- [`deviceFlowCompleteAuthorization`](docs/sdks/deviceflow/README.md#completeauthorization) - Complete Device Authorization
+- [`deviceFlowCompleteAuthorizationForm`](docs/sdks/deviceflow/README.md#completeauthorizationform) - Complete Device Authorization
+- [`deviceFlowVerify`](docs/sdks/deviceflow/README.md#verify) - Process Device Verification Request
+- [`deviceFlowVerifyForm`](docs/sdks/deviceflow/README.md#verifyform) - Process Device Verification Request
+- [`dynamicClientRegistrationDelete`](docs/sdks/dynamicclientregistration/README.md#delete) - Delete Client
+- [`dynamicClientRegistrationDeleteForm`](docs/sdks/dynamicclientregistration/README.md#deleteform) - Delete Client
+- [`dynamicClientRegistrationRegister`](docs/sdks/dynamicclientregistration/README.md#register) - Register Client
+- [`dynamicClientRegistrationRegisterForm`](docs/sdks/dynamicclientregistration/README.md#registerform) - Register Client
+- [`federationProcessConfiguration`](docs/sdks/federation/README.md#processconfiguration) - Process Entity Configuration Request
+- [`federationRegister`](docs/sdks/federation/README.md#register) - Process Federation Registration Request
+- [`federationRegisterForm`](docs/sdks/federation/README.md#registerform) - Process Federation Registration Request
+- [`grantManagementProcess`](docs/sdks/grantmanagement/README.md#process) - Process Grant Management Request
+- [`hardwareSecurityKeyCreate`](docs/sdks/hardwaresecuritykey/README.md#create) - Create Security Key
+- [`hardwareSecurityKeyCreateForm`](docs/sdks/hardwaresecuritykey/README.md#createform) - Create Security Key
+- [`hardwareSecurityKeyGet`](docs/sdks/hardwaresecuritykey/README.md#get) - Get Security Key
+- [`hardwareSecurityKeysDelete`](docs/sdks/hardwaresecuritykeys/README.md#delete) - Delete Security Key
+- [`hardwareSecurityKeysList`](docs/sdks/hardwaresecuritykeys/README.md#list) - List Security Keys
+- [`introspectionEndpointProcessRequest`](docs/sdks/introspectionendpoint/README.md#processrequest) - Process OAuth 2.0 Introspection Request
+- [`introspectionEndpointProcessRequestForm`](docs/sdks/introspectionendpoint/README.md#processrequestform) - Process OAuth 2.0 Introspection Request
+- [`introspectionProcess`](docs/sdks/introspection/README.md#process) - Process Introspection Request
+- [`introspectionProcessForm`](docs/sdks/introspection/README.md#processform) - Process Introspection Request
+- [`joseVerify`](docs/sdks/jose/README.md#verify) - Verify JOSE
+- [`joseVerifyForm`](docs/sdks/jose/README.md#verifyform) - Verify JOSE
+- [`jwksGet`](docs/sdks/jwks/README.md#get) - Get JWK Set
+- [`pushedAuthorizationEndpointProcessRequest`](docs/sdks/pushedauthorizationendpoint/README.md#processrequest) - Process Pushed Authorization Request
+- [`pushedAuthorizationEndpointProcessRequestForm`](docs/sdks/pushedauthorizationendpoint/README.md#processrequestform) - Process Pushed Authorization Request
+- [`revocationProcess`](docs/sdks/revocation/README.md#process) - Process Revocation Request
+- [`revocationProcessForm`](docs/sdks/revocation/README.md#processform) - Process Revocation Request
+- [`serviceManagementCreate`](docs/sdks/servicemanagement/README.md#create) - Create Service
+- [`serviceManagementGet`](docs/sdks/servicemanagement/README.md#get) - Get Service
+- [`serviceManagementGetConfiguration`](docs/sdks/servicemanagement/README.md#getconfiguration) - Get Service Configuration
+- [`serviceManagementList`](docs/sdks/servicemanagement/README.md#list) - List Services
+- [`serviceManagementUpdate`](docs/sdks/servicemanagement/README.md#update) - Update Service
+- [`servicesDelete`](docs/sdks/services/README.md#delete) - Delete Service ⚡
+- [`tokenEndpointProcess`](docs/sdks/tokenendpoint/README.md#process) - Process Token Request
+- [`tokenEndpointProcessForm`](docs/sdks/tokenendpoint/README.md#processform) - Process Token Request
+- [`tokenEndpointReissueIdToken`](docs/sdks/tokenendpoint/README.md#reissueidtoken) - Reissue ID Token
+- [`tokenOperationsDelete`](docs/sdks/tokenoperations/README.md#delete) - Delete Access Token
+- [`tokenOperationsRevokeToken`](docs/sdks/tokenoperations/README.md#revoketoken) - Revoke Access Token
+- [`tokenOperationsRevokeTokenForm`](docs/sdks/tokenoperations/README.md#revoketokenform) - Revoke Access Token
+- [`tokenOperationsUpdateToken`](docs/sdks/tokenoperations/README.md#updatetoken) - Update Access Token
+- [`tokenOperationsUpdateTokenForm`](docs/sdks/tokenoperations/README.md#updatetokenform) - Update Access Token
+- [`tokensCreate`](docs/sdks/tokens/README.md#create) - Create Access Token
+- [`tokensCreateForm`](docs/sdks/tokens/README.md#createform) - Create Access Token
+- [`tokensFail`](docs/sdks/tokens/README.md#fail) - Fail Token Request
+- [`tokensFailForm`](docs/sdks/tokens/README.md#failform) - Fail Token Request
+- [`tokensIssue`](docs/sdks/tokens/README.md#issue) - Issue Token Response
+- [`tokensIssueForm`](docs/sdks/tokens/README.md#issueform) - Issue Token Response
+- [`tokensList`](docs/sdks/tokens/README.md#list) - List Issued Tokens
+- [`userInfoEndpointIssue`](docs/sdks/userinfoendpoint/README.md#issue) - Issue UserInfo Response
+- [`userInfoEndpointIssueForm`](docs/sdks/userinfoendpoint/README.md#issueform) - Issue UserInfo Response
+- [`userinfoProcess`](docs/sdks/userinfo/README.md#process) - Process UserInfo Request
+- [`userinfoProcessForm`](docs/sdks/userinfo/README.md#processform) - Process UserInfo Request
+- [`utilityEndpointsEcho`](docs/sdks/utilityendpoints/README.md#echo) - Echo
+- [`utilityEndpointsGetInfo`](docs/sdks/utilityendpoints/README.md#getinfo) - Get Server Metadata
+- [`vciMetadata`](docs/sdks/vci/README.md#metadata) - /api/{serviceId}/vci/metadata API
+- [`vciMetadataForm`](docs/sdks/vci/README.md#metadataform) - /api/{serviceId}/vci/metadata API
+- [`vciParseBatch`](docs/sdks/vci/README.md#parsebatch) - /api/{serviceId}/vci/batch/parse API
+- [`vciParseBatchForm`](docs/sdks/vci/README.md#parsebatchform) - /api/{serviceId}/vci/batch/parse API
+- [`verifiableCredentialIssuerBatchIssue`](docs/sdks/verifiablecredentialissuer/README.md#batchissue) - /api/{serviceId}/vci/batch/issue API
+- [`verifiableCredentialIssuerCreateOffer`](docs/sdks/verifiablecredentialissuer/README.md#createoffer) - /api/{serviceId}/vci/offer/create API
+- [`verifiableCredentialIssuerCreateOfferForm`](docs/sdks/verifiablecredentialissuer/README.md#createofferform) - /api/{serviceId}/vci/offer/create API
+- [`verifiableCredentialIssuerDeferredParse`](docs/sdks/verifiablecredentialissuer/README.md#deferredparse) - /api/{serviceId}/vci/deferred/parse API
+- [`verifiableCredentialIssuerDeferredParseForm`](docs/sdks/verifiablecredentialissuer/README.md#deferredparseform) - /api/{serviceId}/vci/deferred/parse API
+- [`verifiableCredentialIssuerIssueDeferred`](docs/sdks/verifiablecredentialissuer/README.md#issuedeferred) - /api/{serviceId}/vci/deferred/issue API
+- [`verifiableCredentialIssuerIssueJwt`](docs/sdks/verifiablecredentialissuer/README.md#issuejwt) - /api/{serviceId}/vci/jwtissuer API
+- [`verifiableCredentialIssuerIssueJwtForm`](docs/sdks/verifiablecredentialissuer/README.md#issuejwtform) - /api/{serviceId}/vci/jwtissuer API
+- [`verifiableCredentialIssuerJwks`](docs/sdks/verifiablecredentialissuer/README.md#jwks) - /api/{serviceId}/vci/jwks API
+- [`verifiableCredentialIssuerJwksForm`](docs/sdks/verifiablecredentialissuer/README.md#jwksform) - /api/{serviceId}/vci/jwks API
+- [`verifiableCredentialsIssue`](docs/sdks/verifiablecredentials/README.md#issue) - /api/{serviceId}/vci/single/issue API
+- [`verifiableCredentialsOfferInfo`](docs/sdks/verifiablecredentials/README.md#offerinfo) - /api/{serviceId}/vci/offer/info API
+- [`verifiableCredentialsOfferInfoForm`](docs/sdks/verifiablecredentials/README.md#offerinfoform) - /api/{serviceId}/vci/offer/info API
+- [`verifiableCredentialsParse`](docs/sdks/verifiablecredentials/README.md#parse) - /api/{serviceId}/vci/single/parse API
+- [`verifiableCredentialsParseForm`](docs/sdks/verifiablecredentials/README.md#parseform) - /api/{serviceId}/vci/single/parse API
 
 </details>
 <!-- End Standalone functions [standalone-funcs] -->
@@ -568,7 +597,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.serviceManagement.serviceGetApi({
+  const result = await autheleteBundled.serviceManagement.get({
     serviceId: "<id>",
   }, {
     retries: {
@@ -611,7 +640,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.serviceManagement.serviceGetApi({
+  const result = await autheleteBundled.serviceManagement.get({
     serviceId: "<id>",
   });
 
@@ -650,7 +679,7 @@ const autheleteBundled = new AutheleteBundled({
 
 async function run() {
   try {
-    const result = await autheleteBundled.serviceManagement.serviceGetApi({
+    const result = await autheleteBundled.serviceManagement.get({
       serviceId: "<id>",
     });
 
@@ -664,7 +693,7 @@ async function run() {
       console.log(error.headers);
 
       // Depending on the method different errors may be thrown
-      if (error instanceof errors.ServiceGetApiBadRequestError) {
+      if (error instanceof errors.BadRequestError) {
         console.log(error.data$.resultCode); // string
         console.log(error.data$.resultMessage); // string
       }
@@ -677,10 +706,14 @@ run();
 ```
 
 ### Error Classes
-**Primary error:**
+**Primary errors:**
 * [`AutheleteBundledError`](./src/models/errors/autheletebundlederror.ts): The base class for HTTP error responses.
+  * [`BadRequestError`](./src/models/errors/badrequesterror.ts): . Status code `400`. *
+  * [`UnauthorizedError`](./src/models/errors/unauthorizederror.ts): . Status code `401`. *
+  * [`ForbiddenError`](./src/models/errors/forbiddenerror.ts): . Status code `403`. *
+  * [`InternalServerError`](./src/models/errors/internalservererror.ts): . Status code `500`. *
 
-<details><summary>Less common errors (458)</summary>
+<details><summary>Less common errors (6)</summary>
 
 <br />
 
@@ -693,458 +726,6 @@ run();
 
 
 **Inherit from [`AutheleteBundledError`](./src/models/errors/autheletebundlederror.ts)**:
-* [`ServiceGetApiBadRequestError`](./src/models/errors/servicegetapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ServiceGetListApiBadRequestError`](./src/models/errors/servicegetlistapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ServiceCreateApiBadRequestError`](./src/models/errors/servicecreateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ServiceUpdateApiBadRequestError`](./src/models/errors/serviceupdateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ServiceDeleteApiBadRequestError`](./src/models/errors/servicedeleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ServiceConfigurationApiBadRequestError`](./src/models/errors/serviceconfigurationapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientGetApiBadRequestError`](./src/models/errors/clientgetapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientGetListApiBadRequestError`](./src/models/errors/clientgetlistapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientCreateApiBadRequestError`](./src/models/errors/clientcreateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientUpdateApiBadRequestError`](./src/models/errors/clientupdateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientDeleteApiBadRequestError`](./src/models/errors/clientdeleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientFlagUpdateApiBadRequestError`](./src/models/errors/clientflagupdateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientSecretRefreshApiBadRequestError`](./src/models/errors/clientsecretrefreshapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientSecretUpdateApiBadRequestError`](./src/models/errors/clientsecretupdateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientSecretUpdateApiFormBadRequestError`](./src/models/errors/clientsecretupdateapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationGetListApiBadRequestError`](./src/models/errors/clientauthorizationgetlistapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationUpdateApiBadRequestError`](./src/models/errors/clientauthorizationupdateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationUpdateApiFormBadRequestError`](./src/models/errors/clientauthorizationupdateapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationDeleteApiBadRequestError`](./src/models/errors/clientauthorizationdeleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientGrantedScopesGetApiBadRequestError`](./src/models/errors/clientgrantedscopesgetapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientGrantedScopesDeleteApiBadRequestError`](./src/models/errors/clientgrantedscopesdeleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesGetApiBadRequestError`](./src/models/errors/clientextensionrequestablesscopesgetapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesUpdateApiBadRequestError`](./src/models/errors/clientextensionrequestablesscopesupdateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesDeleteApiBadRequestError`](./src/models/errors/clientextensionrequestablesscopesdeleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationApiBadRequestError`](./src/models/errors/authauthorizationapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationApiFormBadRequestError`](./src/models/errors/authauthorizationapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationFailApiBadRequestError`](./src/models/errors/authauthorizationfailapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationFailApiFormBadRequestError`](./src/models/errors/authauthorizationfailapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationIssueApiBadRequestError`](./src/models/errors/authauthorizationissueapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationIssueApiFormBadRequestError`](./src/models/errors/authauthorizationissueapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`GetApiServiceIdAuthAuthorizationTicketInfoBadRequestError`](./src/models/errors/getapiserviceidauthauthorizationticketinfobadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`PostApiServiceIdAuthAuthorizationTicketUpdateBadRequestError`](./src/models/errors/postapiserviceidauthauthorizationticketupdatebadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`PostApiServiceIdAuthAuthorizationTicketUpdateFormBadRequestError`](./src/models/errors/postapiserviceidauthauthorizationticketupdateformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`PushedAuthReqApiBadRequestError`](./src/models/errors/pushedauthreqapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`PushedAuthReqApiFormBadRequestError`](./src/models/errors/pushedauthreqapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenApiBadRequestError`](./src/models/errors/authtokenapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenApiFormBadRequestError`](./src/models/errors/authtokenapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenFailApiBadRequestError`](./src/models/errors/authtokenfailapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenFailApiFormBadRequestError`](./src/models/errors/authtokenfailapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenIssueApiBadRequestError`](./src/models/errors/authtokenissueapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenIssueApiFormBadRequestError`](./src/models/errors/authtokenissueapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`IdtokenReissueApiBadRequestError`](./src/models/errors/idtokenreissueapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionApiBadRequestError`](./src/models/errors/authintrospectionapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionApiFormBadRequestError`](./src/models/errors/authintrospectionapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionStandardApiBadRequestError`](./src/models/errors/authintrospectionstandardapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionStandardApiFormBadRequestError`](./src/models/errors/authintrospectionstandardapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthRevocationApiBadRequestError`](./src/models/errors/authrevocationapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthRevocationApiFormBadRequestError`](./src/models/errors/authrevocationapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoApiBadRequestError`](./src/models/errors/authuserinfoapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoApiFormBadRequestError`](./src/models/errors/authuserinfoapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoIssueApiBadRequestError`](./src/models/errors/authuserinfoissueapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoIssueApiFormBadRequestError`](./src/models/errors/authuserinfoissueapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`GrantMApiBadRequestError`](./src/models/errors/grantmapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ServiceJwksGetApiBadRequestError`](./src/models/errors/servicejwksgetapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationApiBadRequestError`](./src/models/errors/clientregistrationapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationApiFormBadRequestError`](./src/models/errors/clientregistrationapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationGetApiBadRequestError`](./src/models/errors/clientregistrationgetapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationUpdateApiBadRequestError`](./src/models/errors/clientregistrationupdateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationUpdateApiFormBadRequestError`](./src/models/errors/clientregistrationupdateapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationDeleteApiBadRequestError`](./src/models/errors/clientregistrationdeleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationDeleteApiFormBadRequestError`](./src/models/errors/clientregistrationdeleteapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationApiBadRequestError`](./src/models/errors/backchannelauthenticationapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationApiFormBadRequestError`](./src/models/errors/backchannelauthenticationapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationIssueApiBadRequestError`](./src/models/errors/backchannelauthenticationissueapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationIssueApiFormBadRequestError`](./src/models/errors/backchannelauthenticationissueapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationFailApiBadRequestError`](./src/models/errors/backchannelauthenticationfailapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationFailApiFormBadRequestError`](./src/models/errors/backchannelauthenticationfailapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationCompleteApiBadRequestError`](./src/models/errors/backchannelauthenticationcompleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationCompleteApiFormBadRequestError`](./src/models/errors/backchannelauthenticationcompleteapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`DeviceAuthorizationApiBadRequestError`](./src/models/errors/deviceauthorizationapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`DeviceAuthorizationApiFormBadRequestError`](./src/models/errors/deviceauthorizationapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`DeviceVerificationApiBadRequestError`](./src/models/errors/deviceverificationapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`DeviceVerificationApiFormBadRequestError`](./src/models/errors/deviceverificationapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`DeviceCompleteApiBadRequestError`](./src/models/errors/devicecompleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`DeviceCompleteApiFormBadRequestError`](./src/models/errors/devicecompleteapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenGetListApiBadRequestError`](./src/models/errors/authtokengetlistapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenCreateApiBadRequestError`](./src/models/errors/authtokencreateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenCreateApiFormBadRequestError`](./src/models/errors/authtokencreateapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenUpdateApiBadRequestError`](./src/models/errors/authtokenupdateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenUpdateApiFormBadRequestError`](./src/models/errors/authtokenupdateapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenDeleteApiBadRequestError`](./src/models/errors/authtokendeleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenRevokeApiBadRequestError`](./src/models/errors/authtokenrevokeapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`AuthTokenRevokeApiFormBadRequestError`](./src/models/errors/authtokenrevokeapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`JoseVerifyApiBadRequestError`](./src/models/errors/joseverifyapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`JoseVerifyApiFormBadRequestError`](./src/models/errors/joseverifyapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`FederationConfigurationApiBadRequestError`](./src/models/errors/federationconfigurationapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`FederationRegistrationApiBadRequestError`](./src/models/errors/federationregistrationapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`FederationRegistrationApiFormBadRequestError`](./src/models/errors/federationregistrationapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`InfoApiBadRequestError`](./src/models/errors/infoapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`HskCreateApiBadRequestError`](./src/models/errors/hskcreateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`HskCreateApiFormBadRequestError`](./src/models/errors/hskcreateapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`HskDeleteApiBadRequestError`](./src/models/errors/hskdeleteapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`HskGetApiBadRequestError`](./src/models/errors/hskgetapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`HskGetListApiBadRequestError`](./src/models/errors/hskgetlistapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciMetadataApiBadRequestError`](./src/models/errors/vcimetadataapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciMetadataApiFormBadRequestError`](./src/models/errors/vcimetadataapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciJwtissuerApiBadRequestError`](./src/models/errors/vcijwtissuerapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciJwtissuerApiFormBadRequestError`](./src/models/errors/vcijwtissuerapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciJwksApiBadRequestError`](./src/models/errors/vcijwksapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciJwksApiFormBadRequestError`](./src/models/errors/vcijwksapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciOfferCreateApiBadRequestError`](./src/models/errors/vcioffercreateapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciOfferCreateApiFormBadRequestError`](./src/models/errors/vcioffercreateapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciOfferInfoApiBadRequestError`](./src/models/errors/vciofferinfoapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciOfferInfoApiFormBadRequestError`](./src/models/errors/vciofferinfoapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciSingleParseApiBadRequestError`](./src/models/errors/vcisingleparseapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciSingleParseApiFormBadRequestError`](./src/models/errors/vcisingleparseapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciSingleIssueApiBadRequestError`](./src/models/errors/vcisingleissueapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciBatchParseApiBadRequestError`](./src/models/errors/vcibatchparseapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciBatchParseApiFormBadRequestError`](./src/models/errors/vcibatchparseapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciBatchIssueApiBadRequestError`](./src/models/errors/vcibatchissueapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciDeferredParseApiBadRequestError`](./src/models/errors/vcideferredparseapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciDeferredParseApiFormBadRequestError`](./src/models/errors/vcideferredparseapiformbadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`VciDeferredIssueApiBadRequestError`](./src/models/errors/vcideferredissueapibadrequesterror.ts): . Status code `400`. Applicable to 1 of 114 methods.*
-* [`ServiceGetApiUnauthorizedError`](./src/models/errors/servicegetapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ServiceGetListApiUnauthorizedError`](./src/models/errors/servicegetlistapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ServiceCreateApiUnauthorizedError`](./src/models/errors/servicecreateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ServiceUpdateApiUnauthorizedError`](./src/models/errors/serviceupdateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ServiceDeleteApiUnauthorizedError`](./src/models/errors/servicedeleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ServiceConfigurationApiUnauthorizedError`](./src/models/errors/serviceconfigurationapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientGetApiUnauthorizedError`](./src/models/errors/clientgetapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientGetListApiUnauthorizedError`](./src/models/errors/clientgetlistapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientCreateApiUnauthorizedError`](./src/models/errors/clientcreateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientUpdateApiUnauthorizedError`](./src/models/errors/clientupdateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientDeleteApiUnauthorizedError`](./src/models/errors/clientdeleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientFlagUpdateApiUnauthorizedError`](./src/models/errors/clientflagupdateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientSecretRefreshApiUnauthorizedError`](./src/models/errors/clientsecretrefreshapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientSecretUpdateApiUnauthorizedError`](./src/models/errors/clientsecretupdateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientSecretUpdateApiFormUnauthorizedError`](./src/models/errors/clientsecretupdateapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationGetListApiUnauthorizedError`](./src/models/errors/clientauthorizationgetlistapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationUpdateApiUnauthorizedError`](./src/models/errors/clientauthorizationupdateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationUpdateApiFormUnauthorizedError`](./src/models/errors/clientauthorizationupdateapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationDeleteApiUnauthorizedError`](./src/models/errors/clientauthorizationdeleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientGrantedScopesGetApiUnauthorizedError`](./src/models/errors/clientgrantedscopesgetapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientGrantedScopesDeleteApiUnauthorizedError`](./src/models/errors/clientgrantedscopesdeleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesGetApiUnauthorizedError`](./src/models/errors/clientextensionrequestablesscopesgetapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesUpdateApiUnauthorizedError`](./src/models/errors/clientextensionrequestablesscopesupdateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesDeleteApiUnauthorizedError`](./src/models/errors/clientextensionrequestablesscopesdeleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationApiUnauthorizedError`](./src/models/errors/authauthorizationapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationApiFormUnauthorizedError`](./src/models/errors/authauthorizationapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationFailApiUnauthorizedError`](./src/models/errors/authauthorizationfailapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationFailApiFormUnauthorizedError`](./src/models/errors/authauthorizationfailapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationIssueApiUnauthorizedError`](./src/models/errors/authauthorizationissueapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationIssueApiFormUnauthorizedError`](./src/models/errors/authauthorizationissueapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`GetApiServiceIdAuthAuthorizationTicketInfoUnauthorizedError`](./src/models/errors/getapiserviceidauthauthorizationticketinfounauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`PostApiServiceIdAuthAuthorizationTicketUpdateUnauthorizedError`](./src/models/errors/postapiserviceidauthauthorizationticketupdateunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`PostApiServiceIdAuthAuthorizationTicketUpdateFormUnauthorizedError`](./src/models/errors/postapiserviceidauthauthorizationticketupdateformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`PushedAuthReqApiUnauthorizedError`](./src/models/errors/pushedauthreqapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`PushedAuthReqApiFormUnauthorizedError`](./src/models/errors/pushedauthreqapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenApiUnauthorizedError`](./src/models/errors/authtokenapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenApiFormUnauthorizedError`](./src/models/errors/authtokenapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenFailApiUnauthorizedError`](./src/models/errors/authtokenfailapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenFailApiFormUnauthorizedError`](./src/models/errors/authtokenfailapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenIssueApiUnauthorizedError`](./src/models/errors/authtokenissueapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenIssueApiFormUnauthorizedError`](./src/models/errors/authtokenissueapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`IdtokenReissueApiUnauthorizedError`](./src/models/errors/idtokenreissueapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionApiUnauthorizedError`](./src/models/errors/authintrospectionapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionApiFormUnauthorizedError`](./src/models/errors/authintrospectionapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionStandardApiUnauthorizedError`](./src/models/errors/authintrospectionstandardapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionStandardApiFormUnauthorizedError`](./src/models/errors/authintrospectionstandardapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthRevocationApiUnauthorizedError`](./src/models/errors/authrevocationapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthRevocationApiFormUnauthorizedError`](./src/models/errors/authrevocationapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoApiUnauthorizedError`](./src/models/errors/authuserinfoapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoApiFormUnauthorizedError`](./src/models/errors/authuserinfoapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoIssueApiUnauthorizedError`](./src/models/errors/authuserinfoissueapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoIssueApiFormUnauthorizedError`](./src/models/errors/authuserinfoissueapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`GrantMApiUnauthorizedError`](./src/models/errors/grantmapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ServiceJwksGetApiUnauthorizedError`](./src/models/errors/servicejwksgetapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationApiUnauthorizedError`](./src/models/errors/clientregistrationapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationApiFormUnauthorizedError`](./src/models/errors/clientregistrationapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationGetApiUnauthorizedError`](./src/models/errors/clientregistrationgetapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationUpdateApiUnauthorizedError`](./src/models/errors/clientregistrationupdateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationUpdateApiFormUnauthorizedError`](./src/models/errors/clientregistrationupdateapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationDeleteApiUnauthorizedError`](./src/models/errors/clientregistrationdeleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationDeleteApiFormUnauthorizedError`](./src/models/errors/clientregistrationdeleteapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationApiUnauthorizedError`](./src/models/errors/backchannelauthenticationapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationApiFormUnauthorizedError`](./src/models/errors/backchannelauthenticationapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationIssueApiUnauthorizedError`](./src/models/errors/backchannelauthenticationissueapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationIssueApiFormUnauthorizedError`](./src/models/errors/backchannelauthenticationissueapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationFailApiUnauthorizedError`](./src/models/errors/backchannelauthenticationfailapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationFailApiFormUnauthorizedError`](./src/models/errors/backchannelauthenticationfailapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationCompleteApiUnauthorizedError`](./src/models/errors/backchannelauthenticationcompleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationCompleteApiFormUnauthorizedError`](./src/models/errors/backchannelauthenticationcompleteapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`DeviceAuthorizationApiUnauthorizedError`](./src/models/errors/deviceauthorizationapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`DeviceAuthorizationApiFormUnauthorizedError`](./src/models/errors/deviceauthorizationapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`DeviceVerificationApiUnauthorizedError`](./src/models/errors/deviceverificationapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`DeviceVerificationApiFormUnauthorizedError`](./src/models/errors/deviceverificationapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`DeviceCompleteApiUnauthorizedError`](./src/models/errors/devicecompleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`DeviceCompleteApiFormUnauthorizedError`](./src/models/errors/devicecompleteapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenGetListApiUnauthorizedError`](./src/models/errors/authtokengetlistapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenCreateApiUnauthorizedError`](./src/models/errors/authtokencreateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenCreateApiFormUnauthorizedError`](./src/models/errors/authtokencreateapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenUpdateApiUnauthorizedError`](./src/models/errors/authtokenupdateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenUpdateApiFormUnauthorizedError`](./src/models/errors/authtokenupdateapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenDeleteApiUnauthorizedError`](./src/models/errors/authtokendeleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenRevokeApiUnauthorizedError`](./src/models/errors/authtokenrevokeapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`AuthTokenRevokeApiFormUnauthorizedError`](./src/models/errors/authtokenrevokeapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`JoseVerifyApiUnauthorizedError`](./src/models/errors/joseverifyapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`JoseVerifyApiFormUnauthorizedError`](./src/models/errors/joseverifyapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`FederationConfigurationApiUnauthorizedError`](./src/models/errors/federationconfigurationapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`FederationRegistrationApiUnauthorizedError`](./src/models/errors/federationregistrationapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`FederationRegistrationApiFormUnauthorizedError`](./src/models/errors/federationregistrationapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`InfoApiUnauthorizedError`](./src/models/errors/infoapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`HskCreateApiUnauthorizedError`](./src/models/errors/hskcreateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`HskCreateApiFormUnauthorizedError`](./src/models/errors/hskcreateapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`HskDeleteApiUnauthorizedError`](./src/models/errors/hskdeleteapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`HskGetApiUnauthorizedError`](./src/models/errors/hskgetapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`HskGetListApiUnauthorizedError`](./src/models/errors/hskgetlistapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciMetadataApiUnauthorizedError`](./src/models/errors/vcimetadataapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciMetadataApiFormUnauthorizedError`](./src/models/errors/vcimetadataapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciJwtissuerApiUnauthorizedError`](./src/models/errors/vcijwtissuerapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciJwtissuerApiFormUnauthorizedError`](./src/models/errors/vcijwtissuerapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciJwksApiUnauthorizedError`](./src/models/errors/vcijwksapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciJwksApiFormUnauthorizedError`](./src/models/errors/vcijwksapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciOfferCreateApiUnauthorizedError`](./src/models/errors/vcioffercreateapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciOfferCreateApiFormUnauthorizedError`](./src/models/errors/vcioffercreateapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciOfferInfoApiUnauthorizedError`](./src/models/errors/vciofferinfoapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciOfferInfoApiFormUnauthorizedError`](./src/models/errors/vciofferinfoapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciSingleParseApiUnauthorizedError`](./src/models/errors/vcisingleparseapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciSingleParseApiFormUnauthorizedError`](./src/models/errors/vcisingleparseapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciSingleIssueApiUnauthorizedError`](./src/models/errors/vcisingleissueapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciBatchParseApiUnauthorizedError`](./src/models/errors/vcibatchparseapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciBatchParseApiFormUnauthorizedError`](./src/models/errors/vcibatchparseapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciBatchIssueApiUnauthorizedError`](./src/models/errors/vcibatchissueapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciDeferredParseApiUnauthorizedError`](./src/models/errors/vcideferredparseapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciDeferredParseApiFormUnauthorizedError`](./src/models/errors/vcideferredparseapiformunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`VciDeferredIssueApiUnauthorizedError`](./src/models/errors/vcideferredissueapiunauthorizederror.ts): . Status code `401`. Applicable to 1 of 114 methods.*
-* [`ServiceGetApiForbiddenError`](./src/models/errors/servicegetapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ServiceGetListApiForbiddenError`](./src/models/errors/servicegetlistapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ServiceCreateApiForbiddenError`](./src/models/errors/servicecreateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ServiceUpdateApiForbiddenError`](./src/models/errors/serviceupdateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ServiceDeleteApiForbiddenError`](./src/models/errors/servicedeleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ServiceConfigurationApiForbiddenError`](./src/models/errors/serviceconfigurationapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientGetApiForbiddenError`](./src/models/errors/clientgetapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientGetListApiForbiddenError`](./src/models/errors/clientgetlistapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientCreateApiForbiddenError`](./src/models/errors/clientcreateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientUpdateApiForbiddenError`](./src/models/errors/clientupdateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientDeleteApiForbiddenError`](./src/models/errors/clientdeleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientFlagUpdateApiForbiddenError`](./src/models/errors/clientflagupdateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientSecretRefreshApiForbiddenError`](./src/models/errors/clientsecretrefreshapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientSecretUpdateApiForbiddenError`](./src/models/errors/clientsecretupdateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientSecretUpdateApiFormForbiddenError`](./src/models/errors/clientsecretupdateapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationGetListApiForbiddenError`](./src/models/errors/clientauthorizationgetlistapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationUpdateApiForbiddenError`](./src/models/errors/clientauthorizationupdateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationUpdateApiFormForbiddenError`](./src/models/errors/clientauthorizationupdateapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationDeleteApiForbiddenError`](./src/models/errors/clientauthorizationdeleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientGrantedScopesGetApiForbiddenError`](./src/models/errors/clientgrantedscopesgetapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientGrantedScopesDeleteApiForbiddenError`](./src/models/errors/clientgrantedscopesdeleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesGetApiForbiddenError`](./src/models/errors/clientextensionrequestablesscopesgetapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesUpdateApiForbiddenError`](./src/models/errors/clientextensionrequestablesscopesupdateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesDeleteApiForbiddenError`](./src/models/errors/clientextensionrequestablesscopesdeleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationApiForbiddenError`](./src/models/errors/authauthorizationapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationApiFormForbiddenError`](./src/models/errors/authauthorizationapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationFailApiForbiddenError`](./src/models/errors/authauthorizationfailapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationFailApiFormForbiddenError`](./src/models/errors/authauthorizationfailapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationIssueApiForbiddenError`](./src/models/errors/authauthorizationissueapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationIssueApiFormForbiddenError`](./src/models/errors/authauthorizationissueapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`GetApiServiceIdAuthAuthorizationTicketInfoForbiddenError`](./src/models/errors/getapiserviceidauthauthorizationticketinfoforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`PostApiServiceIdAuthAuthorizationTicketUpdateForbiddenError`](./src/models/errors/postapiserviceidauthauthorizationticketupdateforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`PostApiServiceIdAuthAuthorizationTicketUpdateFormForbiddenError`](./src/models/errors/postapiserviceidauthauthorizationticketupdateformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`PushedAuthReqApiForbiddenError`](./src/models/errors/pushedauthreqapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`PushedAuthReqApiFormForbiddenError`](./src/models/errors/pushedauthreqapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenApiForbiddenError`](./src/models/errors/authtokenapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenApiFormForbiddenError`](./src/models/errors/authtokenapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenFailApiForbiddenError`](./src/models/errors/authtokenfailapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenFailApiFormForbiddenError`](./src/models/errors/authtokenfailapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenIssueApiForbiddenError`](./src/models/errors/authtokenissueapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenIssueApiFormForbiddenError`](./src/models/errors/authtokenissueapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`IdtokenReissueApiForbiddenError`](./src/models/errors/idtokenreissueapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionApiForbiddenError`](./src/models/errors/authintrospectionapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionApiFormForbiddenError`](./src/models/errors/authintrospectionapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionStandardApiForbiddenError`](./src/models/errors/authintrospectionstandardapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionStandardApiFormForbiddenError`](./src/models/errors/authintrospectionstandardapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthRevocationApiForbiddenError`](./src/models/errors/authrevocationapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthRevocationApiFormForbiddenError`](./src/models/errors/authrevocationapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoApiForbiddenError`](./src/models/errors/authuserinfoapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoApiFormForbiddenError`](./src/models/errors/authuserinfoapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoIssueApiForbiddenError`](./src/models/errors/authuserinfoissueapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoIssueApiFormForbiddenError`](./src/models/errors/authuserinfoissueapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`GrantMApiForbiddenError`](./src/models/errors/grantmapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ServiceJwksGetApiForbiddenError`](./src/models/errors/servicejwksgetapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationApiForbiddenError`](./src/models/errors/clientregistrationapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationApiFormForbiddenError`](./src/models/errors/clientregistrationapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationGetApiForbiddenError`](./src/models/errors/clientregistrationgetapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationUpdateApiForbiddenError`](./src/models/errors/clientregistrationupdateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationUpdateApiFormForbiddenError`](./src/models/errors/clientregistrationupdateapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationDeleteApiForbiddenError`](./src/models/errors/clientregistrationdeleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationDeleteApiFormForbiddenError`](./src/models/errors/clientregistrationdeleteapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationApiForbiddenError`](./src/models/errors/backchannelauthenticationapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationApiFormForbiddenError`](./src/models/errors/backchannelauthenticationapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationIssueApiForbiddenError`](./src/models/errors/backchannelauthenticationissueapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationIssueApiFormForbiddenError`](./src/models/errors/backchannelauthenticationissueapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationFailApiForbiddenError`](./src/models/errors/backchannelauthenticationfailapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationFailApiFormForbiddenError`](./src/models/errors/backchannelauthenticationfailapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationCompleteApiForbiddenError`](./src/models/errors/backchannelauthenticationcompleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationCompleteApiFormForbiddenError`](./src/models/errors/backchannelauthenticationcompleteapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`DeviceAuthorizationApiForbiddenError`](./src/models/errors/deviceauthorizationapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`DeviceAuthorizationApiFormForbiddenError`](./src/models/errors/deviceauthorizationapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`DeviceVerificationApiForbiddenError`](./src/models/errors/deviceverificationapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`DeviceVerificationApiFormForbiddenError`](./src/models/errors/deviceverificationapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`DeviceCompleteApiForbiddenError`](./src/models/errors/devicecompleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`DeviceCompleteApiFormForbiddenError`](./src/models/errors/devicecompleteapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenGetListApiForbiddenError`](./src/models/errors/authtokengetlistapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenCreateApiForbiddenError`](./src/models/errors/authtokencreateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenCreateApiFormForbiddenError`](./src/models/errors/authtokencreateapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenUpdateApiForbiddenError`](./src/models/errors/authtokenupdateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenUpdateApiFormForbiddenError`](./src/models/errors/authtokenupdateapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenDeleteApiForbiddenError`](./src/models/errors/authtokendeleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenRevokeApiForbiddenError`](./src/models/errors/authtokenrevokeapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`AuthTokenRevokeApiFormForbiddenError`](./src/models/errors/authtokenrevokeapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`JoseVerifyApiForbiddenError`](./src/models/errors/joseverifyapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`JoseVerifyApiFormForbiddenError`](./src/models/errors/joseverifyapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`FederationConfigurationApiForbiddenError`](./src/models/errors/federationconfigurationapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`FederationRegistrationApiForbiddenError`](./src/models/errors/federationregistrationapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`FederationRegistrationApiFormForbiddenError`](./src/models/errors/federationregistrationapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`InfoApiForbiddenError`](./src/models/errors/infoapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`HskCreateApiForbiddenError`](./src/models/errors/hskcreateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`HskCreateApiFormForbiddenError`](./src/models/errors/hskcreateapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`HskDeleteApiForbiddenError`](./src/models/errors/hskdeleteapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`HskGetApiForbiddenError`](./src/models/errors/hskgetapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`HskGetListApiForbiddenError`](./src/models/errors/hskgetlistapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciMetadataApiForbiddenError`](./src/models/errors/vcimetadataapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciMetadataApiFormForbiddenError`](./src/models/errors/vcimetadataapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciJwtissuerApiForbiddenError`](./src/models/errors/vcijwtissuerapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciJwtissuerApiFormForbiddenError`](./src/models/errors/vcijwtissuerapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciJwksApiForbiddenError`](./src/models/errors/vcijwksapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciJwksApiFormForbiddenError`](./src/models/errors/vcijwksapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciOfferCreateApiForbiddenError`](./src/models/errors/vcioffercreateapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciOfferCreateApiFormForbiddenError`](./src/models/errors/vcioffercreateapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciOfferInfoApiForbiddenError`](./src/models/errors/vciofferinfoapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciOfferInfoApiFormForbiddenError`](./src/models/errors/vciofferinfoapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciSingleParseApiForbiddenError`](./src/models/errors/vcisingleparseapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciSingleParseApiFormForbiddenError`](./src/models/errors/vcisingleparseapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciSingleIssueApiForbiddenError`](./src/models/errors/vcisingleissueapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciBatchParseApiForbiddenError`](./src/models/errors/vcibatchparseapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciBatchParseApiFormForbiddenError`](./src/models/errors/vcibatchparseapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciBatchIssueApiForbiddenError`](./src/models/errors/vcibatchissueapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciDeferredParseApiForbiddenError`](./src/models/errors/vcideferredparseapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciDeferredParseApiFormForbiddenError`](./src/models/errors/vcideferredparseapiformforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`VciDeferredIssueApiForbiddenError`](./src/models/errors/vcideferredissueapiforbiddenerror.ts): . Status code `403`. Applicable to 1 of 114 methods.*
-* [`ServiceGetApiInternalServerError`](./src/models/errors/servicegetapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ServiceGetListApiInternalServerError`](./src/models/errors/servicegetlistapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ServiceCreateApiInternalServerError`](./src/models/errors/servicecreateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ServiceUpdateApiInternalServerError`](./src/models/errors/serviceupdateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ServiceDeleteApiInternalServerError`](./src/models/errors/servicedeleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ServiceConfigurationApiInternalServerError`](./src/models/errors/serviceconfigurationapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientGetApiInternalServerError`](./src/models/errors/clientgetapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientGetListApiInternalServerError`](./src/models/errors/clientgetlistapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientCreateApiInternalServerError`](./src/models/errors/clientcreateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientUpdateApiInternalServerError`](./src/models/errors/clientupdateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientDeleteApiInternalServerError`](./src/models/errors/clientdeleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientFlagUpdateApiInternalServerError`](./src/models/errors/clientflagupdateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientSecretRefreshApiInternalServerError`](./src/models/errors/clientsecretrefreshapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientSecretUpdateApiInternalServerError`](./src/models/errors/clientsecretupdateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientSecretUpdateApiFormInternalServerError`](./src/models/errors/clientsecretupdateapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationGetListApiInternalServerError`](./src/models/errors/clientauthorizationgetlistapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationUpdateApiInternalServerError`](./src/models/errors/clientauthorizationupdateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationUpdateApiFormInternalServerError`](./src/models/errors/clientauthorizationupdateapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientAuthorizationDeleteApiInternalServerError`](./src/models/errors/clientauthorizationdeleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientGrantedScopesGetApiInternalServerError`](./src/models/errors/clientgrantedscopesgetapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientGrantedScopesDeleteApiInternalServerError`](./src/models/errors/clientgrantedscopesdeleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesGetApiInternalServerError`](./src/models/errors/clientextensionrequestablesscopesgetapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesUpdateApiInternalServerError`](./src/models/errors/clientextensionrequestablesscopesupdateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientExtensionRequestablesScopesDeleteApiInternalServerError`](./src/models/errors/clientextensionrequestablesscopesdeleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationApiInternalServerError`](./src/models/errors/authauthorizationapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationApiFormInternalServerError`](./src/models/errors/authauthorizationapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationFailApiInternalServerError`](./src/models/errors/authauthorizationfailapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationFailApiFormInternalServerError`](./src/models/errors/authauthorizationfailapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationIssueApiInternalServerError`](./src/models/errors/authauthorizationissueapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthAuthorizationIssueApiFormInternalServerError`](./src/models/errors/authauthorizationissueapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`GetApiServiceIdAuthAuthorizationTicketInfoInternalServerError`](./src/models/errors/getapiserviceidauthauthorizationticketinfointernalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`PostApiServiceIdAuthAuthorizationTicketUpdateInternalServerError`](./src/models/errors/postapiserviceidauthauthorizationticketupdateinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`PostApiServiceIdAuthAuthorizationTicketUpdateFormInternalServerError`](./src/models/errors/postapiserviceidauthauthorizationticketupdateforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`PushedAuthReqApiInternalServerError`](./src/models/errors/pushedauthreqapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`PushedAuthReqApiFormInternalServerError`](./src/models/errors/pushedauthreqapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenApiInternalServerError`](./src/models/errors/authtokenapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenApiFormInternalServerError`](./src/models/errors/authtokenapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenFailApiInternalServerError`](./src/models/errors/authtokenfailapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenFailApiFormInternalServerError`](./src/models/errors/authtokenfailapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenIssueApiInternalServerError`](./src/models/errors/authtokenissueapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenIssueApiFormInternalServerError`](./src/models/errors/authtokenissueapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`IdtokenReissueApiInternalServerError`](./src/models/errors/idtokenreissueapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionApiInternalServerError`](./src/models/errors/authintrospectionapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionApiFormInternalServerError`](./src/models/errors/authintrospectionapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionStandardApiInternalServerError`](./src/models/errors/authintrospectionstandardapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthIntrospectionStandardApiFormInternalServerError`](./src/models/errors/authintrospectionstandardapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthRevocationApiInternalServerError`](./src/models/errors/authrevocationapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthRevocationApiFormInternalServerError`](./src/models/errors/authrevocationapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoApiInternalServerError`](./src/models/errors/authuserinfoapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoApiFormInternalServerError`](./src/models/errors/authuserinfoapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoIssueApiInternalServerError`](./src/models/errors/authuserinfoissueapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthUserinfoIssueApiFormInternalServerError`](./src/models/errors/authuserinfoissueapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`GrantMApiInternalServerError`](./src/models/errors/grantmapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ServiceJwksGetApiInternalServerError`](./src/models/errors/servicejwksgetapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationApiInternalServerError`](./src/models/errors/clientregistrationapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationApiFormInternalServerError`](./src/models/errors/clientregistrationapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationGetApiInternalServerError`](./src/models/errors/clientregistrationgetapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationUpdateApiInternalServerError`](./src/models/errors/clientregistrationupdateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationUpdateApiFormInternalServerError`](./src/models/errors/clientregistrationupdateapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationDeleteApiInternalServerError`](./src/models/errors/clientregistrationdeleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`ClientRegistrationDeleteApiFormInternalServerError`](./src/models/errors/clientregistrationdeleteapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationApiInternalServerError`](./src/models/errors/backchannelauthenticationapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationApiFormInternalServerError`](./src/models/errors/backchannelauthenticationapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationIssueApiInternalServerError`](./src/models/errors/backchannelauthenticationissueapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationIssueApiFormInternalServerError`](./src/models/errors/backchannelauthenticationissueapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationFailApiInternalServerError`](./src/models/errors/backchannelauthenticationfailapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationFailApiFormInternalServerError`](./src/models/errors/backchannelauthenticationfailapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationCompleteApiInternalServerError`](./src/models/errors/backchannelauthenticationcompleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`BackchannelAuthenticationCompleteApiFormInternalServerError`](./src/models/errors/backchannelauthenticationcompleteapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`DeviceAuthorizationApiInternalServerError`](./src/models/errors/deviceauthorizationapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`DeviceAuthorizationApiFormInternalServerError`](./src/models/errors/deviceauthorizationapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`DeviceVerificationApiInternalServerError`](./src/models/errors/deviceverificationapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`DeviceVerificationApiFormInternalServerError`](./src/models/errors/deviceverificationapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`DeviceCompleteApiInternalServerError`](./src/models/errors/devicecompleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`DeviceCompleteApiFormInternalServerError`](./src/models/errors/devicecompleteapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenGetListApiInternalServerError`](./src/models/errors/authtokengetlistapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenCreateApiInternalServerError`](./src/models/errors/authtokencreateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenCreateApiFormInternalServerError`](./src/models/errors/authtokencreateapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenUpdateApiInternalServerError`](./src/models/errors/authtokenupdateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenUpdateApiFormInternalServerError`](./src/models/errors/authtokenupdateapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenDeleteApiInternalServerError`](./src/models/errors/authtokendeleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenRevokeApiInternalServerError`](./src/models/errors/authtokenrevokeapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`AuthTokenRevokeApiFormInternalServerError`](./src/models/errors/authtokenrevokeapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`JoseVerifyApiInternalServerError`](./src/models/errors/joseverifyapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`JoseVerifyApiFormInternalServerError`](./src/models/errors/joseverifyapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`FederationConfigurationApiInternalServerError`](./src/models/errors/federationconfigurationapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`FederationRegistrationApiInternalServerError`](./src/models/errors/federationregistrationapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`FederationRegistrationApiFormInternalServerError`](./src/models/errors/federationregistrationapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`InfoApiInternalServerError`](./src/models/errors/infoapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`HskCreateApiInternalServerError`](./src/models/errors/hskcreateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`HskCreateApiFormInternalServerError`](./src/models/errors/hskcreateapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`HskDeleteApiInternalServerError`](./src/models/errors/hskdeleteapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`HskGetApiInternalServerError`](./src/models/errors/hskgetapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`HskGetListApiInternalServerError`](./src/models/errors/hskgetlistapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciMetadataApiInternalServerError`](./src/models/errors/vcimetadataapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciMetadataApiFormInternalServerError`](./src/models/errors/vcimetadataapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciJwtissuerApiInternalServerError`](./src/models/errors/vcijwtissuerapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciJwtissuerApiFormInternalServerError`](./src/models/errors/vcijwtissuerapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciJwksApiInternalServerError`](./src/models/errors/vcijwksapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciJwksApiFormInternalServerError`](./src/models/errors/vcijwksapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciOfferCreateApiInternalServerError`](./src/models/errors/vcioffercreateapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciOfferCreateApiFormInternalServerError`](./src/models/errors/vcioffercreateapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciOfferInfoApiInternalServerError`](./src/models/errors/vciofferinfoapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciOfferInfoApiFormInternalServerError`](./src/models/errors/vciofferinfoapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciSingleParseApiInternalServerError`](./src/models/errors/vcisingleparseapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciSingleParseApiFormInternalServerError`](./src/models/errors/vcisingleparseapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciSingleIssueApiInternalServerError`](./src/models/errors/vcisingleissueapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciBatchParseApiInternalServerError`](./src/models/errors/vcibatchparseapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciBatchParseApiFormInternalServerError`](./src/models/errors/vcibatchparseapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciBatchIssueApiInternalServerError`](./src/models/errors/vcibatchissueapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciDeferredParseApiInternalServerError`](./src/models/errors/vcideferredparseapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciDeferredParseApiFormInternalServerError`](./src/models/errors/vcideferredparseapiforminternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
-* [`VciDeferredIssueApiInternalServerError`](./src/models/errors/vcideferredissueapiinternalservererror.ts): . Status code `500`. Applicable to 1 of 114 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>
@@ -1179,7 +760,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.serviceManagement.serviceGetApi({
+  const result = await autheleteBundled.serviceManagement.get({
     serviceId: "<id>",
   });
 
@@ -1204,7 +785,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.serviceManagement.serviceGetApi({
+  const result = await autheleteBundled.serviceManagement.get({
     serviceId: "<id>",
   });
 
@@ -1228,7 +809,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.serviceManagement.serviceGetApi({
+  const result = await autheleteBundled.serviceManagement.get({
     serviceId: "<id>",
   }, {
     serverURL: "https://br.authlete.com",

@@ -3,14 +3,12 @@
 
 ## Overview
 
-API endpoints for various utility operations.
-
 ### Available Operations
 
-* [infoApi](#infoapi) - Get Server Metadata
-* [miscEchoApi](#miscechoapi) - Echo
+* [getInfo](#getinfo) - Get Server Metadata
+* [echo](#echo) - Echo
 
-## infoApi
+## getInfo
 
 get the server version and enabled features
 
@@ -28,7 +26,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.utilityEndpoints.infoApi();
+  const result = await autheleteBundled.utilityEndpoints.getInfo();
 
   console.log(result);
 }
@@ -42,7 +40,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { utilityEndpointsInfoApi } from "authelete-bundled/funcs/utilityEndpointsInfoApi.js";
+import { utilityEndpointsGetInfo } from "authelete-bundled/funcs/utilityEndpointsGetInfo.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -53,12 +51,12 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await utilityEndpointsInfoApi(autheleteBundled);
+  const res = await utilityEndpointsGetInfo(autheleteBundled);
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("utilityEndpointsInfoApi failed:", res.error);
+    console.log("utilityEndpointsGetInfo failed:", res.error);
   }
 }
 
@@ -82,13 +80,13 @@ run();
 
 | Error Type                          | Status Code                         | Content Type                        |
 | ----------------------------------- | ----------------------------------- | ----------------------------------- |
-| errors.InfoApiBadRequestError       | 400                                 | application/json                    |
-| errors.InfoApiUnauthorizedError     | 401                                 | application/json                    |
-| errors.InfoApiForbiddenError        | 403                                 | application/json                    |
-| errors.InfoApiInternalServerError   | 500                                 | application/json                    |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
 | errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## miscEchoApi
+## echo
 
 Echo test endpoint. Will return all path parameters in the request
 
@@ -106,7 +104,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  await autheleteBundled.utilityEndpoints.miscEchoApi();
+  await autheleteBundled.utilityEndpoints.echo();
 
 
 }
@@ -120,7 +118,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { utilityEndpointsMiscEchoApi } from "authelete-bundled/funcs/utilityEndpointsMiscEchoApi.js";
+import { utilityEndpointsEcho } from "authelete-bundled/funcs/utilityEndpointsEcho.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -131,12 +129,12 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await utilityEndpointsMiscEchoApi(autheleteBundled);
+  const res = await utilityEndpointsEcho(autheleteBundled);
   if (res.ok) {
     const { value: result } = res;
     
   } else {
-    console.log("utilityEndpointsMiscEchoApi failed:", res.error);
+    console.log("utilityEndpointsEcho failed:", res.error);
   }
 }
 

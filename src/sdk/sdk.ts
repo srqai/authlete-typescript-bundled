@@ -3,25 +3,36 @@
  */
 
 import { ClientSDK } from "../lib/sdks.js";
+import { Authorization } from "./authorization.js";
 import { AuthorizationEndpoint } from "./authorizationendpoint.js";
+import { BackchannelAuthentication } from "./backchannelauthentication.js";
 import { Ciba } from "./ciba.js";
 import { ClientManagement } from "./clientmanagement.js";
+import { ClientRegistrations } from "./clientregistrations.js";
+import { Clients } from "./clients.js";
 import { DeviceFlow } from "./deviceflow.js";
 import { DynamicClientRegistration } from "./dynamicclientregistration.js";
-import { FederationEndpoint } from "./federationendpoint.js";
-import { GrantManagementEndpoint } from "./grantmanagementendpoint.js";
+import { Federation } from "./federation.js";
+import { GrantManagement } from "./grantmanagement.js";
 import { HardwareSecurityKey } from "./hardwaresecuritykey.js";
+import { HardwareSecurityKeys } from "./hardwaresecuritykeys.js";
+import { Introspection } from "./introspection.js";
 import { IntrospectionEndpoint } from "./introspectionendpoint.js";
-import { JoseObject } from "./joseobject.js";
-import { JWKSetEndpoint } from "./jwksetendpoint.js";
+import { Jose } from "./jose.js";
+import { Jwks } from "./jwks.js";
 import { PushedAuthorizationEndpoint } from "./pushedauthorizationendpoint.js";
-import { RevocationEndpoint } from "./revocationendpoint.js";
+import { Revocation } from "./revocation.js";
 import { ServiceManagement } from "./servicemanagement.js";
+import { Services } from "./services.js";
 import { TokenEndpoint } from "./tokenendpoint.js";
 import { TokenOperations } from "./tokenoperations.js";
+import { Tokens } from "./tokens.js";
+import { Userinfo } from "./userinfo.js";
 import { UserInfoEndpoint } from "./userinfoendpoint.js";
 import { UtilityEndpoints } from "./utilityendpoints.js";
+import { Vci } from "./vci.js";
 import { VerifiableCredentialIssuer } from "./verifiablecredentialissuer.js";
+import { VerifiableCredentials } from "./verifiablecredentials.js";
 
 export class AutheleteBundled extends ClientSDK {
   private _serviceManagement?: ServiceManagement;
@@ -29,9 +40,24 @@ export class AutheleteBundled extends ClientSDK {
     return (this._serviceManagement ??= new ServiceManagement(this._options));
   }
 
+  private _services?: Services;
+  get services(): Services {
+    return (this._services ??= new Services(this._options));
+  }
+
+  private _clients?: Clients;
+  get clients(): Clients {
+    return (this._clients ??= new Clients(this._options));
+  }
+
   private _clientManagement?: ClientManagement;
   get clientManagement(): ClientManagement {
     return (this._clientManagement ??= new ClientManagement(this._options));
+  }
+
+  private _authorization?: Authorization;
+  get authorization(): Authorization {
+    return (this._authorization ??= new Authorization(this._options));
   }
 
   private _authorizationEndpoint?: AuthorizationEndpoint;
@@ -52,6 +78,16 @@ export class AutheleteBundled extends ClientSDK {
     return (this._tokenEndpoint ??= new TokenEndpoint(this._options));
   }
 
+  private _tokens?: Tokens;
+  get tokens(): Tokens {
+    return (this._tokens ??= new Tokens(this._options));
+  }
+
+  private _introspection?: Introspection;
+  get introspection(): Introspection {
+    return (this._introspection ??= new Introspection(this._options));
+  }
+
   private _introspectionEndpoint?: IntrospectionEndpoint;
   get introspectionEndpoint(): IntrospectionEndpoint {
     return (this._introspectionEndpoint ??= new IntrospectionEndpoint(
@@ -59,9 +95,14 @@ export class AutheleteBundled extends ClientSDK {
     ));
   }
 
-  private _revocationEndpoint?: RevocationEndpoint;
-  get revocationEndpoint(): RevocationEndpoint {
-    return (this._revocationEndpoint ??= new RevocationEndpoint(this._options));
+  private _revocation?: Revocation;
+  get revocation(): Revocation {
+    return (this._revocation ??= new Revocation(this._options));
+  }
+
+  private _userinfo?: Userinfo;
+  get userinfo(): Userinfo {
+    return (this._userinfo ??= new Userinfo(this._options));
   }
 
   private _userInfoEndpoint?: UserInfoEndpoint;
@@ -69,16 +110,14 @@ export class AutheleteBundled extends ClientSDK {
     return (this._userInfoEndpoint ??= new UserInfoEndpoint(this._options));
   }
 
-  private _grantManagementEndpoint?: GrantManagementEndpoint;
-  get grantManagementEndpoint(): GrantManagementEndpoint {
-    return (this._grantManagementEndpoint ??= new GrantManagementEndpoint(
-      this._options,
-    ));
+  private _grantManagement?: GrantManagement;
+  get grantManagement(): GrantManagement {
+    return (this._grantManagement ??= new GrantManagement(this._options));
   }
 
-  private _jwkSetEndpoint?: JWKSetEndpoint;
-  get jwkSetEndpoint(): JWKSetEndpoint {
-    return (this._jwkSetEndpoint ??= new JWKSetEndpoint(this._options));
+  private _jwks?: Jwks;
+  get jwks(): Jwks {
+    return (this._jwks ??= new Jwks(this._options));
   }
 
   private _dynamicClientRegistration?: DynamicClientRegistration;
@@ -88,9 +127,23 @@ export class AutheleteBundled extends ClientSDK {
     ));
   }
 
+  private _clientRegistrations?: ClientRegistrations;
+  get clientRegistrations(): ClientRegistrations {
+    return (this._clientRegistrations ??= new ClientRegistrations(
+      this._options,
+    ));
+  }
+
   private _ciba?: Ciba;
   get ciba(): Ciba {
     return (this._ciba ??= new Ciba(this._options));
+  }
+
+  private _backchannelAuthentication?: BackchannelAuthentication;
+  get backchannelAuthentication(): BackchannelAuthentication {
+    return (this._backchannelAuthentication ??= new BackchannelAuthentication(
+      this._options,
+    ));
   }
 
   private _deviceFlow?: DeviceFlow;
@@ -103,14 +156,14 @@ export class AutheleteBundled extends ClientSDK {
     return (this._tokenOperations ??= new TokenOperations(this._options));
   }
 
-  private _joseObject?: JoseObject;
-  get joseObject(): JoseObject {
-    return (this._joseObject ??= new JoseObject(this._options));
+  private _jose?: Jose;
+  get jose(): Jose {
+    return (this._jose ??= new Jose(this._options));
   }
 
-  private _federationEndpoint?: FederationEndpoint;
-  get federationEndpoint(): FederationEndpoint {
-    return (this._federationEndpoint ??= new FederationEndpoint(this._options));
+  private _federation?: Federation;
+  get federation(): Federation {
+    return (this._federation ??= new Federation(this._options));
   }
 
   private _utilityEndpoints?: UtilityEndpoints;
@@ -125,9 +178,28 @@ export class AutheleteBundled extends ClientSDK {
     ));
   }
 
+  private _hardwareSecurityKeys?: HardwareSecurityKeys;
+  get hardwareSecurityKeys(): HardwareSecurityKeys {
+    return (this._hardwareSecurityKeys ??= new HardwareSecurityKeys(
+      this._options,
+    ));
+  }
+
+  private _vci?: Vci;
+  get vci(): Vci {
+    return (this._vci ??= new Vci(this._options));
+  }
+
   private _verifiableCredentialIssuer?: VerifiableCredentialIssuer;
   get verifiableCredentialIssuer(): VerifiableCredentialIssuer {
     return (this._verifiableCredentialIssuer ??= new VerifiableCredentialIssuer(
+      this._options,
+    ));
+  }
+
+  private _verifiableCredentials?: VerifiableCredentials;
+  get verifiableCredentials(): VerifiableCredentials {
+    return (this._verifiableCredentials ??= new VerifiableCredentials(
       this._options,
     ));
   }

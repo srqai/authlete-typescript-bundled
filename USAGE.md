@@ -9,7 +9,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.serviceManagement.serviceGetApi({
+  const result = await autheleteBundled.serviceManagement.get({
     serviceId: "<id>",
   });
 

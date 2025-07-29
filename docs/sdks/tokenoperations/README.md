@@ -3,293 +3,15 @@
 
 ## Overview
 
-API endpoints for various token related operations, including creating, revoking and deleting access_tokens with specified scopes.
-
 ### Available Operations
 
-* [authTokenGetListApi](#authtokengetlistapi) - List Issued Tokens
-* [authTokenCreateApi](#authtokencreateapi) - Create Access Token
-* [authTokenCreateApiForm](#authtokencreateapiform) - Create Access Token
-* [authTokenUpdateApi](#authtokenupdateapi) - Update Access Token
-* [authTokenUpdateApiForm](#authtokenupdateapiform) - Update Access Token
-* [authTokenDeleteApi](#authtokendeleteapi) - Delete Access Token
-* [authTokenRevokeApi](#authtokenrevokeapi) - Revoke Access Token
-* [authTokenRevokeApiForm](#authtokenrevokeapiform) - Revoke Access Token
-
-## authTokenGetListApi
-
-Get the list of access tokens that are associated with the service.
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="auth_token_get_list_api" method="get" path="/api/{serviceId}/auth/token/get/list" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.tokenOperations.authTokenGetListApi({
-    serviceId: "<id>",
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenOperationsAuthTokenGetListApi } from "authelete-bundled/funcs/tokenOperationsAuthTokenGetListApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await tokenOperationsAuthTokenGetListApi(autheleteBundled, {
-    serviceId: "<id>",
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("tokenOperationsAuthTokenGetListApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.AuthTokenGetListApiRequest](../../models/operations/authtokengetlistapirequest.md)                                                                                 | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.AuthTokenGetListApiResponse](../../models/operations/authtokengetlistapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                    | Status Code                                   | Content Type                                  |
-| --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
-| errors.AuthTokenGetListApiBadRequestError     | 400                                           | application/json                              |
-| errors.AuthTokenGetListApiUnauthorizedError   | 401                                           | application/json                              |
-| errors.AuthTokenGetListApiForbiddenError      | 403                                           | application/json                              |
-| errors.AuthTokenGetListApiInternalServerError | 500                                           | application/json                              |
-| errors.AutheleteBundledDefaultError           | 4XX, 5XX                                      | \*/\*                                         |
-
-## authTokenCreateApi
-
-Create an access token.
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="auth_token_create_api" method="post" path="/api/{serviceId}/auth/token/create" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.tokenOperations.authTokenCreateApi({
-    serviceId: "<id>",
-    requestBody: {
-      grantType: "AUTHORIZATION_CODE",
-      clientId: 26888344961664,
-      subject: "john",
-      scopes: [
-        "history.read",
-        "timeline.read",
-      ],
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenOperationsAuthTokenCreateApi } from "authelete-bundled/funcs/tokenOperationsAuthTokenCreateApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await tokenOperationsAuthTokenCreateApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      grantType: "AUTHORIZATION_CODE",
-      clientId: 26888344961664,
-      subject: "john",
-      scopes: [
-        "history.read",
-        "timeline.read",
-      ],
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("tokenOperationsAuthTokenCreateApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.AuthTokenCreateApiRequest](../../models/operations/authtokencreateapirequest.md)                                                                                   | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.AuthTokenCreateApiResponse](../../models/operations/authtokencreateapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                   | Status Code                                  | Content Type                                 |
-| -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| errors.AuthTokenCreateApiBadRequestError     | 400                                          | application/json                             |
-| errors.AuthTokenCreateApiUnauthorizedError   | 401                                          | application/json                             |
-| errors.AuthTokenCreateApiForbiddenError      | 403                                          | application/json                             |
-| errors.AuthTokenCreateApiInternalServerError | 500                                          | application/json                             |
-| errors.AutheleteBundledDefaultError          | 4XX, 5XX                                     | \*/\*                                        |
-
-## authTokenCreateApiForm
-
-Create an access token.
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="auth_token_create_api_form" method="post" path="/api/{serviceId}/auth/token/create" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.tokenOperations.authTokenCreateApiForm({
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: false,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenOperationsAuthTokenCreateApiForm } from "authelete-bundled/funcs/tokenOperationsAuthTokenCreateApiForm.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await tokenOperationsAuthTokenCreateApiForm(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: false,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("tokenOperationsAuthTokenCreateApiForm failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.AuthTokenCreateApiFormRequest](../../models/operations/authtokencreateapiformrequest.md)                                                                           | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.AuthTokenCreateApiFormResponse](../../models/operations/authtokencreateapiformresponse.md)\>**
-
-### Errors
-
-| Error Type                                       | Status Code                                      | Content Type                                     |
-| ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ |
-| errors.AuthTokenCreateApiFormBadRequestError     | 400                                              | application/json                                 |
-| errors.AuthTokenCreateApiFormUnauthorizedError   | 401                                              | application/json                                 |
-| errors.AuthTokenCreateApiFormForbiddenError      | 403                                              | application/json                                 |
-| errors.AuthTokenCreateApiFormInternalServerError | 500                                              | application/json                                 |
-| errors.AutheleteBundledDefaultError              | 4XX, 5XX                                         | \*/\*                                            |
-
-## authTokenUpdateApi
+* [updateToken](#updatetoken) - Update Access Token
+* [updateTokenForm](#updatetokenform) - Update Access Token
+* [delete](#delete) - Delete Access Token
+* [revokeToken](#revoketoken) - Revoke Access Token
+* [revokeTokenForm](#revoketokenform) - Revoke Access Token
+
+## updateToken
 
 Update an access token.
 
@@ -307,7 +29,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.tokenOperations.authTokenUpdateApi({
+  const result = await autheleteBundled.tokenOperations.updateToken({
     serviceId: "<id>",
     requestBody: {
       accessToken: "Z5a40U6dWvw2gMoCOAFbZcM85q4HC0Z--0YKD9-Nf6Q",
@@ -329,7 +51,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenOperationsAuthTokenUpdateApi } from "authelete-bundled/funcs/tokenOperationsAuthTokenUpdateApi.js";
+import { tokenOperationsUpdateToken } from "authelete-bundled/funcs/tokenOperationsUpdateToken.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -340,7 +62,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await tokenOperationsAuthTokenUpdateApi(autheleteBundled, {
+  const res = await tokenOperationsUpdateToken(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       accessToken: "Z5a40U6dWvw2gMoCOAFbZcM85q4HC0Z--0YKD9-Nf6Q",
@@ -353,7 +75,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("tokenOperationsAuthTokenUpdateApi failed:", res.error);
+    console.log("tokenOperationsUpdateToken failed:", res.error);
   }
 }
 
@@ -376,15 +98,15 @@ run();
 
 ### Errors
 
-| Error Type                                   | Status Code                                  | Content Type                                 |
-| -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| errors.AuthTokenUpdateApiBadRequestError     | 400                                          | application/json                             |
-| errors.AuthTokenUpdateApiUnauthorizedError   | 401                                          | application/json                             |
-| errors.AuthTokenUpdateApiForbiddenError      | 403                                          | application/json                             |
-| errors.AuthTokenUpdateApiInternalServerError | 500                                          | application/json                             |
-| errors.AutheleteBundledDefaultError          | 4XX, 5XX                                     | \*/\*                                        |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## authTokenUpdateApiForm
+## updateTokenForm
 
 Update an access token.
 
@@ -402,7 +124,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.tokenOperations.authTokenUpdateApiForm({
+  const result = await autheleteBundled.tokenOperations.updateTokenForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -421,7 +143,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenOperationsAuthTokenUpdateApiForm } from "authelete-bundled/funcs/tokenOperationsAuthTokenUpdateApiForm.js";
+import { tokenOperationsUpdateTokenForm } from "authelete-bundled/funcs/tokenOperationsUpdateTokenForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -432,7 +154,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await tokenOperationsAuthTokenUpdateApiForm(autheleteBundled, {
+  const res = await tokenOperationsUpdateTokenForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -442,7 +164,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("tokenOperationsAuthTokenUpdateApiForm failed:", res.error);
+    console.log("tokenOperationsUpdateTokenForm failed:", res.error);
   }
 }
 
@@ -465,15 +187,15 @@ run();
 
 ### Errors
 
-| Error Type                                       | Status Code                                      | Content Type                                     |
-| ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ |
-| errors.AuthTokenUpdateApiFormBadRequestError     | 400                                              | application/json                                 |
-| errors.AuthTokenUpdateApiFormUnauthorizedError   | 401                                              | application/json                                 |
-| errors.AuthTokenUpdateApiFormForbiddenError      | 403                                              | application/json                                 |
-| errors.AuthTokenUpdateApiFormInternalServerError | 500                                              | application/json                                 |
-| errors.AutheleteBundledDefaultError              | 4XX, 5XX                                         | \*/\*                                            |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## authTokenDeleteApi
+## delete
 
 Delete an access token.
 
@@ -491,7 +213,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  await autheleteBundled.tokenOperations.authTokenDeleteApi({
+  await autheleteBundled.tokenOperations.delete({
     serviceId: "<id>",
     accessTokenIdentifier: "<value>",
   });
@@ -508,7 +230,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenOperationsAuthTokenDeleteApi } from "authelete-bundled/funcs/tokenOperationsAuthTokenDeleteApi.js";
+import { tokenOperationsDelete } from "authelete-bundled/funcs/tokenOperationsDelete.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -519,7 +241,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await tokenOperationsAuthTokenDeleteApi(autheleteBundled, {
+  const res = await tokenOperationsDelete(autheleteBundled, {
     serviceId: "<id>",
     accessTokenIdentifier: "<value>",
   });
@@ -527,7 +249,7 @@ async function run() {
     const { value: result } = res;
     
   } else {
-    console.log("tokenOperationsAuthTokenDeleteApi failed:", res.error);
+    console.log("tokenOperationsDelete failed:", res.error);
   }
 }
 
@@ -550,15 +272,15 @@ run();
 
 ### Errors
 
-| Error Type                                   | Status Code                                  | Content Type                                 |
-| -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| errors.AuthTokenDeleteApiBadRequestError     | 400                                          | application/json                             |
-| errors.AuthTokenDeleteApiUnauthorizedError   | 401                                          | application/json                             |
-| errors.AuthTokenDeleteApiForbiddenError      | 403                                          | application/json                             |
-| errors.AuthTokenDeleteApiInternalServerError | 500                                          | application/json                             |
-| errors.AutheleteBundledDefaultError          | 4XX, 5XX                                     | \*/\*                                        |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## authTokenRevokeApi
+## revokeToken
 
 Revoke an access token.
 
@@ -576,7 +298,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.tokenOperations.authTokenRevokeApi({
+  const result = await autheleteBundled.tokenOperations.revokeToken({
     serviceId: "<id>",
     requestBody: {
       accessTokenIdentifier: "Z5a40U6dWvw2gMoCOAFbZcM85q4HC0Z--0YKD9-Nf6Q",
@@ -595,7 +317,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenOperationsAuthTokenRevokeApi } from "authelete-bundled/funcs/tokenOperationsAuthTokenRevokeApi.js";
+import { tokenOperationsRevokeToken } from "authelete-bundled/funcs/tokenOperationsRevokeToken.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -606,7 +328,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await tokenOperationsAuthTokenRevokeApi(autheleteBundled, {
+  const res = await tokenOperationsRevokeToken(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       accessTokenIdentifier: "Z5a40U6dWvw2gMoCOAFbZcM85q4HC0Z--0YKD9-Nf6Q",
@@ -616,7 +338,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("tokenOperationsAuthTokenRevokeApi failed:", res.error);
+    console.log("tokenOperationsRevokeToken failed:", res.error);
   }
 }
 
@@ -639,15 +361,15 @@ run();
 
 ### Errors
 
-| Error Type                                   | Status Code                                  | Content Type                                 |
-| -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| errors.AuthTokenRevokeApiBadRequestError     | 400                                          | application/json                             |
-| errors.AuthTokenRevokeApiUnauthorizedError   | 401                                          | application/json                             |
-| errors.AuthTokenRevokeApiForbiddenError      | 403                                          | application/json                             |
-| errors.AuthTokenRevokeApiInternalServerError | 500                                          | application/json                             |
-| errors.AutheleteBundledDefaultError          | 4XX, 5XX                                     | \*/\*                                        |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## authTokenRevokeApiForm
+## revokeTokenForm
 
 Revoke an access token.
 
@@ -665,7 +387,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.tokenOperations.authTokenRevokeApiForm({
+  const result = await autheleteBundled.tokenOperations.revokeTokenForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -684,7 +406,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenOperationsAuthTokenRevokeApiForm } from "authelete-bundled/funcs/tokenOperationsAuthTokenRevokeApiForm.js";
+import { tokenOperationsRevokeTokenForm } from "authelete-bundled/funcs/tokenOperationsRevokeTokenForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -695,7 +417,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await tokenOperationsAuthTokenRevokeApiForm(autheleteBundled, {
+  const res = await tokenOperationsRevokeTokenForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -705,7 +427,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("tokenOperationsAuthTokenRevokeApiForm failed:", res.error);
+    console.log("tokenOperationsRevokeTokenForm failed:", res.error);
   }
 }
 
@@ -728,10 +450,10 @@ run();
 
 ### Errors
 
-| Error Type                                       | Status Code                                      | Content Type                                     |
-| ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ |
-| errors.AuthTokenRevokeApiFormBadRequestError     | 400                                              | application/json                                 |
-| errors.AuthTokenRevokeApiFormUnauthorizedError   | 401                                              | application/json                                 |
-| errors.AuthTokenRevokeApiFormForbiddenError      | 403                                              | application/json                                 |
-| errors.AuthTokenRevokeApiFormInternalServerError | 500                                              | application/json                                 |
-| errors.AutheleteBundledDefaultError              | 4XX, 5XX                                         | \*/\*                                            |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |

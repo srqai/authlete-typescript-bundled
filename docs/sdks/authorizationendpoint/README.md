@@ -3,1263 +3,17 @@
 
 ## Overview
 
-API endpoints for implementing OAuth 2.0 Authorization Endpoint.
-
 ### Available Operations
 
-* [authAuthorizationApi](#authauthorizationapi) - Process Authorization Request
-* [authAuthorizationApiForm](#authauthorizationapiform) - Process Authorization Request
-* [authAuthorizationFailApi](#authauthorizationfailapi) - Fail Authorization Request
-* [authAuthorizationFailApiForm](#authauthorizationfailapiform) - Fail Authorization Request
-* [authAuthorizationIssueApi](#authauthorizationissueapi) - Issue Authorization Response
-* [authAuthorizationIssueApiForm](#authauthorizationissueapiform) - Issue Authorization Response
-* [getApiServiceIdAuthAuthorizationTicketInfo](#getapiserviceidauthauthorizationticketinfo) - Get Ticket Information
-* [postApiServiceIdAuthAuthorizationTicketUpdate](#postapiserviceidauthauthorizationticketupdate) - Update Ticket Information
-* [postApiServiceIdAuthAuthorizationTicketUpdateForm](#postapiserviceidauthauthorizationticketupdateform) - Update Ticket Information
-
-## authAuthorizationApi
-
-This API parses request parameters of an authorization request and returns necessary data for the authorization server
-implementation to process the authorization request further.
-
-<br>
-<details>
-<summary>Description</summary>
-
-This API is supposed to be called from within the implementation of the authorization endpoint of
-the service. The endpoint implementation must extract the request parameters from the authorization
-request from the client application and pass them as the value of parameters request parameter for
-Authlete's `/auth/authorization` API.
-
-The value of `parameters` is either (1) the entire query string when the HTTP method of the request
-from the client application is `GET` or (2) the entire entity body (which is formatted in
-`application/x-www-form-urlencoded`) when the HTTP method of the request from the client application
-is `POST`.
-
-The following code snippet is an example in JAX-RS showing how to extract request parameters from
-the authorization request.
-
-```java
-@GET
-public Response get(@Context UriInfo uriInfo)
-{
-    // The query parameters of the authorization request.
-    String parameters = uriInfo.getRequestUri().getQuery();
-    ......
-}
-
-@POST
-@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-public Response post(String parameters)
-{
-    // 'parameters' is the entity body of the authorization request.
-    ......
-}
-```
-
-The endpoint implementation does not have to parse the request parameters from the client application
-because Authlete's `/auth/authorization` API does it.
-
-The response from `/auth/authorization` API has various parameters. Among them, it is `action`
-parameter that the authorization server implementation should check first because it denotes the
-next action that the authorization server implementation should take. According to the value of
-`action`, the service implementation must take the steps described below.
-
-**INTERNAL_SERVER_ERROR**
-
-When the value of `action` is `INTERNAL_SERVER_ERROR`, it means that the request from the authorization
-server implementation was wrong or that an error occurred in Authlete.
-In either case, from the viewpoint of the client application, it is an error on the server side.
-Therefore, the service implementation should generate a response to the client application with
-HTTP status of "500 Internal Server Error". Authlete recommends `application/json` as the content
-type although OAuth 2.0 specification does not mention the format of the error response when the
-redirect URI is not usable.
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used as
-the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-The endpoint implementation may return another different response to the client application
-since "500 Internal Server Error" is not required by OAuth 2.0.
-
-**BAD_REQUEST**
-
-When the value of `action` is `BAD_REQUEST`, it means that the request from the client application
-is invalid.
-
-A response with HTTP status of "400 Bad Request" should be returned to the client application and
-Authlete recommends `application/json` as the content type although OAuth 2.0 specification does
-not mention the format of the error response when the redirect URI is not usable.
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used as
-the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-The endpoint implementation may return another different response to the client application since
-"400 Bad Request" is not required by OAuth 2.0.
-
-**LOCATION**
-
-When the value of `action` is `LOCATION`, it means that the request from the client application
-is invalid but the redirect URI
-to which the error should be reported has been determined.
-
-A response with HTTP status of "302 Found" must be returned to the client application with `Location`
-header which has a redirect URI with error parameter.
-
-The value of `responseContent` is a redirect URI with `error` parameter, so it can be used as the
-value of `Location` header.
-
-The following illustrates the response which the service implementation must generate and return
-to the client application.
-
-```
-HTTP/1.1 302 Found
-Location: {responseContent}
-Cache-Control: no-store
-Pragma: no-cache
-```
-
-**FORM**
-
-When the value of `action` is `FORM`, it means that the request from the client application is
-invalid but the redirect URI to which the error should be reported has been determined, and that
-the authorization request contains `response_mode=form_post` as is defined in [OAuth 2.0 Form Post
-Response Mode](https://openid.net/specs/oauth-v2-form-post-response-mode-1_0.html).
-
-The HTTP status of the response returned to the client application should be "200 OK" and the
-content type should be `text/html;charset=UTF-8`.
-
-The value of `responseContent` is an HTML which can be used as the entity body of the response.
-
-The following illustrates the response which the service implementation must generate and return
-to the client application.
-
-```
-HTTP/1.1 200 OK
-Content-Type: text/html;charset=UTF-8
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-**NO_INTERACTION**
-
-When the value of `action` is `NO_INTERACTION`, it means that the request from the client application
-has no problem and requires the service to process the request without displaying any user interface
-pages for authentication or consent. This case happens when the authorization request contains
-`prompt=none`.
-
-The service must follow the steps described below.
-
-[1] END-USER AUTHENTICATION
-
-Check whether an end-user has already logged in. If an end-user has logged in, go to the next step ([MAX_AGE]).
-Otherwise, call Authlete's `/auth/authorization/fail` API with `reason=NOT_LOGGED_IN` and use the response from
-the API to generate a response to the client application.
-
-[2] MAX AGE
-
-Get the value of `maxAge` parameter from the `/auth/authorization` API response. The value represents
-the maximum authentication age which has come from `max_age` request parameter or `defaultMaxAge`
-configuration parameter of the client application. If the value is `0`, go to the next step ([SUBJECT]).
-Otherwise, follow the sub steps described below.
-
-(i) Get the time at which the end-user was authenticated. that this value is not managed by Authlete,
-meaning that it is expected that the service implementation manages the value. If the service implementation
-does not manage authentication time of end-users, call Authlete's `/auth/authorization/fail` API
-with `reason=MAX_AGE_NOT_SUPPORTED` and use the API response to generate a response to the client
-application.
-
-(ii) Add the value of the maximum authentication age (which is represented in seconds) to the authentication
-time. The calculated value is the expiration time.
-
-(iii) Check whether the calculated value is equal to or greater than the current time. If this condition
-is satisfied, go to the next step ([SUBJECT]). Otherwise, call Authlete's `/auth/authorization/fail`
-API with `reason=EXCEEDS_MAX_AGE` and use the API response to generate a response to the client
-application.
-
-[3] SUBJECT
-
-Get the value of `subject` from the `/auth/authorization` API response. The value represents an
-end-user who the client application expects to grant authorization. If the value is `null`, go to
-the next step ([ACRs]). Otherwise, follow the sub steps described below.
-
-(i) Compare the value of the requested subject to the current end-user.
-
-(ii) If they are equal, go to the next step ([ACRs]). If they are not equal, call Authlete's
-`/auth/authorization/fail` API with `reason=DIFFERENT_SUBJECT` and use the response from the API
-to generate a response to the client application.
-
-[4] ACRs
-
-Get the value of `acrs` from the `/auth/authorization` API response. The value represents a list
-of ACRs (Authentication Context Class References) and comes from (1) acr claim in `claims` request
-parameter, (2) `acr_values` request parameter, or (3) `default_acr_values` configuration parameter
-of the client application.
-
-It is ensured that all the ACRs in acrs are supported by the authorization server implementation.
-In other words, it is ensured that all the ACRs are listed in `acr_values_supported` configuration
-parameter of the authorization server.
-
-If the value of ACRs is `null`, go to the next step ([ISSUE]). Otherwise, follow the sub steps
-described below.
-
-(i) Get the ACR performed for the authentication of the current end-user. Note that this value is
-managed not by Authlete but by the authorization server implementation. (If the authorization server
-implementation cannot handle ACRs, it should not have listed ACRs as `acr_values_supported`.)
-
-(ii) Compare the ACR value obtained in the above step to each element in the ACR array (`acrs`)
-in the listed order.
-
-(iii) If the ACR value was found in the array, (= the ACR performed for the authentication of the
-current end-user did not match any one of the ACRs requested by the client application), check
-whether one of the requested ACRs must be satisfied or not using `acrEssential` parameter in the
-`/auth/authorization` API response. If the value of `acrEssential` parameter is `true`, call Authlete's
-`/auth/authorization/fail` API with `reason=ACR_NOT_SATISFIED` and use the response from the API
-to generate a response to the client application. Otherwise, go to the next step ([SCOPES]).
-
-[5] SCOPES
-
-Get the value of `scopes` from the `/auth/authorization` API response. If the array contains a
-scope which has not been granted to the client application by the end-user in the past, call
-Authlete's `/auth/authorization/fail` API with `reason=CONSENT_REQUIRED` and use the response from
-the API to generate a response to the client application. Otherwise, go to the next step ([RESOURCES]).
-
-Note that Authlete provides APIs to manage records of granted scopes (`/api/client/granted_scopes/*`
-APIs), which is only available in a dedicated/onpremise Authlete server (contact sales@authlete.com
-for details).
-
-[6] DYNAMIC SCOPES
-
-Get the value of `dynamicScopes` from the `/auth/authorization` API response. If the array contains
-a scope which has not been granted to the client application by the end-user in the past, call
-Authlete's `/auth/authorization/fail` API with `reason=CONSENT_REQUIRED` and use the response from
-the API to generate a response to the client application. Otherwise, go to the next step ([RESOURCES]).
-
-Note that Authlete provides APIs to manage records of granted scopes (`/api/client/granted_scopes/*`
-APIs) but dynamic scopes are not remembered as granted scopes.
-
-[7] RESOURCES
-
-Get the value of `resources` from the `/auth/authorization` API response. The array represents
-the values of the `resource` request parameters. If you want to reject the request, call Authlete's
-`/auth/authorization/fail` API with `reason=INVALID_TARGET` and use the response from the API to
-generate a response to the client application. Otherwise, go to the next step ([ISSUE]).
-
-See "Resource Indicators for OAuth 2.0" for details.
-
-[8] ISSUE
-
-If all the above steps succeeded, the last step is to issue an authorization code, an ID token
-and/or an access token. (There is a special case, though. In the case of `response_type=none`,
-nothing is issued.) It can be performed by calling Authlete's `/auth/authorization/issue` API.
-The API requires the following parameters. Prepare these parameters and call `/auth/authorization/issue`
-API and use the response to generate a response to the client application.
-
-- <u>`ticket` (required)</u><br>
-  This parameter represents a ticket which is exchanged with tokens at `/auth/authorization/issue`.
-  Use the value of `ticket` contained in the `/auth/authorization` API response.
-
-- <u>`subject` (required)</u><br>
-  This parameter represents the unique identifier of the current end-user. It is often called "user ID"
-  and it may or may not be visible to the user. In any case, it is a number or a string assigned
-  to an end-user by the authorization server implementation. Authlete does not care about the format
-  of the value of subject, but it must consist of only ASCII letters and its length must not exceed 100.
-
-  When the value of `subject` parameter in the /auth/authorization API response is not `null`,
-  it is necessarily identical to the value of `subject` parameter in the `/auth/authorization/issue`
-  API request.
-
-  The value of this parameter will be embedded in an ID token as the value of `sub` claim. When
-  the value of `subject_type` configuration parameter of the client application is `PAIRWISE`,
-  the value of sub claim is different from the value specified by this parameter, See [8. Subject
-  Identifier Types](https://openid.net/specs/openid-connect-core-1_0.html#SubjectIDTypes) of OpenID
-  Connect Core 1.0 for details about subject types.
-
-  You can use the `sub` request parameter to adjust the value of the `sub` claim in an ID token.
-  See the description of the `sub` request parameter for details.
-
-- <u>`authTime` (optional)</u><br>
-  This parameter represents the time when the end-user authentication occurred. Its value is the
-  number of seconds from `1970-01-01`. The value of this parameter will be embedded in an ID token
-  as the value of `auth_time` claim.
-
-- <u>`acr` (optional)</u><br>
-  This parameter represents the ACR (Authentication Context Class Reference) which the authentication
-  of the end-user satisfies. When `acrs` in the `/auth/authorization` API response is a non-empty
-  array and the value of `acrEssential` is `true`, the value of this parameter must be one of the
-  array elements. Otherwise, even `null` is allowed. The value of this parameter will be embedded
-  in an ID token as the value of `acr` claim.
-
-- <u>`claims` (optional)</u><br>
-  This parameter represents claims of the end-user. "Claims" here are pieces of information about
-  the end-user such as `"name"`, `"email"` and `"birthdate"`. The authorization server implementation
-  is required to gather claims of the end-user, format the claim values into JSON and set the JSON
-  string as the value of this parameter.
-
-  The claims which the authorization server implementation is required to gather are listed in
-  `claims` parameter in the `/auth/authorization` API response.
-
-  For example, if claims parameter lists `"name"`, `"email"` and `"birthdate"`, the value of this
-  parameter should look like the following.
-
-  ```json
-  {
-    "name": "John Smith",
-    "email": "john@example.com",
-    "birthdate": "1974-05-06"
-  }
-  ```
-
-  `claimsLocales` parameter in the `/auth/authorization` API response lists the end-user's preferred
-  languages and scripts, ordered by preference. When `claimsLocales` parameter is a non-empty array,
-  its elements should be taken into account when the authorization server implementation gathers
-  claim values. Especially, note the excerpt below from [5.2. Claims Languages and Scripts](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsLanguagesAndScripts)
-  of OpenID Connect Core 1.0.
-
-  > When the OP determines, either through the `claims_locales` parameter, or by other means, that
-  the End-User and Client are requesting Claims in only one set of languages and scripts, it is
-  RECOMMENDED that OPs return Claims without language tags when they employ this language and script.
-  It is also RECOMMENDED that Clients be written in a manner that they can handle and utilize Claims
-  using language tags.
-
-  If `claims` parameter in the `/auth/authorization` API response is `null` or an empty array,
-  the value of this parameter should be `null`.
-
-  See [5.1. Standard Claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims)
-  of OpenID Connect core 1.0 for claim names and their value formats. Note (1) that the authorization
-  server implementation support its special claims ([5.1.2. Additional Claims](https://openid.net/specs/openid-connect-core-1_0.html#AdditionalClaims))
-  and (2) that claim names may be followed by a language tag ([5.2. Claims Languages and Scripts](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsLanguagesAndScripts)).
-  Read the specification of [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html)
-  for details.
-
-  The claim values in this parameter will be embedded in an ID token.
-
-  Note that `idTokenClaims` parameter is available in the `/auth/authorization` API response.
-  The parameter has the value of the `"id_token"` property in the `claims` request parameter or
-  in the `"claims"` property in a request object. The value of this parameter should be considered
-  when you prepare claim values.
-
-- <u>`properties` (optional)</u><br>
-  Extra properties to associate with an access token and/or an authorization code that may be issued
-  by this request. Note that `properties` parameter is accepted only when `Content-Type` of the
-  request is `application/json`, so don't use `application/x-www-form-urlencoded` for details.
-
-- <u>`scopes` (optional)</u><br>
-  Scopes to associate with an access token and/or an authorization code. If this parameter is `null`,
-  the scopes specified in the original authorization request from the client application are used.
-  In other cases, including the case of an empty array, the specified scopes will replace the original
-  scopes contained in the original authorization request.
-
-  Even scopes that are not included in the original authorization request can be specified. However,
-  as an exception, `openid` scope is ignored on the server side if it is not included in the original
-  request. It is because the existence of `openid` scope considerably changes the validation steps
-  and because adding `openid` triggers generation of an ID token (although the client application
-  has not requested it) and the behavior is a major violation against the specification.
-
-  If you add `offline_access` scope although it is not included in the original request, keep in
-  mind that the specification requires explicit consent from the user for the scope ([OpenID Connect
-  Core 1.0, 11. Offline Access](https://openid.net/specs/openid-connect-core-1_0.html#OfflineAccess)).
-  When `offline_access` is included in the original request, the current implementation of Authlete's
-  `/auth/authorization` API checks whether the request has come along with `prompt` request parameter
-  and the value includes consent. However, note that the implementation of Authlete's `/auth/authorization/issue`
-  API does not perform such checking if `offline_access` scope is added via this `scopes` parameter.
-
-- <u>`sub` (optional)</u><br>
-  The value of the `sub` claim in an ID token. If the value of this request parameter is not empty,
-  it is used as the value of the `sub` claim. Otherwise, the value of the `subject` request parameter
-  is used as the value of the `sub` claim. The main purpose of this parameter is to hide the actual
-  value of the subject from client applications.
-
-  Note that even if this `sub` parameter is not empty, the value of the subject request parameter
-  is used as the value of the subject which is associated with the access token.
-
-**INTERACTION**
-
-When the value of `action` is `INTERACTION`, it means that the request from the client application
-has no problem and requires the service to process the request with user interaction by an HTML form.
-The purpose of the UI displayed to the end-user is to ask the end-user to grant authorization to
-the client application. The items described below are some points which the service implementation
-should take into account when it builds the UI.
-
-[1] DISPLAY MODE
-
-The response from `/auth/authorization` API has `display` parameter. It is one of `PAGE` (default),
-`POPUP`, `TOUCH` and `WAP` The meanings of the values are described in [3.1.2.1. Authentication
-Request of OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest).
-Basically, the authorization server implementation should display the UI which is suitable for the
-display mode, but it is okay for the authorization server implementation to "attempt to detect the
-capabilities of the User Agent and present an appropriate display".
-
-It is ensured that the value of `display` is one of the supported display modes which are specified
-by `supportedDisplays` configuration parameter of the service.
-
-[2] UI LOCALE
-
-The response from `/auth/authorization` API has `uiLocales` parameter. It it is not `null`, it lists
-language tag values (such as `fr-CA`, `ja-JP` and `en`) ordered by preference. The service implementation
-should display the UI in one of the language listed in the parameter when possible. It is ensured
-that language tags listed in `uiLocales` are contained in the list of supported UI locales which
-are specified by `supportedUiLocales` configuration parameter of the service.
-
-[3] CLIENT INFORMATION
-
-The authorization server implementation should show information about the client application to
-the end-user. The information is embedded in `client` parameter in the response from `/auth/authorization`
-API.
-
-[4] SCOPES
-
-A client application requires authorization for specific permissions. In OAuth 2.0 specification,
-"scope" is a technical term which represents a permission. `scopes` parameter in the response
-from `/auth/authorization` API is a list of scopes requested by the client application. The service
-implementation should show the end-user the scopes.
-
-The authorization server implementation may choose not to show scopes to which the end-user has
-given consent in the past. To put it the other way around, the authorization server implementation
-may show only the scopes to which the end-user has not given consent yet. However, if the value
-of `prompts` response parameter contains `CONSENT`, the authorization server implementation has
-to obtain explicit consent from the end-user even if the end-user has given consent to all the
-requested scopes in the past.
-
-Note that Authlete provides APIs to manage records of granted scopes (`/api/client/granted_scopes/*`
-APIs), but the APIs work only in the case the Authlete server you use is a dedicated Authlete server
-(contact sales@authlete.com for details). In other words, the APIs of the shared Authlete server
-are disabled intentionally (in order to prevent garbage data from being accumulated) and they
-return 403 Forbidden.
-
-It is ensured that the values in `scopes` parameter are contained in the list of supported scopes
-which are specified by `supportedScopes` configuration parameter of the service.
-
-[5] DYNAMIC SCOPES
-
-The authorization request may include dynamic scopes. The list of recognized dynamic scopes are
-accessible by getDynamicScopes() method. See the description of the [DynamicScope](https://authlete.github.io/authlete-java-common/com/authlete/common/dto/DynamicScope.html)
-class for details about dynamic scopes.
-
-[6] AUTHORIZATION DETAILS
-
-The authorization server implementation should show the end-user "authorization details" if the
-request includes it. The value of `authorization_details` parameter in the response is the content
-of the `authorization_details` request parameter.
-
-See "OAuth 2.0 Rich Authorization Requests" for details.
-
-[7] PURPOSE
-
-The authorization server implementation must show the value of the `purpose` request parameter if
-it supports [OpenID Connect for Identity Assurance 1.0](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html).
-See [8. Transaction-specific Purpose](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.8)
-in the specification for details.
-
-Note that the value of `purpose` response parameter is the value of the purpose request parameter.
-
-[7] END-USER AUTHENTICATION
-
-Necessarily, the end-user must be authenticated (= must login the service) before granting authorization
-to the client application. Simply put, a login form is expected to be displayed for end-user authentication.
-The service implementation must follow the steps described below to comply with OpenID Connect.
-(Or just always show a login form if it's too much of a bother.)
-
-(i) Get the value of `prompts` response parameter. It corresponds to the value of the `prompt`
-request parameter. Details of the request parameter are described in [3.1.2.1. Authentication
-Request](https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest) of OpenID Connect Core 1.0.
-
-(ii) If the value of `prompts` parameter is `SELECT_ACCOUNT` display a form to let the end-user
-select on of his/her accounts for login. If `subject` response parameter is not `null`, it is the
-end-user ID that the client application expects, so the value should be used to determine the value
-of the login ID. Note that a subject and a login ID are not necessarily equal. If the value of
-`subject` response parameter is `null`, the value of `loginHint` response parameter should be referred
-to as a hint to determine the value of the login ID. The value of `loginHint` response parameter
-is simply the value of the `login_hint` request parameter.
-
-(iii) If the value of `prompts` response parameter contains `LOGIN`, display a form to urge the
-end-user to login even if the end-user has already logged in. If the value of `subject` response
-parameter is not `null`, it is the end-user ID that the client application expects, so the value
-should be used to determine the value of the login ID. Note that a subject and a login ID are not
-necessarily equal. If the value of `subject` response parameter is `null`, the value of `loginHint`
-response parameter should be referred to as a hint to determine the value of the login ID. The value
-of `loginHint` response parameter is simply the value of the `login_hint` request parameter.
-
-(iv) If the value of `prompts` response parameter does not contain `LOGIN`, the authorization server
-implementation does not have to authenticate the end-user if all the conditions described below
-are satisfied. If any one of the conditions is not satisfied, show a login form to authenticate
-the end-user.
-
-- An end-user has already logged in the service.
-
-- The login ID of the current end-user matches the value of `subject` response parameter.
-This check is required only when the value of `subject` response parameter is a non-null value.
-
-- The max age, which is the number of seconds contained in `maxAge` response parameter,
-has not passed since the current end-user logged in your service. This check is required only when
-the value of `maxAge` response parameter is a non-zero value.
-
-- If the authorization server implementation does not manage authentication time of end-users
-(= if the authorization server implementation cannot know when end-users logged in) and if the
-value of `maxAge` response parameter is a non-zero value, a login form should be displayed.
-
-- The ACR (Authentication Context Class Reference) of the authentication performed for
-the current end-user satisfies one of the ACRs listed in `acrs` response parameter. This check is
-required only when the value of `acrs` response parameter is a non-empty array.
-
-In every case, the end-user authentication must satisfy one of the ACRs listed in `acrs` response
-parameter when the value of `acrs` response parameter is a non-empty array and `acrEssential`
-response parameter is `true`.
-
-[9] GRANT/DENY BUTTONS
-
-The end-user is supposed to choose either (1) to grant authorization to the client application or
-(2) to deny the authorization request. The UI must have UI components to accept the judgment by
-the user. Usually, a button to grant authorization and a button to deny the request are provided.
-
-When the value of `subject` response parameter is not `null`, the end-user authentication must be
-performed for the subject, meaning that the authorization server implementation should repeatedly
-show a login form until the subject is successfully authenticated.
-
-The end-user will choose either (1) to grant authorization to the client application or (2) to
-deny the authorization request. When the end-user chose to deny the authorization request, call
-Authlete's `/auth/authorization/fail` API with `reason=DENIED` and use the response from the API
-to generate a response to the client application.
-
-When the end-user chose to grant authorization to the client application, the authorization server
-implementation has to issue an authorization code, an ID token, and/or an access token to the client
-application. (There is a special case. When `response_type=none`, nothing is issued.) Issuing the
-tokens can be performed by calling Authlete's `/auth/authorization/issue` API. Read [ISSUE] written
-above in the description for the case of `action=NO_INTERACTION`.
-</details>
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="auth_authorization_api" method="post" path="/api/{serviceId}/auth/authorization" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.authorizationEndpoint.authAuthorizationApi({
-    serviceId: "<id>",
-    requestBody: {
-      parameters: "response_type=code&client_id=26478243745571&redirect_uri=https%3A%2F%2Fmy-client.example.com%2Fcb1&scope=timeline.read+history.read&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&code_challenge_method=S256",
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { authorizationEndpointAuthAuthorizationApi } from "authelete-bundled/funcs/authorizationEndpointAuthAuthorizationApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await authorizationEndpointAuthAuthorizationApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      parameters: "response_type=code&client_id=26478243745571&redirect_uri=https%3A%2F%2Fmy-client.example.com%2Fcb1&scope=timeline.read+history.read&code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&code_challenge_method=S256",
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("authorizationEndpointAuthAuthorizationApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.AuthAuthorizationApiRequest](../../models/operations/authauthorizationapirequest.md)                                                                               | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.AuthAuthorizationApiResponse](../../models/operations/authauthorizationapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                     | Status Code                                    | Content Type                                   |
-| ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| errors.AuthAuthorizationApiBadRequestError     | 400                                            | application/json                               |
-| errors.AuthAuthorizationApiUnauthorizedError   | 401                                            | application/json                               |
-| errors.AuthAuthorizationApiForbiddenError      | 403                                            | application/json                               |
-| errors.AuthAuthorizationApiInternalServerError | 500                                            | application/json                               |
-| errors.AutheleteBundledDefaultError            | 4XX, 5XX                                       | \*/\*                                          |
-
-## authAuthorizationApiForm
-
-This API parses request parameters of an authorization request and returns necessary data for the authorization server
-implementation to process the authorization request further.
-
-<br>
-<details>
-<summary>Description</summary>
-
-This API is supposed to be called from within the implementation of the authorization endpoint of
-the service. The endpoint implementation must extract the request parameters from the authorization
-request from the client application and pass them as the value of parameters request parameter for
-Authlete's `/auth/authorization` API.
-
-The value of `parameters` is either (1) the entire query string when the HTTP method of the request
-from the client application is `GET` or (2) the entire entity body (which is formatted in
-`application/x-www-form-urlencoded`) when the HTTP method of the request from the client application
-is `POST`.
-
-The following code snippet is an example in JAX-RS showing how to extract request parameters from
-the authorization request.
-
-```java
-@GET
-public Response get(@Context UriInfo uriInfo)
-{
-    // The query parameters of the authorization request.
-    String parameters = uriInfo.getRequestUri().getQuery();
-    ......
-}
-
-@POST
-@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-public Response post(String parameters)
-{
-    // 'parameters' is the entity body of the authorization request.
-    ......
-}
-```
-
-The endpoint implementation does not have to parse the request parameters from the client application
-because Authlete's `/auth/authorization` API does it.
-
-The response from `/auth/authorization` API has various parameters. Among them, it is `action`
-parameter that the authorization server implementation should check first because it denotes the
-next action that the authorization server implementation should take. According to the value of
-`action`, the service implementation must take the steps described below.
-
-**INTERNAL_SERVER_ERROR**
-
-When the value of `action` is `INTERNAL_SERVER_ERROR`, it means that the request from the authorization
-server implementation was wrong or that an error occurred in Authlete.
-In either case, from the viewpoint of the client application, it is an error on the server side.
-Therefore, the service implementation should generate a response to the client application with
-HTTP status of "500 Internal Server Error". Authlete recommends `application/json` as the content
-type although OAuth 2.0 specification does not mention the format of the error response when the
-redirect URI is not usable.
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used as
-the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-The endpoint implementation may return another different response to the client application
-since "500 Internal Server Error" is not required by OAuth 2.0.
-
-**BAD_REQUEST**
-
-When the value of `action` is `BAD_REQUEST`, it means that the request from the client application
-is invalid.
-
-A response with HTTP status of "400 Bad Request" should be returned to the client application and
-Authlete recommends `application/json` as the content type although OAuth 2.0 specification does
-not mention the format of the error response when the redirect URI is not usable.
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used as
-the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-The endpoint implementation may return another different response to the client application since
-"400 Bad Request" is not required by OAuth 2.0.
-
-**LOCATION**
-
-When the value of `action` is `LOCATION`, it means that the request from the client application
-is invalid but the redirect URI
-to which the error should be reported has been determined.
-
-A response with HTTP status of "302 Found" must be returned to the client application with `Location`
-header which has a redirect URI with error parameter.
-
-The value of `responseContent` is a redirect URI with `error` parameter, so it can be used as the
-value of `Location` header.
-
-The following illustrates the response which the service implementation must generate and return
-to the client application.
-
-```
-HTTP/1.1 302 Found
-Location: {responseContent}
-Cache-Control: no-store
-Pragma: no-cache
-```
-
-**FORM**
-
-When the value of `action` is `FORM`, it means that the request from the client application is
-invalid but the redirect URI to which the error should be reported has been determined, and that
-the authorization request contains `response_mode=form_post` as is defined in [OAuth 2.0 Form Post
-Response Mode](https://openid.net/specs/oauth-v2-form-post-response-mode-1_0.html).
-
-The HTTP status of the response returned to the client application should be "200 OK" and the
-content type should be `text/html;charset=UTF-8`.
-
-The value of `responseContent` is an HTML which can be used as the entity body of the response.
-
-The following illustrates the response which the service implementation must generate and return
-to the client application.
-
-```
-HTTP/1.1 200 OK
-Content-Type: text/html;charset=UTF-8
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-**NO_INTERACTION**
-
-When the value of `action` is `NO_INTERACTION`, it means that the request from the client application
-has no problem and requires the service to process the request without displaying any user interface
-pages for authentication or consent. This case happens when the authorization request contains
-`prompt=none`.
-
-The service must follow the steps described below.
-
-[1] END-USER AUTHENTICATION
-
-Check whether an end-user has already logged in. If an end-user has logged in, go to the next step ([MAX_AGE]).
-Otherwise, call Authlete's `/auth/authorization/fail` API with `reason=NOT_LOGGED_IN` and use the response from
-the API to generate a response to the client application.
-
-[2] MAX AGE
-
-Get the value of `maxAge` parameter from the `/auth/authorization` API response. The value represents
-the maximum authentication age which has come from `max_age` request parameter or `defaultMaxAge`
-configuration parameter of the client application. If the value is `0`, go to the next step ([SUBJECT]).
-Otherwise, follow the sub steps described below.
-
-(i) Get the time at which the end-user was authenticated. that this value is not managed by Authlete,
-meaning that it is expected that the service implementation manages the value. If the service implementation
-does not manage authentication time of end-users, call Authlete's `/auth/authorization/fail` API
-with `reason=MAX_AGE_NOT_SUPPORTED` and use the API response to generate a response to the client
-application.
-
-(ii) Add the value of the maximum authentication age (which is represented in seconds) to the authentication
-time. The calculated value is the expiration time.
-
-(iii) Check whether the calculated value is equal to or greater than the current time. If this condition
-is satisfied, go to the next step ([SUBJECT]). Otherwise, call Authlete's `/auth/authorization/fail`
-API with `reason=EXCEEDS_MAX_AGE` and use the API response to generate a response to the client
-application.
-
-[3] SUBJECT
-
-Get the value of `subject` from the `/auth/authorization` API response. The value represents an
-end-user who the client application expects to grant authorization. If the value is `null`, go to
-the next step ([ACRs]). Otherwise, follow the sub steps described below.
-
-(i) Compare the value of the requested subject to the current end-user.
-
-(ii) If they are equal, go to the next step ([ACRs]). If they are not equal, call Authlete's
-`/auth/authorization/fail` API with `reason=DIFFERENT_SUBJECT` and use the response from the API
-to generate a response to the client application.
-
-[4] ACRs
-
-Get the value of `acrs` from the `/auth/authorization` API response. The value represents a list
-of ACRs (Authentication Context Class References) and comes from (1) acr claim in `claims` request
-parameter, (2) `acr_values` request parameter, or (3) `default_acr_values` configuration parameter
-of the client application.
-
-It is ensured that all the ACRs in acrs are supported by the authorization server implementation.
-In other words, it is ensured that all the ACRs are listed in `acr_values_supported` configuration
-parameter of the authorization server.
-
-If the value of ACRs is `null`, go to the next step ([ISSUE]). Otherwise, follow the sub steps
-described below.
-
-(i) Get the ACR performed for the authentication of the current end-user. Note that this value is
-managed not by Authlete but by the authorization server implementation. (If the authorization server
-implementation cannot handle ACRs, it should not have listed ACRs as `acr_values_supported`.)
-
-(ii) Compare the ACR value obtained in the above step to each element in the ACR array (`acrs`)
-in the listed order.
-
-(iii) If the ACR value was found in the array, (= the ACR performed for the authentication of the
-current end-user did not match any one of the ACRs requested by the client application), check
-whether one of the requested ACRs must be satisfied or not using `acrEssential` parameter in the
-`/auth/authorization` API response. If the value of `acrEssential` parameter is `true`, call Authlete's
-`/auth/authorization/fail` API with `reason=ACR_NOT_SATISFIED` and use the response from the API
-to generate a response to the client application. Otherwise, go to the next step ([SCOPES]).
-
-[5] SCOPES
-
-Get the value of `scopes` from the `/auth/authorization` API response. If the array contains a
-scope which has not been granted to the client application by the end-user in the past, call
-Authlete's `/auth/authorization/fail` API with `reason=CONSENT_REQUIRED` and use the response from
-the API to generate a response to the client application. Otherwise, go to the next step ([RESOURCES]).
-
-Note that Authlete provides APIs to manage records of granted scopes (`/api/client/granted_scopes/*`
-APIs), which is only available in a dedicated/onpremise Authlete server (contact sales@authlete.com
-for details).
-
-[6] DYNAMIC SCOPES
-
-Get the value of `dynamicScopes` from the `/auth/authorization` API response. If the array contains
-a scope which has not been granted to the client application by the end-user in the past, call
-Authlete's `/auth/authorization/fail` API with `reason=CONSENT_REQUIRED` and use the response from
-the API to generate a response to the client application. Otherwise, go to the next step ([RESOURCES]).
-
-Note that Authlete provides APIs to manage records of granted scopes (`/api/client/granted_scopes/*`
-APIs) but dynamic scopes are not remembered as granted scopes.
-
-[7] RESOURCES
-
-Get the value of `resources` from the `/auth/authorization` API response. The array represents
-the values of the `resource` request parameters. If you want to reject the request, call Authlete's
-`/auth/authorization/fail` API with `reason=INVALID_TARGET` and use the response from the API to
-generate a response to the client application. Otherwise, go to the next step ([ISSUE]).
-
-See "Resource Indicators for OAuth 2.0" for details.
-
-[8] ISSUE
-
-If all the above steps succeeded, the last step is to issue an authorization code, an ID token
-and/or an access token. (There is a special case, though. In the case of `response_type=none`,
-nothing is issued.) It can be performed by calling Authlete's `/auth/authorization/issue` API.
-The API requires the following parameters. Prepare these parameters and call `/auth/authorization/issue`
-API and use the response to generate a response to the client application.
-
-- <u>`ticket` (required)</u><br>
-  This parameter represents a ticket which is exchanged with tokens at `/auth/authorization/issue`.
-  Use the value of `ticket` contained in the `/auth/authorization` API response.
-
-- <u>`subject` (required)</u><br>
-  This parameter represents the unique identifier of the current end-user. It is often called "user ID"
-  and it may or may not be visible to the user. In any case, it is a number or a string assigned
-  to an end-user by the authorization server implementation. Authlete does not care about the format
-  of the value of subject, but it must consist of only ASCII letters and its length must not exceed 100.
-
-  When the value of `subject` parameter in the /auth/authorization API response is not `null`,
-  it is necessarily identical to the value of `subject` parameter in the `/auth/authorization/issue`
-  API request.
-
-  The value of this parameter will be embedded in an ID token as the value of `sub` claim. When
-  the value of `subject_type` configuration parameter of the client application is `PAIRWISE`,
-  the value of sub claim is different from the value specified by this parameter, See [8. Subject
-  Identifier Types](https://openid.net/specs/openid-connect-core-1_0.html#SubjectIDTypes) of OpenID
-  Connect Core 1.0 for details about subject types.
-
-  You can use the `sub` request parameter to adjust the value of the `sub` claim in an ID token.
-  See the description of the `sub` request parameter for details.
-
-- <u>`authTime` (optional)</u><br>
-  This parameter represents the time when the end-user authentication occurred. Its value is the
-  number of seconds from `1970-01-01`. The value of this parameter will be embedded in an ID token
-  as the value of `auth_time` claim.
-
-- <u>`acr` (optional)</u><br>
-  This parameter represents the ACR (Authentication Context Class Reference) which the authentication
-  of the end-user satisfies. When `acrs` in the `/auth/authorization` API response is a non-empty
-  array and the value of `acrEssential` is `true`, the value of this parameter must be one of the
-  array elements. Otherwise, even `null` is allowed. The value of this parameter will be embedded
-  in an ID token as the value of `acr` claim.
-
-- <u>`claims` (optional)</u><br>
-  This parameter represents claims of the end-user. "Claims" here are pieces of information about
-  the end-user such as `"name"`, `"email"` and `"birthdate"`. The authorization server implementation
-  is required to gather claims of the end-user, format the claim values into JSON and set the JSON
-  string as the value of this parameter.
-
-  The claims which the authorization server implementation is required to gather are listed in
-  `claims` parameter in the `/auth/authorization` API response.
-
-  For example, if claims parameter lists `"name"`, `"email"` and `"birthdate"`, the value of this
-  parameter should look like the following.
-
-  ```json
-  {
-    "name": "John Smith",
-    "email": "john@example.com",
-    "birthdate": "1974-05-06"
-  }
-  ```
-
-  `claimsLocales` parameter in the `/auth/authorization` API response lists the end-user's preferred
-  languages and scripts, ordered by preference. When `claimsLocales` parameter is a non-empty array,
-  its elements should be taken into account when the authorization server implementation gathers
-  claim values. Especially, note the excerpt below from [5.2. Claims Languages and Scripts](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsLanguagesAndScripts)
-  of OpenID Connect Core 1.0.
-
-  > When the OP determines, either through the `claims_locales` parameter, or by other means, that
-  the End-User and Client are requesting Claims in only one set of languages and scripts, it is
-  RECOMMENDED that OPs return Claims without language tags when they employ this language and script.
-  It is also RECOMMENDED that Clients be written in a manner that they can handle and utilize Claims
-  using language tags.
-
-  If `claims` parameter in the `/auth/authorization` API response is `null` or an empty array,
-  the value of this parameter should be `null`.
-
-  See [5.1. Standard Claims](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims)
-  of OpenID Connect core 1.0 for claim names and their value formats. Note (1) that the authorization
-  server implementation support its special claims ([5.1.2. Additional Claims](https://openid.net/specs/openid-connect-core-1_0.html#AdditionalClaims))
-  and (2) that claim names may be followed by a language tag ([5.2. Claims Languages and Scripts](https://openid.net/specs/openid-connect-core-1_0.html#ClaimsLanguagesAndScripts)).
-  Read the specification of [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html)
-  for details.
-
-  The claim values in this parameter will be embedded in an ID token.
-
-  Note that `idTokenClaims` parameter is available in the `/auth/authorization` API response.
-  The parameter has the value of the `"id_token"` property in the `claims` request parameter or
-  in the `"claims"` property in a request object. The value of this parameter should be considered
-  when you prepare claim values.
-
-- <u>`properties` (optional)</u><br>
-  Extra properties to associate with an access token and/or an authorization code that may be issued
-  by this request. Note that `properties` parameter is accepted only when `Content-Type` of the
-  request is `application/json`, so don't use `application/x-www-form-urlencoded` for details.
-
-- <u>`scopes` (optional)</u><br>
-  Scopes to associate with an access token and/or an authorization code. If this parameter is `null`,
-  the scopes specified in the original authorization request from the client application are used.
-  In other cases, including the case of an empty array, the specified scopes will replace the original
-  scopes contained in the original authorization request.
-
-  Even scopes that are not included in the original authorization request can be specified. However,
-  as an exception, `openid` scope is ignored on the server side if it is not included in the original
-  request. It is because the existence of `openid` scope considerably changes the validation steps
-  and because adding `openid` triggers generation of an ID token (although the client application
-  has not requested it) and the behavior is a major violation against the specification.
-
-  If you add `offline_access` scope although it is not included in the original request, keep in
-  mind that the specification requires explicit consent from the user for the scope ([OpenID Connect
-  Core 1.0, 11. Offline Access](https://openid.net/specs/openid-connect-core-1_0.html#OfflineAccess)).
-  When `offline_access` is included in the original request, the current implementation of Authlete's
-  `/auth/authorization` API checks whether the request has come along with `prompt` request parameter
-  and the value includes consent. However, note that the implementation of Authlete's `/auth/authorization/issue`
-  API does not perform such checking if `offline_access` scope is added via this `scopes` parameter.
-
-- <u>`sub` (optional)</u><br>
-  The value of the `sub` claim in an ID token. If the value of this request parameter is not empty,
-  it is used as the value of the `sub` claim. Otherwise, the value of the `subject` request parameter
-  is used as the value of the `sub` claim. The main purpose of this parameter is to hide the actual
-  value of the subject from client applications.
-
-  Note that even if this `sub` parameter is not empty, the value of the subject request parameter
-  is used as the value of the subject which is associated with the access token.
-
-**INTERACTION**
-
-When the value of `action` is `INTERACTION`, it means that the request from the client application
-has no problem and requires the service to process the request with user interaction by an HTML form.
-The purpose of the UI displayed to the end-user is to ask the end-user to grant authorization to
-the client application. The items described below are some points which the service implementation
-should take into account when it builds the UI.
-
-[1] DISPLAY MODE
-
-The response from `/auth/authorization` API has `display` parameter. It is one of `PAGE` (default),
-`POPUP`, `TOUCH` and `WAP` The meanings of the values are described in [3.1.2.1. Authentication
-Request of OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest).
-Basically, the authorization server implementation should display the UI which is suitable for the
-display mode, but it is okay for the authorization server implementation to "attempt to detect the
-capabilities of the User Agent and present an appropriate display".
-
-It is ensured that the value of `display` is one of the supported display modes which are specified
-by `supportedDisplays` configuration parameter of the service.
-
-[2] UI LOCALE
-
-The response from `/auth/authorization` API has `uiLocales` parameter. It it is not `null`, it lists
-language tag values (such as `fr-CA`, `ja-JP` and `en`) ordered by preference. The service implementation
-should display the UI in one of the language listed in the parameter when possible. It is ensured
-that language tags listed in `uiLocales` are contained in the list of supported UI locales which
-are specified by `supportedUiLocales` configuration parameter of the service.
-
-[3] CLIENT INFORMATION
-
-The authorization server implementation should show information about the client application to
-the end-user. The information is embedded in `client` parameter in the response from `/auth/authorization`
-API.
-
-[4] SCOPES
-
-A client application requires authorization for specific permissions. In OAuth 2.0 specification,
-"scope" is a technical term which represents a permission. `scopes` parameter in the response
-from `/auth/authorization` API is a list of scopes requested by the client application. The service
-implementation should show the end-user the scopes.
-
-The authorization server implementation may choose not to show scopes to which the end-user has
-given consent in the past. To put it the other way around, the authorization server implementation
-may show only the scopes to which the end-user has not given consent yet. However, if the value
-of `prompts` response parameter contains `CONSENT`, the authorization server implementation has
-to obtain explicit consent from the end-user even if the end-user has given consent to all the
-requested scopes in the past.
-
-Note that Authlete provides APIs to manage records of granted scopes (`/api/client/granted_scopes/*`
-APIs), but the APIs work only in the case the Authlete server you use is a dedicated Authlete server
-(contact sales@authlete.com for details). In other words, the APIs of the shared Authlete server
-are disabled intentionally (in order to prevent garbage data from being accumulated) and they
-return 403 Forbidden.
-
-It is ensured that the values in `scopes` parameter are contained in the list of supported scopes
-which are specified by `supportedScopes` configuration parameter of the service.
-
-[5] DYNAMIC SCOPES
-
-The authorization request may include dynamic scopes. The list of recognized dynamic scopes are
-accessible by getDynamicScopes() method. See the description of the [DynamicScope](https://authlete.github.io/authlete-java-common/com/authlete/common/dto/DynamicScope.html)
-class for details about dynamic scopes.
-
-[6] AUTHORIZATION DETAILS
-
-The authorization server implementation should show the end-user "authorization details" if the
-request includes it. The value of `authorization_details` parameter in the response is the content
-of the `authorization_details` request parameter.
-
-See "OAuth 2.0 Rich Authorization Requests" for details.
-
-[7] PURPOSE
-
-The authorization server implementation must show the value of the `purpose` request parameter if
-it supports [OpenID Connect for Identity Assurance 1.0](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html).
-See [8. Transaction-specific Purpose](https://openid.net/specs/openid-connect-4-identity-assurance-1_0.html#rfc.section.8)
-in the specification for details.
-
-Note that the value of `purpose` response parameter is the value of the purpose request parameter.
-
-[7] END-USER AUTHENTICATION
-
-Necessarily, the end-user must be authenticated (= must login the service) before granting authorization
-to the client application. Simply put, a login form is expected to be displayed for end-user authentication.
-The service implementation must follow the steps described below to comply with OpenID Connect.
-(Or just always show a login form if it's too much of a bother.)
-
-(i) Get the value of `prompts` response parameter. It corresponds to the value of the `prompt`
-request parameter. Details of the request parameter are described in [3.1.2.1. Authentication
-Request](https://openid.net/specs/openid-connect-core-1_0.html#AuthRequest) of OpenID Connect Core 1.0.
-
-(ii) If the value of `prompts` parameter is `SELECT_ACCOUNT` display a form to let the end-user
-select on of his/her accounts for login. If `subject` response parameter is not `null`, it is the
-end-user ID that the client application expects, so the value should be used to determine the value
-of the login ID. Note that a subject and a login ID are not necessarily equal. If the value of
-`subject` response parameter is `null`, the value of `loginHint` response parameter should be referred
-to as a hint to determine the value of the login ID. The value of `loginHint` response parameter
-is simply the value of the `login_hint` request parameter.
-
-(iii) If the value of `prompts` response parameter contains `LOGIN`, display a form to urge the
-end-user to login even if the end-user has already logged in. If the value of `subject` response
-parameter is not `null`, it is the end-user ID that the client application expects, so the value
-should be used to determine the value of the login ID. Note that a subject and a login ID are not
-necessarily equal. If the value of `subject` response parameter is `null`, the value of `loginHint`
-response parameter should be referred to as a hint to determine the value of the login ID. The value
-of `loginHint` response parameter is simply the value of the `login_hint` request parameter.
-
-(iv) If the value of `prompts` response parameter does not contain `LOGIN`, the authorization server
-implementation does not have to authenticate the end-user if all the conditions described below
-are satisfied. If any one of the conditions is not satisfied, show a login form to authenticate
-the end-user.
-
-- An end-user has already logged in the service.
-
-- The login ID of the current end-user matches the value of `subject` response parameter.
-This check is required only when the value of `subject` response parameter is a non-null value.
-
-- The max age, which is the number of seconds contained in `maxAge` response parameter,
-has not passed since the current end-user logged in your service. This check is required only when
-the value of `maxAge` response parameter is a non-zero value.
-
-- If the authorization server implementation does not manage authentication time of end-users
-(= if the authorization server implementation cannot know when end-users logged in) and if the
-value of `maxAge` response parameter is a non-zero value, a login form should be displayed.
-
-- The ACR (Authentication Context Class Reference) of the authentication performed for
-the current end-user satisfies one of the ACRs listed in `acrs` response parameter. This check is
-required only when the value of `acrs` response parameter is a non-empty array.
-
-In every case, the end-user authentication must satisfy one of the ACRs listed in `acrs` response
-parameter when the value of `acrs` response parameter is a non-empty array and `acrEssential`
-response parameter is `true`.
-
-[9] GRANT/DENY BUTTONS
-
-The end-user is supposed to choose either (1) to grant authorization to the client application or
-(2) to deny the authorization request. The UI must have UI components to accept the judgment by
-the user. Usually, a button to grant authorization and a button to deny the request are provided.
-
-When the value of `subject` response parameter is not `null`, the end-user authentication must be
-performed for the subject, meaning that the authorization server implementation should repeatedly
-show a login form until the subject is successfully authenticated.
-
-The end-user will choose either (1) to grant authorization to the client application or (2) to
-deny the authorization request. When the end-user chose to deny the authorization request, call
-Authlete's `/auth/authorization/fail` API with `reason=DENIED` and use the response from the API
-to generate a response to the client application.
-
-When the end-user chose to grant authorization to the client application, the authorization server
-implementation has to issue an authorization code, an ID token, and/or an access token to the client
-application. (There is a special case. When `response_type=none`, nothing is issued.) Issuing the
-tokens can be performed by calling Authlete's `/auth/authorization/issue` API. Read [ISSUE] written
-above in the description for the case of `action=NO_INTERACTION`.
-</details>
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="auth_authorization_api_form" method="post" path="/api/{serviceId}/auth/authorization" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.authorizationEndpoint.authAuthorizationApiForm({
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: true,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { authorizationEndpointAuthAuthorizationApiForm } from "authelete-bundled/funcs/authorizationEndpointAuthAuthorizationApiForm.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await authorizationEndpointAuthAuthorizationApiForm(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: false,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("authorizationEndpointAuthAuthorizationApiForm failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.AuthAuthorizationApiFormRequest](../../models/operations/authauthorizationapiformrequest.md)                                                                       | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.AuthAuthorizationApiFormResponse](../../models/operations/authauthorizationapiformresponse.md)\>**
-
-### Errors
-
-| Error Type                                         | Status Code                                        | Content Type                                       |
-| -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- |
-| errors.AuthAuthorizationApiFormBadRequestError     | 400                                                | application/json                                   |
-| errors.AuthAuthorizationApiFormUnauthorizedError   | 401                                                | application/json                                   |
-| errors.AuthAuthorizationApiFormForbiddenError      | 403                                                | application/json                                   |
-| errors.AuthAuthorizationApiFormInternalServerError | 500                                                | application/json                                   |
-| errors.AutheleteBundledDefaultError                | 4XX, 5XX                                           | \*/\*                                              |
-
-## authAuthorizationFailApi
+* [failRequest](#failrequest) - Fail Authorization Request
+* [failRequestForm](#failrequestform) - Fail Authorization Request
+* [issue](#issue) - Issue Authorization Response
+* [issueForm](#issueform) - Issue Authorization Response
+* [getTicketInfo](#getticketinfo) - Get Ticket Information
+* [updateTicket](#updateticket) - Update Ticket Information
+* [updateTicketForm](#updateticketform) - Update Ticket Information
+
+## failRequest
 
 This API generates a content of an error authorization response that the authorization server implementation
 returns to the client application.
@@ -1386,7 +140,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.authorizationEndpoint.authAuthorizationFailApi({
+  const result = await autheleteBundled.authorizationEndpoint.failRequest({
     serviceId: "<id>",
     requestBody: {
       ticket: "qA7wGybwArICpbUSutrf5Xc9-i1fHE0ySOHxR1eBoBQ",
@@ -1406,7 +160,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { authorizationEndpointAuthAuthorizationFailApi } from "authelete-bundled/funcs/authorizationEndpointAuthAuthorizationFailApi.js";
+import { authorizationEndpointFailRequest } from "authelete-bundled/funcs/authorizationEndpointFailRequest.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1417,7 +171,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await authorizationEndpointAuthAuthorizationFailApi(autheleteBundled, {
+  const res = await authorizationEndpointFailRequest(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       ticket: "qA7wGybwArICpbUSutrf5Xc9-i1fHE0ySOHxR1eBoBQ",
@@ -1428,7 +182,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("authorizationEndpointAuthAuthorizationFailApi failed:", res.error);
+    console.log("authorizationEndpointFailRequest failed:", res.error);
   }
 }
 
@@ -1451,15 +205,15 @@ run();
 
 ### Errors
 
-| Error Type                                         | Status Code                                        | Content Type                                       |
-| -------------------------------------------------- | -------------------------------------------------- | -------------------------------------------------- |
-| errors.AuthAuthorizationFailApiBadRequestError     | 400                                                | application/json                                   |
-| errors.AuthAuthorizationFailApiUnauthorizedError   | 401                                                | application/json                                   |
-| errors.AuthAuthorizationFailApiForbiddenError      | 403                                                | application/json                                   |
-| errors.AuthAuthorizationFailApiInternalServerError | 500                                                | application/json                                   |
-| errors.AutheleteBundledDefaultError                | 4XX, 5XX                                           | \*/\*                                              |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## authAuthorizationFailApiForm
+## failRequestForm
 
 This API generates a content of an error authorization response that the authorization server implementation
 returns to the client application.
@@ -1586,7 +340,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.authorizationEndpoint.authAuthorizationFailApiForm({
+  const result = await autheleteBundled.authorizationEndpoint.failRequestForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -1605,7 +359,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { authorizationEndpointAuthAuthorizationFailApiForm } from "authelete-bundled/funcs/authorizationEndpointAuthAuthorizationFailApiForm.js";
+import { authorizationEndpointFailRequestForm } from "authelete-bundled/funcs/authorizationEndpointFailRequestForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1616,7 +370,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await authorizationEndpointAuthAuthorizationFailApiForm(autheleteBundled, {
+  const res = await authorizationEndpointFailRequestForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -1626,7 +380,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("authorizationEndpointAuthAuthorizationFailApiForm failed:", res.error);
+    console.log("authorizationEndpointFailRequestForm failed:", res.error);
   }
 }
 
@@ -1649,15 +403,15 @@ run();
 
 ### Errors
 
-| Error Type                                             | Status Code                                            | Content Type                                           |
-| ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------ |
-| errors.AuthAuthorizationFailApiFormBadRequestError     | 400                                                    | application/json                                       |
-| errors.AuthAuthorizationFailApiFormUnauthorizedError   | 401                                                    | application/json                                       |
-| errors.AuthAuthorizationFailApiFormForbiddenError      | 403                                                    | application/json                                       |
-| errors.AuthAuthorizationFailApiFormInternalServerError | 500                                                    | application/json                                       |
-| errors.AutheleteBundledDefaultError                    | 4XX, 5XX                                               | \*/\*                                                  |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## authAuthorizationIssueApi
+## issue
 
 This API parses request parameters of an authorization request and returns necessary data for the
 authorization server implementation to process the authorization request further.
@@ -1787,7 +541,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.authorizationEndpoint.authAuthorizationIssueApi({
+  const result = await autheleteBundled.authorizationEndpoint.issue({
     serviceId: "<id>",
     requestBody: {
       ticket: "FFgB9gwb_WXh6g1u-UQ8ZI-d_k4B-o-cm7RkVzI8Vnc",
@@ -1807,7 +561,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { authorizationEndpointAuthAuthorizationIssueApi } from "authelete-bundled/funcs/authorizationEndpointAuthAuthorizationIssueApi.js";
+import { authorizationEndpointIssue } from "authelete-bundled/funcs/authorizationEndpointIssue.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1818,7 +572,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await authorizationEndpointAuthAuthorizationIssueApi(autheleteBundled, {
+  const res = await authorizationEndpointIssue(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       ticket: "FFgB9gwb_WXh6g1u-UQ8ZI-d_k4B-o-cm7RkVzI8Vnc",
@@ -1829,7 +583,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("authorizationEndpointAuthAuthorizationIssueApi failed:", res.error);
+    console.log("authorizationEndpointIssue failed:", res.error);
   }
 }
 
@@ -1852,15 +606,15 @@ run();
 
 ### Errors
 
-| Error Type                                          | Status Code                                         | Content Type                                        |
-| --------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------- |
-| errors.AuthAuthorizationIssueApiBadRequestError     | 400                                                 | application/json                                    |
-| errors.AuthAuthorizationIssueApiUnauthorizedError   | 401                                                 | application/json                                    |
-| errors.AuthAuthorizationIssueApiForbiddenError      | 403                                                 | application/json                                    |
-| errors.AuthAuthorizationIssueApiInternalServerError | 500                                                 | application/json                                    |
-| errors.AutheleteBundledDefaultError                 | 4XX, 5XX                                            | \*/\*                                               |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## authAuthorizationIssueApiForm
+## issueForm
 
 This API parses request parameters of an authorization request and returns necessary data for the
 authorization server implementation to process the authorization request further.
@@ -1990,7 +744,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.authorizationEndpoint.authAuthorizationIssueApiForm({
+  const result = await autheleteBundled.authorizationEndpoint.issueForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -2009,7 +763,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { authorizationEndpointAuthAuthorizationIssueApiForm } from "authelete-bundled/funcs/authorizationEndpointAuthAuthorizationIssueApiForm.js";
+import { authorizationEndpointIssueForm } from "authelete-bundled/funcs/authorizationEndpointIssueForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -2020,7 +774,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await authorizationEndpointAuthAuthorizationIssueApiForm(autheleteBundled, {
+  const res = await authorizationEndpointIssueForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -2030,7 +784,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("authorizationEndpointAuthAuthorizationIssueApiForm failed:", res.error);
+    console.log("authorizationEndpointIssueForm failed:", res.error);
   }
 }
 
@@ -2053,15 +807,15 @@ run();
 
 ### Errors
 
-| Error Type                                              | Status Code                                             | Content Type                                            |
-| ------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------- |
-| errors.AuthAuthorizationIssueApiFormBadRequestError     | 400                                                     | application/json                                        |
-| errors.AuthAuthorizationIssueApiFormUnauthorizedError   | 401                                                     | application/json                                        |
-| errors.AuthAuthorizationIssueApiFormForbiddenError      | 403                                                     | application/json                                        |
-| errors.AuthAuthorizationIssueApiFormInternalServerError | 500                                                     | application/json                                        |
-| errors.AutheleteBundledDefaultError                     | 4XX, 5XX                                                | \*/\*                                                   |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## getApiServiceIdAuthAuthorizationTicketInfo
+## getTicketInfo
 
 Get Ticket Information
 
@@ -2078,7 +832,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.authorizationEndpoint.getApiServiceIdAuthAuthorizationTicketInfo({
+  const result = await autheleteBundled.authorizationEndpoint.getTicketInfo({
     serviceId: "<id>",
   });
 
@@ -2094,7 +848,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { authorizationEndpointGetApiServiceIdAuthAuthorizationTicketInfo } from "authelete-bundled/funcs/authorizationEndpointGetApiServiceIdAuthAuthorizationTicketInfo.js";
+import { authorizationEndpointGetTicketInfo } from "authelete-bundled/funcs/authorizationEndpointGetTicketInfo.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -2105,14 +859,14 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await authorizationEndpointGetApiServiceIdAuthAuthorizationTicketInfo(autheleteBundled, {
+  const res = await authorizationEndpointGetTicketInfo(autheleteBundled, {
     serviceId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("authorizationEndpointGetApiServiceIdAuthAuthorizationTicketInfo failed:", res.error);
+    console.log("authorizationEndpointGetTicketInfo failed:", res.error);
   }
 }
 
@@ -2135,15 +889,15 @@ run();
 
 ### Errors
 
-| Error Type                                                           | Status Code                                                          | Content Type                                                         |
-| -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| errors.GetApiServiceIdAuthAuthorizationTicketInfoBadRequestError     | 400                                                                  | application/json                                                     |
-| errors.GetApiServiceIdAuthAuthorizationTicketInfoUnauthorizedError   | 401                                                                  | application/json                                                     |
-| errors.GetApiServiceIdAuthAuthorizationTicketInfoForbiddenError      | 403                                                                  | application/json                                                     |
-| errors.GetApiServiceIdAuthAuthorizationTicketInfoInternalServerError | 500                                                                  | application/json                                                     |
-| errors.AutheleteBundledDefaultError                                  | 4XX, 5XX                                                             | \*/\*                                                                |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## postApiServiceIdAuthAuthorizationTicketUpdate
+## updateTicket
 
 Update Ticket Information
 
@@ -2160,7 +914,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.authorizationEndpoint.postApiServiceIdAuthAuthorizationTicketUpdate({
+  const result = await autheleteBundled.authorizationEndpoint.updateTicket({
     serviceId: "<id>",
     requestBody: {
       ticket: "<value>",
@@ -2180,7 +934,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdate } from "authelete-bundled/funcs/authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdate.js";
+import { authorizationEndpointUpdateTicket } from "authelete-bundled/funcs/authorizationEndpointUpdateTicket.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -2191,7 +945,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdate(autheleteBundled, {
+  const res = await authorizationEndpointUpdateTicket(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       ticket: "<value>",
@@ -2202,7 +956,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdate failed:", res.error);
+    console.log("authorizationEndpointUpdateTicket failed:", res.error);
   }
 }
 
@@ -2225,15 +979,15 @@ run();
 
 ### Errors
 
-| Error Type                                                              | Status Code                                                             | Content Type                                                            |
-| ----------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| errors.PostApiServiceIdAuthAuthorizationTicketUpdateBadRequestError     | 400                                                                     | application/json                                                        |
-| errors.PostApiServiceIdAuthAuthorizationTicketUpdateUnauthorizedError   | 401                                                                     | application/json                                                        |
-| errors.PostApiServiceIdAuthAuthorizationTicketUpdateForbiddenError      | 403                                                                     | application/json                                                        |
-| errors.PostApiServiceIdAuthAuthorizationTicketUpdateInternalServerError | 500                                                                     | application/json                                                        |
-| errors.AutheleteBundledDefaultError                                     | 4XX, 5XX                                                                | \*/\*                                                                   |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## postApiServiceIdAuthAuthorizationTicketUpdateForm
+## updateTicketForm
 
 Update Ticket Information
 
@@ -2250,7 +1004,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.authorizationEndpoint.postApiServiceIdAuthAuthorizationTicketUpdateForm({
+  const result = await autheleteBundled.authorizationEndpoint.updateTicketForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -2269,7 +1023,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdateForm } from "authelete-bundled/funcs/authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdateForm.js";
+import { authorizationEndpointUpdateTicketForm } from "authelete-bundled/funcs/authorizationEndpointUpdateTicketForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -2280,7 +1034,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdateForm(autheleteBundled, {
+  const res = await authorizationEndpointUpdateTicketForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -2290,7 +1044,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("authorizationEndpointPostApiServiceIdAuthAuthorizationTicketUpdateForm failed:", res.error);
+    console.log("authorizationEndpointUpdateTicketForm failed:", res.error);
   }
 }
 
@@ -2313,10 +1067,10 @@ run();
 
 ### Errors
 
-| Error Type                                                                  | Status Code                                                                 | Content Type                                                                |
-| --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| errors.PostApiServiceIdAuthAuthorizationTicketUpdateFormBadRequestError     | 400                                                                         | application/json                                                            |
-| errors.PostApiServiceIdAuthAuthorizationTicketUpdateFormUnauthorizedError   | 401                                                                         | application/json                                                            |
-| errors.PostApiServiceIdAuthAuthorizationTicketUpdateFormForbiddenError      | 403                                                                         | application/json                                                            |
-| errors.PostApiServiceIdAuthAuthorizationTicketUpdateFormInternalServerError | 500                                                                         | application/json                                                            |
-| errors.AutheleteBundledDefaultError                                         | 4XX, 5XX                                                                    | \*/\*                                                                       |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |

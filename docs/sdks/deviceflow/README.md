@@ -3,18 +3,16 @@
 
 ## Overview
 
-API endpoints for implementing OAuth 2.0 Device Flow
-
 ### Available Operations
 
-* [deviceAuthorizationApi](#deviceauthorizationapi) - Process Device Authorization Request
-* [deviceAuthorizationApiForm](#deviceauthorizationapiform) - Process Device Authorization Request
-* [deviceVerificationApi](#deviceverificationapi) - Process Device Verification Request
-* [deviceVerificationApiForm](#deviceverificationapiform) - Process Device Verification Request
-* [deviceCompleteApi](#devicecompleteapi) - Complete Device Authorization
-* [deviceCompleteApiForm](#devicecompleteapiform) - Complete Device Authorization
+* [authorize](#authorize) - Process Device Authorization Request
+* [authorizeForm](#authorizeform) - Process Device Authorization Request
+* [verify](#verify) - Process Device Verification Request
+* [verifyForm](#verifyform) - Process Device Verification Request
+* [completeAuthorization](#completeauthorization) - Complete Device Authorization
+* [completeAuthorizationForm](#completeauthorizationform) - Complete Device Authorization
 
-## deviceAuthorizationApi
+## authorize
 
 This API parses request parameters of a [device authorization request](https://datatracker.ietf.org/doc/html/rfc8628#section-3.1)
 and returns necessary data for the authorization server implementation to process the device authorization
@@ -127,7 +125,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.deviceFlow.deviceAuthorizationApi({
+  const result = await autheleteBundled.deviceFlow.authorize({
     serviceId: "<id>",
     requestBody: {
       parameters: "client_id=26888344961664&scope=history.read",
@@ -148,7 +146,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { deviceFlowDeviceAuthorizationApi } from "authelete-bundled/funcs/deviceFlowDeviceAuthorizationApi.js";
+import { deviceFlowAuthorize } from "authelete-bundled/funcs/deviceFlowAuthorize.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -159,7 +157,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await deviceFlowDeviceAuthorizationApi(autheleteBundled, {
+  const res = await deviceFlowAuthorize(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       parameters: "client_id=26888344961664&scope=history.read",
@@ -171,7 +169,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("deviceFlowDeviceAuthorizationApi failed:", res.error);
+    console.log("deviceFlowAuthorize failed:", res.error);
   }
 }
 
@@ -194,15 +192,15 @@ run();
 
 ### Errors
 
-| Error Type                                       | Status Code                                      | Content Type                                     |
-| ------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------ |
-| errors.DeviceAuthorizationApiBadRequestError     | 400                                              | application/json                                 |
-| errors.DeviceAuthorizationApiUnauthorizedError   | 401                                              | application/json                                 |
-| errors.DeviceAuthorizationApiForbiddenError      | 403                                              | application/json                                 |
-| errors.DeviceAuthorizationApiInternalServerError | 500                                              | application/json                                 |
-| errors.AutheleteBundledDefaultError              | 4XX, 5XX                                         | \*/\*                                            |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## deviceAuthorizationApiForm
+## authorizeForm
 
 This API parses request parameters of a [device authorization request](https://datatracker.ietf.org/doc/html/rfc8628#section-3.1)
 and returns necessary data for the authorization server implementation to process the device authorization
@@ -315,7 +313,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.deviceFlow.deviceAuthorizationApiForm({
+  const result = await autheleteBundled.deviceFlow.authorizeForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -334,7 +332,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { deviceFlowDeviceAuthorizationApiForm } from "authelete-bundled/funcs/deviceFlowDeviceAuthorizationApiForm.js";
+import { deviceFlowAuthorizeForm } from "authelete-bundled/funcs/deviceFlowAuthorizeForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -345,7 +343,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await deviceFlowDeviceAuthorizationApiForm(autheleteBundled, {
+  const res = await deviceFlowAuthorizeForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -355,7 +353,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("deviceFlowDeviceAuthorizationApiForm failed:", res.error);
+    console.log("deviceFlowAuthorizeForm failed:", res.error);
   }
 }
 
@@ -378,15 +376,15 @@ run();
 
 ### Errors
 
-| Error Type                                           | Status Code                                          | Content Type                                         |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| errors.DeviceAuthorizationApiFormBadRequestError     | 400                                                  | application/json                                     |
-| errors.DeviceAuthorizationApiFormUnauthorizedError   | 401                                                  | application/json                                     |
-| errors.DeviceAuthorizationApiFormForbiddenError      | 403                                                  | application/json                                     |
-| errors.DeviceAuthorizationApiFormInternalServerError | 500                                                  | application/json                                     |
-| errors.AutheleteBundledDefaultError                  | 4XX, 5XX                                             | \*/\*                                                |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## deviceVerificationApi
+## verify
 
 The API returns information associated with a user code.
 
@@ -444,7 +442,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.deviceFlow.deviceVerificationApi({
+  const result = await autheleteBundled.deviceFlow.verify({
     serviceId: "<id>",
     requestBody: {
       userCode: "XWWKPBWVXQ",
@@ -463,7 +461,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { deviceFlowDeviceVerificationApi } from "authelete-bundled/funcs/deviceFlowDeviceVerificationApi.js";
+import { deviceFlowVerify } from "authelete-bundled/funcs/deviceFlowVerify.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -474,7 +472,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await deviceFlowDeviceVerificationApi(autheleteBundled, {
+  const res = await deviceFlowVerify(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       userCode: "XWWKPBWVXQ",
@@ -484,7 +482,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("deviceFlowDeviceVerificationApi failed:", res.error);
+    console.log("deviceFlowVerify failed:", res.error);
   }
 }
 
@@ -507,15 +505,15 @@ run();
 
 ### Errors
 
-| Error Type                                      | Status Code                                     | Content Type                                    |
-| ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
-| errors.DeviceVerificationApiBadRequestError     | 400                                             | application/json                                |
-| errors.DeviceVerificationApiUnauthorizedError   | 401                                             | application/json                                |
-| errors.DeviceVerificationApiForbiddenError      | 403                                             | application/json                                |
-| errors.DeviceVerificationApiInternalServerError | 500                                             | application/json                                |
-| errors.AutheleteBundledDefaultError             | 4XX, 5XX                                        | \*/\*                                           |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## deviceVerificationApiForm
+## verifyForm
 
 The API returns information associated with a user code.
 
@@ -573,7 +571,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.deviceFlow.deviceVerificationApiForm({
+  const result = await autheleteBundled.deviceFlow.verifyForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -592,7 +590,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { deviceFlowDeviceVerificationApiForm } from "authelete-bundled/funcs/deviceFlowDeviceVerificationApiForm.js";
+import { deviceFlowVerifyForm } from "authelete-bundled/funcs/deviceFlowVerifyForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -603,7 +601,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await deviceFlowDeviceVerificationApiForm(autheleteBundled, {
+  const res = await deviceFlowVerifyForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -613,7 +611,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("deviceFlowDeviceVerificationApiForm failed:", res.error);
+    console.log("deviceFlowVerifyForm failed:", res.error);
   }
 }
 
@@ -636,15 +634,15 @@ run();
 
 ### Errors
 
-| Error Type                                          | Status Code                                         | Content Type                                        |
-| --------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------- |
-| errors.DeviceVerificationApiFormBadRequestError     | 400                                                 | application/json                                    |
-| errors.DeviceVerificationApiFormUnauthorizedError   | 401                                                 | application/json                                    |
-| errors.DeviceVerificationApiFormForbiddenError      | 403                                                 | application/json                                    |
-| errors.DeviceVerificationApiFormInternalServerError | 500                                                 | application/json                                    |
-| errors.AutheleteBundledDefaultError                 | 4XX, 5XX                                            | \*/\*                                               |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## deviceCompleteApi
+## completeAuthorization
 
 This API returns information about what action the authorization server should take after it receives
 the result of end-user's decision about whether the end-user has approved or rejected a client
@@ -731,7 +729,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.deviceFlow.deviceCompleteApi({
+  const result = await autheleteBundled.deviceFlow.completeAuthorization({
     serviceId: "<id>",
     requestBody: {
       userCode: "XWWKPBWVXQ",
@@ -752,7 +750,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { deviceFlowDeviceCompleteApi } from "authelete-bundled/funcs/deviceFlowDeviceCompleteApi.js";
+import { deviceFlowCompleteAuthorization } from "authelete-bundled/funcs/deviceFlowCompleteAuthorization.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -763,7 +761,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await deviceFlowDeviceCompleteApi(autheleteBundled, {
+  const res = await deviceFlowCompleteAuthorization(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       userCode: "XWWKPBWVXQ",
@@ -775,7 +773,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("deviceFlowDeviceCompleteApi failed:", res.error);
+    console.log("deviceFlowCompleteAuthorization failed:", res.error);
   }
 }
 
@@ -798,15 +796,15 @@ run();
 
 ### Errors
 
-| Error Type                                  | Status Code                                 | Content Type                                |
-| ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
-| errors.DeviceCompleteApiBadRequestError     | 400                                         | application/json                            |
-| errors.DeviceCompleteApiUnauthorizedError   | 401                                         | application/json                            |
-| errors.DeviceCompleteApiForbiddenError      | 403                                         | application/json                            |
-| errors.DeviceCompleteApiInternalServerError | 500                                         | application/json                            |
-| errors.AutheleteBundledDefaultError         | 4XX, 5XX                                    | \*/\*                                       |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## deviceCompleteApiForm
+## completeAuthorizationForm
 
 This API returns information about what action the authorization server should take after it receives
 the result of end-user's decision about whether the end-user has approved or rejected a client
@@ -893,7 +891,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.deviceFlow.deviceCompleteApiForm({
+  const result = await autheleteBundled.deviceFlow.completeAuthorizationForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -912,7 +910,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { deviceFlowDeviceCompleteApiForm } from "authelete-bundled/funcs/deviceFlowDeviceCompleteApiForm.js";
+import { deviceFlowCompleteAuthorizationForm } from "authelete-bundled/funcs/deviceFlowCompleteAuthorizationForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -923,7 +921,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await deviceFlowDeviceCompleteApiForm(autheleteBundled, {
+  const res = await deviceFlowCompleteAuthorizationForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -933,7 +931,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("deviceFlowDeviceCompleteApiForm failed:", res.error);
+    console.log("deviceFlowCompleteAuthorizationForm failed:", res.error);
   }
 }
 
@@ -956,10 +954,10 @@ run();
 
 ### Errors
 
-| Error Type                                      | Status Code                                     | Content Type                                    |
-| ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
-| errors.DeviceCompleteApiFormBadRequestError     | 400                                             | application/json                                |
-| errors.DeviceCompleteApiFormUnauthorizedError   | 401                                             | application/json                                |
-| errors.DeviceCompleteApiFormForbiddenError      | 403                                             | application/json                                |
-| errors.DeviceCompleteApiFormInternalServerError | 500                                             | application/json                                |
-| errors.AutheleteBundledDefaultError             | 4XX, 5XX                                        | \*/\*                                           |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |

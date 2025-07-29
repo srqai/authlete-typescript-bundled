@@ -5,7 +5,7 @@
 import * as z from "zod";
 import { AutheleteBundledError } from "./autheletebundlederror.js";
 
-export type ServiceGetApiInternalServerErrorData = {
+export type InternalServerErrorData = {
   /**
    * The flag value to be set
    *
@@ -14,7 +14,7 @@ export type ServiceGetApiInternalServerErrorData = {
   clientLocked: boolean;
 };
 
-export class ServiceGetApiInternalServerError extends AutheleteBundledError {
+export class InternalServerError extends AutheleteBundledError {
   /**
    * The flag value to be set
    *
@@ -23,10 +23,10 @@ export class ServiceGetApiInternalServerError extends AutheleteBundledError {
   clientLocked: boolean;
 
   /** The original data that was passed to this error instance. */
-  data$: ServiceGetApiInternalServerErrorData;
+  data$: InternalServerErrorData;
 
   constructor(
-    err: ServiceGetApiInternalServerErrorData,
+    err: InternalServerErrorData,
     httpMeta: { response: Response; request: Request; body: string },
   ) {
     const message = "message" in err && typeof err.message === "string"
@@ -36,11 +36,11 @@ export class ServiceGetApiInternalServerError extends AutheleteBundledError {
     this.data$ = err;
     this.clientLocked = err.clientLocked;
 
-    this.name = "ServiceGetApiInternalServerError";
+    this.name = "InternalServerError";
   }
 }
 
-export type ServiceGetApiForbiddenErrorData = {
+export type ForbiddenErrorData = {
   /**
    * The flag value to be set
    *
@@ -49,7 +49,7 @@ export type ServiceGetApiForbiddenErrorData = {
   clientLocked: boolean;
 };
 
-export class ServiceGetApiForbiddenError extends AutheleteBundledError {
+export class ForbiddenError extends AutheleteBundledError {
   /**
    * The flag value to be set
    *
@@ -58,10 +58,10 @@ export class ServiceGetApiForbiddenError extends AutheleteBundledError {
   clientLocked: boolean;
 
   /** The original data that was passed to this error instance. */
-  data$: ServiceGetApiForbiddenErrorData;
+  data$: ForbiddenErrorData;
 
   constructor(
-    err: ServiceGetApiForbiddenErrorData,
+    err: ForbiddenErrorData,
     httpMeta: { response: Response; request: Request; body: string },
   ) {
     const message = "message" in err && typeof err.message === "string"
@@ -71,11 +71,11 @@ export class ServiceGetApiForbiddenError extends AutheleteBundledError {
     this.data$ = err;
     this.clientLocked = err.clientLocked;
 
-    this.name = "ServiceGetApiForbiddenError";
+    this.name = "ForbiddenError";
   }
 }
 
-export type ServiceGetApiUnauthorizedErrorData = {
+export type UnauthorizedErrorData = {
   /**
    * The flag value to be set
    *
@@ -84,7 +84,7 @@ export type ServiceGetApiUnauthorizedErrorData = {
   clientLocked: boolean;
 };
 
-export class ServiceGetApiUnauthorizedError extends AutheleteBundledError {
+export class UnauthorizedError extends AutheleteBundledError {
   /**
    * The flag value to be set
    *
@@ -93,10 +93,10 @@ export class ServiceGetApiUnauthorizedError extends AutheleteBundledError {
   clientLocked: boolean;
 
   /** The original data that was passed to this error instance. */
-  data$: ServiceGetApiUnauthorizedErrorData;
+  data$: UnauthorizedErrorData;
 
   constructor(
-    err: ServiceGetApiUnauthorizedErrorData,
+    err: UnauthorizedErrorData,
     httpMeta: { response: Response; request: Request; body: string },
   ) {
     const message = "message" in err && typeof err.message === "string"
@@ -106,11 +106,11 @@ export class ServiceGetApiUnauthorizedError extends AutheleteBundledError {
     this.data$ = err;
     this.clientLocked = err.clientLocked;
 
-    this.name = "ServiceGetApiUnauthorizedError";
+    this.name = "UnauthorizedError";
   }
 }
 
-export type ServiceGetApiBadRequestErrorData = {
+export type BadRequestErrorData = {
   /**
    * The code which represents the result of the API call.
    */
@@ -121,7 +121,7 @@ export type ServiceGetApiBadRequestErrorData = {
   resultMessage?: string | undefined;
 };
 
-export class ServiceGetApiBadRequestError extends AutheleteBundledError {
+export class BadRequestError extends AutheleteBundledError {
   /**
    * The code which represents the result of the API call.
    */
@@ -132,10 +132,10 @@ export class ServiceGetApiBadRequestError extends AutheleteBundledError {
   resultMessage?: string | undefined;
 
   /** The original data that was passed to this error instance. */
-  data$: ServiceGetApiBadRequestErrorData;
+  data$: BadRequestErrorData;
 
   constructor(
-    err: ServiceGetApiBadRequestErrorData,
+    err: BadRequestErrorData,
     httpMeta: { response: Response; request: Request; body: string },
   ) {
     const message = "message" in err && typeof err.message === "string"
@@ -146,13 +146,13 @@ export class ServiceGetApiBadRequestError extends AutheleteBundledError {
     if (err.resultCode != null) this.resultCode = err.resultCode;
     if (err.resultMessage != null) this.resultMessage = err.resultMessage;
 
-    this.name = "ServiceGetApiBadRequestError";
+    this.name = "BadRequestError";
   }
 }
 
 /** @internal */
-export const ServiceGetApiInternalServerError$inboundSchema: z.ZodType<
-  ServiceGetApiInternalServerError,
+export const InternalServerError$inboundSchema: z.ZodType<
+  InternalServerError,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -162,7 +162,7 @@ export const ServiceGetApiInternalServerError$inboundSchema: z.ZodType<
   body$: z.string(),
 })
   .transform((v) => {
-    return new ServiceGetApiInternalServerError(v, {
+    return new InternalServerError(v, {
       request: v.request$,
       response: v.response$,
       body: v.body$,
@@ -170,16 +170,16 @@ export const ServiceGetApiInternalServerError$inboundSchema: z.ZodType<
   });
 
 /** @internal */
-export type ServiceGetApiInternalServerError$Outbound = {
+export type InternalServerError$Outbound = {
   clientLocked: boolean;
 };
 
 /** @internal */
-export const ServiceGetApiInternalServerError$outboundSchema: z.ZodType<
-  ServiceGetApiInternalServerError$Outbound,
+export const InternalServerError$outboundSchema: z.ZodType<
+  InternalServerError$Outbound,
   z.ZodTypeDef,
-  ServiceGetApiInternalServerError
-> = z.instanceof(ServiceGetApiInternalServerError)
+  InternalServerError
+> = z.instanceof(InternalServerError)
   .transform(v => v.data$)
   .pipe(z.object({
     clientLocked: z.boolean(),
@@ -189,18 +189,18 @@ export const ServiceGetApiInternalServerError$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace ServiceGetApiInternalServerError$ {
-  /** @deprecated use `ServiceGetApiInternalServerError$inboundSchema` instead. */
-  export const inboundSchema = ServiceGetApiInternalServerError$inboundSchema;
-  /** @deprecated use `ServiceGetApiInternalServerError$outboundSchema` instead. */
-  export const outboundSchema = ServiceGetApiInternalServerError$outboundSchema;
-  /** @deprecated use `ServiceGetApiInternalServerError$Outbound` instead. */
-  export type Outbound = ServiceGetApiInternalServerError$Outbound;
+export namespace InternalServerError$ {
+  /** @deprecated use `InternalServerError$inboundSchema` instead. */
+  export const inboundSchema = InternalServerError$inboundSchema;
+  /** @deprecated use `InternalServerError$outboundSchema` instead. */
+  export const outboundSchema = InternalServerError$outboundSchema;
+  /** @deprecated use `InternalServerError$Outbound` instead. */
+  export type Outbound = InternalServerError$Outbound;
 }
 
 /** @internal */
-export const ServiceGetApiForbiddenError$inboundSchema: z.ZodType<
-  ServiceGetApiForbiddenError,
+export const ForbiddenError$inboundSchema: z.ZodType<
+  ForbiddenError,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -210,7 +210,7 @@ export const ServiceGetApiForbiddenError$inboundSchema: z.ZodType<
   body$: z.string(),
 })
   .transform((v) => {
-    return new ServiceGetApiForbiddenError(v, {
+    return new ForbiddenError(v, {
       request: v.request$,
       response: v.response$,
       body: v.body$,
@@ -218,16 +218,16 @@ export const ServiceGetApiForbiddenError$inboundSchema: z.ZodType<
   });
 
 /** @internal */
-export type ServiceGetApiForbiddenError$Outbound = {
+export type ForbiddenError$Outbound = {
   clientLocked: boolean;
 };
 
 /** @internal */
-export const ServiceGetApiForbiddenError$outboundSchema: z.ZodType<
-  ServiceGetApiForbiddenError$Outbound,
+export const ForbiddenError$outboundSchema: z.ZodType<
+  ForbiddenError$Outbound,
   z.ZodTypeDef,
-  ServiceGetApiForbiddenError
-> = z.instanceof(ServiceGetApiForbiddenError)
+  ForbiddenError
+> = z.instanceof(ForbiddenError)
   .transform(v => v.data$)
   .pipe(z.object({
     clientLocked: z.boolean(),
@@ -237,18 +237,18 @@ export const ServiceGetApiForbiddenError$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace ServiceGetApiForbiddenError$ {
-  /** @deprecated use `ServiceGetApiForbiddenError$inboundSchema` instead. */
-  export const inboundSchema = ServiceGetApiForbiddenError$inboundSchema;
-  /** @deprecated use `ServiceGetApiForbiddenError$outboundSchema` instead. */
-  export const outboundSchema = ServiceGetApiForbiddenError$outboundSchema;
-  /** @deprecated use `ServiceGetApiForbiddenError$Outbound` instead. */
-  export type Outbound = ServiceGetApiForbiddenError$Outbound;
+export namespace ForbiddenError$ {
+  /** @deprecated use `ForbiddenError$inboundSchema` instead. */
+  export const inboundSchema = ForbiddenError$inboundSchema;
+  /** @deprecated use `ForbiddenError$outboundSchema` instead. */
+  export const outboundSchema = ForbiddenError$outboundSchema;
+  /** @deprecated use `ForbiddenError$Outbound` instead. */
+  export type Outbound = ForbiddenError$Outbound;
 }
 
 /** @internal */
-export const ServiceGetApiUnauthorizedError$inboundSchema: z.ZodType<
-  ServiceGetApiUnauthorizedError,
+export const UnauthorizedError$inboundSchema: z.ZodType<
+  UnauthorizedError,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -258,7 +258,7 @@ export const ServiceGetApiUnauthorizedError$inboundSchema: z.ZodType<
   body$: z.string(),
 })
   .transform((v) => {
-    return new ServiceGetApiUnauthorizedError(v, {
+    return new UnauthorizedError(v, {
       request: v.request$,
       response: v.response$,
       body: v.body$,
@@ -266,16 +266,16 @@ export const ServiceGetApiUnauthorizedError$inboundSchema: z.ZodType<
   });
 
 /** @internal */
-export type ServiceGetApiUnauthorizedError$Outbound = {
+export type UnauthorizedError$Outbound = {
   clientLocked: boolean;
 };
 
 /** @internal */
-export const ServiceGetApiUnauthorizedError$outboundSchema: z.ZodType<
-  ServiceGetApiUnauthorizedError$Outbound,
+export const UnauthorizedError$outboundSchema: z.ZodType<
+  UnauthorizedError$Outbound,
   z.ZodTypeDef,
-  ServiceGetApiUnauthorizedError
-> = z.instanceof(ServiceGetApiUnauthorizedError)
+  UnauthorizedError
+> = z.instanceof(UnauthorizedError)
   .transform(v => v.data$)
   .pipe(z.object({
     clientLocked: z.boolean(),
@@ -285,18 +285,18 @@ export const ServiceGetApiUnauthorizedError$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace ServiceGetApiUnauthorizedError$ {
-  /** @deprecated use `ServiceGetApiUnauthorizedError$inboundSchema` instead. */
-  export const inboundSchema = ServiceGetApiUnauthorizedError$inboundSchema;
-  /** @deprecated use `ServiceGetApiUnauthorizedError$outboundSchema` instead. */
-  export const outboundSchema = ServiceGetApiUnauthorizedError$outboundSchema;
-  /** @deprecated use `ServiceGetApiUnauthorizedError$Outbound` instead. */
-  export type Outbound = ServiceGetApiUnauthorizedError$Outbound;
+export namespace UnauthorizedError$ {
+  /** @deprecated use `UnauthorizedError$inboundSchema` instead. */
+  export const inboundSchema = UnauthorizedError$inboundSchema;
+  /** @deprecated use `UnauthorizedError$outboundSchema` instead. */
+  export const outboundSchema = UnauthorizedError$outboundSchema;
+  /** @deprecated use `UnauthorizedError$Outbound` instead. */
+  export type Outbound = UnauthorizedError$Outbound;
 }
 
 /** @internal */
-export const ServiceGetApiBadRequestError$inboundSchema: z.ZodType<
-  ServiceGetApiBadRequestError,
+export const BadRequestError$inboundSchema: z.ZodType<
+  BadRequestError,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -307,7 +307,7 @@ export const ServiceGetApiBadRequestError$inboundSchema: z.ZodType<
   body$: z.string(),
 })
   .transform((v) => {
-    return new ServiceGetApiBadRequestError(v, {
+    return new BadRequestError(v, {
       request: v.request$,
       response: v.response$,
       body: v.body$,
@@ -315,17 +315,17 @@ export const ServiceGetApiBadRequestError$inboundSchema: z.ZodType<
   });
 
 /** @internal */
-export type ServiceGetApiBadRequestError$Outbound = {
+export type BadRequestError$Outbound = {
   resultCode?: string | undefined;
   resultMessage?: string | undefined;
 };
 
 /** @internal */
-export const ServiceGetApiBadRequestError$outboundSchema: z.ZodType<
-  ServiceGetApiBadRequestError$Outbound,
+export const BadRequestError$outboundSchema: z.ZodType<
+  BadRequestError$Outbound,
   z.ZodTypeDef,
-  ServiceGetApiBadRequestError
-> = z.instanceof(ServiceGetApiBadRequestError)
+  BadRequestError
+> = z.instanceof(BadRequestError)
   .transform(v => v.data$)
   .pipe(z.object({
     resultCode: z.string().optional(),
@@ -336,11 +336,11 @@ export const ServiceGetApiBadRequestError$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace ServiceGetApiBadRequestError$ {
-  /** @deprecated use `ServiceGetApiBadRequestError$inboundSchema` instead. */
-  export const inboundSchema = ServiceGetApiBadRequestError$inboundSchema;
-  /** @deprecated use `ServiceGetApiBadRequestError$outboundSchema` instead. */
-  export const outboundSchema = ServiceGetApiBadRequestError$outboundSchema;
-  /** @deprecated use `ServiceGetApiBadRequestError$Outbound` instead. */
-  export type Outbound = ServiceGetApiBadRequestError$Outbound;
+export namespace BadRequestError$ {
+  /** @deprecated use `BadRequestError$inboundSchema` instead. */
+  export const inboundSchema = BadRequestError$inboundSchema;
+  /** @deprecated use `BadRequestError$outboundSchema` instead. */
+  export const outboundSchema = BadRequestError$outboundSchema;
+  /** @deprecated use `BadRequestError$Outbound` instead. */
+  export type Outbound = BadRequestError$Outbound;
 }

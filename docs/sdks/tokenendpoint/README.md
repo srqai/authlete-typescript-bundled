@@ -3,19 +3,13 @@
 
 ## Overview
 
-API endpoints for implementing OAuth 2.0 Token Endpoint.
-
 ### Available Operations
 
-* [authTokenApi](#authtokenapi) - Process Token Request
-* [authTokenApiForm](#authtokenapiform) - Process Token Request
-* [authTokenFailApi](#authtokenfailapi) - Fail Token Request
-* [authTokenFailApiForm](#authtokenfailapiform) - Fail Token Request
-* [authTokenIssueApi](#authtokenissueapi) - Issue Token Response
-* [authTokenIssueApiForm](#authtokenissueapiform) - Issue Token Response
-* [idtokenReissueApi](#idtokenreissueapi) - Reissue ID Token
+* [process](#process) - Process Token Request
+* [processForm](#processform) - Process Token Request
+* [reissueIdToken](#reissueidtoken) - Reissue ID Token
 
-## authTokenApi
+## process
 
 This API parses request parameters of an authorization request and returns necessary data for the
 authorization server implementation to process the authorization request further.
@@ -475,7 +469,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.tokenEndpoint.authTokenApi({
+  const result = await autheleteBundled.tokenEndpoint.process({
     serviceId: "<id>",
     requestBody: {
       parameters: "grant_type=authorization_code&code=Xv_su944auuBgc5mfUnxXayiiQU9Z4-T_Yae_UfExmo&redirect_uri=https%3A%2F%2Fmy-client.example.com%2Fcb1&code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk",
@@ -496,7 +490,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenEndpointAuthTokenApi } from "authelete-bundled/funcs/tokenEndpointAuthTokenApi.js";
+import { tokenEndpointProcess } from "authelete-bundled/funcs/tokenEndpointProcess.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -507,7 +501,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await tokenEndpointAuthTokenApi(autheleteBundled, {
+  const res = await tokenEndpointProcess(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       parameters: "grant_type=authorization_code&code=Xv_su944auuBgc5mfUnxXayiiQU9Z4-T_Yae_UfExmo&redirect_uri=https%3A%2F%2Fmy-client.example.com%2Fcb1&code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk",
@@ -519,7 +513,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("tokenEndpointAuthTokenApi failed:", res.error);
+    console.log("tokenEndpointProcess failed:", res.error);
   }
 }
 
@@ -542,15 +536,15 @@ run();
 
 ### Errors
 
-| Error Type                             | Status Code                            | Content Type                           |
-| -------------------------------------- | -------------------------------------- | -------------------------------------- |
-| errors.AuthTokenApiBadRequestError     | 400                                    | application/json                       |
-| errors.AuthTokenApiUnauthorizedError   | 401                                    | application/json                       |
-| errors.AuthTokenApiForbiddenError      | 403                                    | application/json                       |
-| errors.AuthTokenApiInternalServerError | 500                                    | application/json                       |
-| errors.AutheleteBundledDefaultError    | 4XX, 5XX                               | \*/\*                                  |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
 
-## authTokenApiForm
+## processForm
 
 This API parses request parameters of an authorization request and returns necessary data for the
 authorization server implementation to process the authorization request further.
@@ -1010,7 +1004,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.tokenEndpoint.authTokenApiForm({
+  const result = await autheleteBundled.tokenEndpoint.processForm({
     serviceId: "<id>",
     requestBody: {
       clientLocked: false,
@@ -1029,7 +1023,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenEndpointAuthTokenApiForm } from "authelete-bundled/funcs/tokenEndpointAuthTokenApiForm.js";
+import { tokenEndpointProcessForm } from "authelete-bundled/funcs/tokenEndpointProcessForm.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1040,7 +1034,7 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await tokenEndpointAuthTokenApiForm(autheleteBundled, {
+  const res = await tokenEndpointProcessForm(autheleteBundled, {
     serviceId: "<id>",
     requestBody: {
       clientLocked: true,
@@ -1050,7 +1044,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("tokenEndpointAuthTokenApiForm failed:", res.error);
+    console.log("tokenEndpointProcessForm failed:", res.error);
   }
 }
 
@@ -1073,647 +1067,15 @@ run();
 
 ### Errors
 
-| Error Type                                 | Status Code                                | Content Type                               |
-| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
-| errors.AuthTokenApiFormBadRequestError     | 400                                        | application/json                           |
-| errors.AuthTokenApiFormUnauthorizedError   | 401                                        | application/json                           |
-| errors.AuthTokenApiFormForbiddenError      | 403                                        | application/json                           |
-| errors.AuthTokenApiFormInternalServerError | 500                                        | application/json                           |
-| errors.AutheleteBundledDefaultError        | 4XX, 5XX                                   | \*/\*                                      |
-
-## authTokenFailApi
-
-This API generates a content of an error token response that the authorization server implementation
-returns to the client application.
-
-<br>
-<details>
-<summary>Description</summary>
-
-This API is supposed to be called from within the implementation of the token endpoint of the service
-in order to generate an error response to the client application.
-
-The description of the `/auth/token` API describes the timing when this API should be called. See
-the description for the case of `action=PASSWORD`.
-
-The response from `/auth/token/fail` API has some parameters. Among them, it is `action` parameter
-that the authorization server implementation should check first because it denotes the next action
-that the authorization server implementation should take. According to the value of `action`, the
-authorization server implementation must take the steps described below.
-
-**INTERNAL_SERVER_ERROR**
-
-When the value of `action` is `INTERNAL_SERVER_ERROR`, it means that the request from the authorization
-server implementation was wrong or that an error occurred in Authlete.
-
-In either case, from the viewpoint of the client application, it is an error on the server side.
-Therefore, the service implementation should generate a response to the client application with
-HTTP status of "500 Internal Server Error".
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used
-as the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-The endpoint implementation may return another different response to the client application
-since "500 Internal Server Error" is not required by OAuth 2.0.
-
-**BAD_REQUEST**
-
-When the value of `action` is `BAD_REQUEST`, it means that Authlete's `/auth/token/fail` API successfully
-generated an error response for the client application.
-
-The HTTP status of the response returned to the client application must be "400 Bad Request" and
-the content type must be `application/json`.
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used
-as the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-</details>
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="auth_token_fail_api" method="post" path="/api/{serviceId}/auth/token/fail" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.tokenEndpoint.authTokenFailApi({
-    serviceId: "<id>",
-    requestBody: {
-      ticket: "83BNqKIhGMyrkvop_7jQjv2Z1612LNdGSQKkvkrf47c",
-      reason: "INVALID_RESOURCE_OWNER_CREDENTIALS",
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenEndpointAuthTokenFailApi } from "authelete-bundled/funcs/tokenEndpointAuthTokenFailApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await tokenEndpointAuthTokenFailApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      ticket: "83BNqKIhGMyrkvop_7jQjv2Z1612LNdGSQKkvkrf47c",
-      reason: "INVALID_RESOURCE_OWNER_CREDENTIALS",
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("tokenEndpointAuthTokenFailApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.AuthTokenFailApiRequest](../../models/operations/authtokenfailapirequest.md)                                                                                       | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.AuthTokenFailApiResponse](../../models/operations/authtokenfailapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                 | Status Code                                | Content Type                               |
-| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ |
-| errors.AuthTokenFailApiBadRequestError     | 400                                        | application/json                           |
-| errors.AuthTokenFailApiUnauthorizedError   | 401                                        | application/json                           |
-| errors.AuthTokenFailApiForbiddenError      | 403                                        | application/json                           |
-| errors.AuthTokenFailApiInternalServerError | 500                                        | application/json                           |
-| errors.AutheleteBundledDefaultError        | 4XX, 5XX                                   | \*/\*                                      |
-
-## authTokenFailApiForm
-
-This API generates a content of an error token response that the authorization server implementation
-returns to the client application.
-
-<br>
-<details>
-<summary>Description</summary>
-
-This API is supposed to be called from within the implementation of the token endpoint of the service
-in order to generate an error response to the client application.
-
-The description of the `/auth/token` API describes the timing when this API should be called. See
-the description for the case of `action=PASSWORD`.
-
-The response from `/auth/token/fail` API has some parameters. Among them, it is `action` parameter
-that the authorization server implementation should check first because it denotes the next action
-that the authorization server implementation should take. According to the value of `action`, the
-authorization server implementation must take the steps described below.
-
-**INTERNAL_SERVER_ERROR**
-
-When the value of `action` is `INTERNAL_SERVER_ERROR`, it means that the request from the authorization
-server implementation was wrong or that an error occurred in Authlete.
-
-In either case, from the viewpoint of the client application, it is an error on the server side.
-Therefore, the service implementation should generate a response to the client application with
-HTTP status of "500 Internal Server Error".
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used
-as the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-The endpoint implementation may return another different response to the client application
-since "500 Internal Server Error" is not required by OAuth 2.0.
-
-**BAD_REQUEST**
-
-When the value of `action` is `BAD_REQUEST`, it means that Authlete's `/auth/token/fail` API successfully
-generated an error response for the client application.
-
-The HTTP status of the response returned to the client application must be "400 Bad Request" and
-the content type must be `application/json`.
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used
-as the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-</details>
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="auth_token_fail_api_form" method="post" path="/api/{serviceId}/auth/token/fail" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.tokenEndpoint.authTokenFailApiForm({
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: true,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenEndpointAuthTokenFailApiForm } from "authelete-bundled/funcs/tokenEndpointAuthTokenFailApiForm.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await tokenEndpointAuthTokenFailApiForm(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: true,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("tokenEndpointAuthTokenFailApiForm failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.AuthTokenFailApiFormRequest](../../models/operations/authtokenfailapiformrequest.md)                                                                               | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.AuthTokenFailApiFormResponse](../../models/operations/authtokenfailapiformresponse.md)\>**
-
-### Errors
-
-| Error Type                                     | Status Code                                    | Content Type                                   |
-| ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
-| errors.AuthTokenFailApiFormBadRequestError     | 400                                            | application/json                               |
-| errors.AuthTokenFailApiFormUnauthorizedError   | 401                                            | application/json                               |
-| errors.AuthTokenFailApiFormForbiddenError      | 403                                            | application/json                               |
-| errors.AuthTokenFailApiFormInternalServerError | 500                                            | application/json                               |
-| errors.AutheleteBundledDefaultError            | 4XX, 5XX                                       | \*/\*                                          |
-
-## authTokenIssueApi
-
-This API generates a content of a successful token response that the authorization server implementation
-returns to the client application.
-
-<br>
-<details>
-<summary>Description</summary>
-
-This API is supposed to be called from within the implementation of the token endpoint of the service
-in order to generate a successful response to the client application.
-
-The description of the `/auth/token` API describes the timing when this API should be called. See
-the description for the case of `action=PASSWORD`.
-
-The response from `/auth/token/issue` API has some parameters. Among them, it is `action` parameter
-that the authorization server implementation should check first because it denotes the next action
-that the authorization server implementation should take. According to the value of `action`, the
-authorization server implementation must take the steps described below.
-
-**INTERNAL_SERVER_ERROR**
-
-When the value of `action` is `INTERNAL_SERVER_ERROR`, it means that the request from the authorization
-server implementation was wrong or that an error occurred in Authlete.
-
-In either case, from the viewpoint of the client application, it is an error on the server side.
-Therefore, the service implementation should generate a response to the client application with
-HTTP status of "500 Internal Server Error".
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used
-as the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-The endpoint implementation may return another different response to the client application
-since "500 Internal Server Error" is not required by OAuth 2.0.
-
-**OK**
-
-When the value of `action` is `OK`, it means that Authlete's `/auth/token/issue` API successfully
-generated an access token.
-
-The HTTP status of the response returned to the client application must be "200 OK" and the content
-type must be`application/json`.
-
-The value of `responseContent` is a JSON string which contains an access token, so it can be used
-as the entity body of the response.
-
-The following illustrates the response which the service implementation must generate and return
-to the client application.
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-</details>
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="auth_token_issue_api" method="post" path="/api/{serviceId}/auth/token/issue" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.tokenEndpoint.authTokenIssueApi({
-    serviceId: "<id>",
-    requestBody: {
-      ticket: "p7SXQ9JFjng7KFOZdCMBKcoR3ift7B54l1LGIgQXqEM",
-      subject: "john",
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenEndpointAuthTokenIssueApi } from "authelete-bundled/funcs/tokenEndpointAuthTokenIssueApi.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await tokenEndpointAuthTokenIssueApi(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      ticket: "p7SXQ9JFjng7KFOZdCMBKcoR3ift7B54l1LGIgQXqEM",
-      subject: "john",
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("tokenEndpointAuthTokenIssueApi failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.AuthTokenIssueApiRequest](../../models/operations/authtokenissueapirequest.md)                                                                                     | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.AuthTokenIssueApiResponse](../../models/operations/authtokenissueapiresponse.md)\>**
-
-### Errors
-
-| Error Type                                  | Status Code                                 | Content Type                                |
-| ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
-| errors.AuthTokenIssueApiBadRequestError     | 400                                         | application/json                            |
-| errors.AuthTokenIssueApiUnauthorizedError   | 401                                         | application/json                            |
-| errors.AuthTokenIssueApiForbiddenError      | 403                                         | application/json                            |
-| errors.AuthTokenIssueApiInternalServerError | 500                                         | application/json                            |
-| errors.AutheleteBundledDefaultError         | 4XX, 5XX                                    | \*/\*                                       |
-
-## authTokenIssueApiForm
-
-This API generates a content of a successful token response that the authorization server implementation
-returns to the client application.
-
-<br>
-<details>
-<summary>Description</summary>
-
-This API is supposed to be called from within the implementation of the token endpoint of the service
-in order to generate a successful response to the client application.
-
-The description of the `/auth/token` API describes the timing when this API should be called. See
-the description for the case of `action=PASSWORD`.
-
-The response from `/auth/token/issue` API has some parameters. Among them, it is `action` parameter
-that the authorization server implementation should check first because it denotes the next action
-that the authorization server implementation should take. According to the value of `action`, the
-authorization server implementation must take the steps described below.
-
-**INTERNAL_SERVER_ERROR**
-
-When the value of `action` is `INTERNAL_SERVER_ERROR`, it means that the request from the authorization
-server implementation was wrong or that an error occurred in Authlete.
-
-In either case, from the viewpoint of the client application, it is an error on the server side.
-Therefore, the service implementation should generate a response to the client application with
-HTTP status of "500 Internal Server Error".
-
-The value of `responseContent` is a JSON string which describes the error, so it can be used
-as the entity body of the response.
-
-The following illustrates the response which the service implementation should generate and return
-to the client application.
-
-```
-HTTP/1.1 500 Internal Server Error
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-The endpoint implementation may return another different response to the client application
-since "500 Internal Server Error" is not required by OAuth 2.0.
-
-**OK**
-
-When the value of `action` is `OK`, it means that Authlete's `/auth/token/issue` API successfully
-generated an access token.
-
-The HTTP status of the response returned to the client application must be "200 OK" and the content
-type must be`application/json`.
-
-The value of `responseContent` is a JSON string which contains an access token, so it can be used
-as the entity body of the response.
-
-The following illustrates the response which the service implementation must generate and return
-to the client application.
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-Pragma: no-cache
-
-{responseContent}
-```
-
-</details>
-
-
-### Example Usage
-
-<!-- UsageSnippet language="typescript" operationID="auth_token_issue_api_form" method="post" path="/api/{serviceId}/auth/token/issue" -->
-```typescript
-import { AutheleteBundled } from "authelete-bundled";
-
-const autheleteBundled = new AutheleteBundled({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const result = await autheleteBundled.tokenEndpoint.authTokenIssueApiForm({
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: false,
-    },
-  });
-
-  console.log(result);
-}
-
-run();
-```
-
-### Standalone function
-
-The standalone function version of this method:
-
-```typescript
-import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenEndpointAuthTokenIssueApiForm } from "authelete-bundled/funcs/tokenEndpointAuthTokenIssueApiForm.js";
-
-// Use `AutheleteBundledCore` for best tree-shaking performance.
-// You can create one instance of it to use across an application.
-const autheleteBundled = new AutheleteBundledCore({
-  security: {
-    authlete: process.env["AUTHELETEBUNDLED_AUTHLETE"] ?? "",
-  },
-});
-
-async function run() {
-  const res = await tokenEndpointAuthTokenIssueApiForm(autheleteBundled, {
-    serviceId: "<id>",
-    requestBody: {
-      clientLocked: true,
-    },
-  });
-  if (res.ok) {
-    const { value: result } = res;
-    console.log(result);
-  } else {
-    console.log("tokenEndpointAuthTokenIssueApiForm failed:", res.error);
-  }
-}
-
-run();
-```
-
-### Parameters
-
-| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.AuthTokenIssueApiFormRequest](../../models/operations/authtokenissueapiformrequest.md)                                                                             | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
-| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
-| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
-| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
-| `options.serverURL`                                                                                                                                                            | *string*                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                             | An optional server URL to use.                                                                                                                                                 |
-
-### Response
-
-**Promise\<[operations.AuthTokenIssueApiFormResponse](../../models/operations/authtokenissueapiformresponse.md)\>**
-
-### Errors
-
-| Error Type                                      | Status Code                                     | Content Type                                    |
-| ----------------------------------------------- | ----------------------------------------------- | ----------------------------------------------- |
-| errors.AuthTokenIssueApiFormBadRequestError     | 400                                             | application/json                                |
-| errors.AuthTokenIssueApiFormUnauthorizedError   | 401                                             | application/json                                |
-| errors.AuthTokenIssueApiFormForbiddenError      | 403                                             | application/json                                |
-| errors.AuthTokenIssueApiFormInternalServerError | 500                                             | application/json                                |
-| errors.AutheleteBundledDefaultError             | 4XX, 5XX                                        | \*/\*                                           |
-
-## idtokenReissueApi
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
+
+## reissueIdToken
 
 The API is expected to be called only when the value of the `action`
 parameter in a response from the `/auth/token` API is [ID_TOKEN_REISSUABLE](https://authlete.github.io/authlete-java-common/com/authlete/common/dto/TokenResponse.Action.html#ID_TOKEN_REISSUABLE). The purpose
@@ -1735,7 +1097,7 @@ const autheleteBundled = new AutheleteBundled({
 });
 
 async function run() {
-  const result = await autheleteBundled.tokenEndpoint.idtokenReissueApi({
+  const result = await autheleteBundled.tokenEndpoint.reissueIdToken({
     serviceId: "<id>",
   });
 
@@ -1751,7 +1113,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AutheleteBundledCore } from "authelete-bundled/core.js";
-import { tokenEndpointIdtokenReissueApi } from "authelete-bundled/funcs/tokenEndpointIdtokenReissueApi.js";
+import { tokenEndpointReissueIdToken } from "authelete-bundled/funcs/tokenEndpointReissueIdToken.js";
 
 // Use `AutheleteBundledCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -1762,14 +1124,14 @@ const autheleteBundled = new AutheleteBundledCore({
 });
 
 async function run() {
-  const res = await tokenEndpointIdtokenReissueApi(autheleteBundled, {
+  const res = await tokenEndpointReissueIdToken(autheleteBundled, {
     serviceId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("tokenEndpointIdtokenReissueApi failed:", res.error);
+    console.log("tokenEndpointReissueIdToken failed:", res.error);
   }
 }
 
@@ -1792,10 +1154,10 @@ run();
 
 ### Errors
 
-| Error Type                                  | Status Code                                 | Content Type                                |
-| ------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
-| errors.IdtokenReissueApiBadRequestError     | 400                                         | application/json                            |
-| errors.IdtokenReissueApiUnauthorizedError   | 401                                         | application/json                            |
-| errors.IdtokenReissueApiForbiddenError      | 403                                         | application/json                            |
-| errors.IdtokenReissueApiInternalServerError | 500                                         | application/json                            |
-| errors.AutheleteBundledDefaultError         | 4XX, 5XX                                    | \*/\*                                       |
+| Error Type                          | Status Code                         | Content Type                        |
+| ----------------------------------- | ----------------------------------- | ----------------------------------- |
+| errors.BadRequestError              | 400                                 | application/json                    |
+| errors.UnauthorizedError            | 401                                 | application/json                    |
+| errors.ForbiddenError               | 403                                 | application/json                    |
+| errors.InternalServerError          | 500                                 | application/json                    |
+| errors.AutheleteBundledDefaultError | 4XX, 5XX                            | \*/\*                               |
