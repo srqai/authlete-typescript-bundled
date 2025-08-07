@@ -1,6 +1,6 @@
 {
   "name": "authelete-bundled",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Speakeasy",
   "type": "module",
   "tshy": {
@@ -19,24 +19,27 @@
     }
   },
   "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/srqai/authlete-typescript-bundled.git"
+  },
   "scripts": {
     "lint": "eslint --cache --max-warnings=0 src",
     "build": "tshy",
     "prepublishOnly": "npm run build"
   },
-  "peerDependencies": {
-    "zod": "^3"
-  },
+  "peerDependencies": {},
   "devDependencies": {
     "@eslint/js": "^9.19.0",
     "eslint": "^9.19.0",
     "globals": "^15.14.0",
     "tshy": "^2.0.0",
-    "typescript": "^5.4.5",
-    "typescript-eslint": "^8.22.0",
-    "zod": "^3.25.17"
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.26.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "zod": "^3.20.0"
+  },
   "exports": {
     ".": {
       "import": {

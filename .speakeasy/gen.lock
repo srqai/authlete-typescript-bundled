@@ -3,15 +3,17 @@ id: 336e88f5-1eaa-48bb-a56c-eb6d0abf3f80
 management:
   docChecksum: b1fdf968df9a7e1b4a61ebf110626c23
   docVersion: 3.0.0
-  speakeasyVersion: 1.592.1
-  generationVersion: 2.667.0
-  releaseVersion: 0.1.1
-  configChecksum: a904a92fe8d18d52d001d59bbb1a51b7
+  speakeasyVersion: 1.598.3
+  generationVersion: 2.674.3
+  releaseVersion: 0.1.2
+  configChecksum: de15e90fcbc22ac023c62702530536fe
+  repoURL: https://github.com/srqai/authlete-typescript-bundled.git
+  installationURL: https://github.com/srqai/authlete-typescript-bundled
   published: true
 features:
   typescript:
     additionalDependencies: 0.1.0
-    core: 3.21.16
+    core: 3.21.20
     defaultEnabledRetries: 0.1.0
     devContainers: 2.90.0
     enumUnions: 0.1.0
